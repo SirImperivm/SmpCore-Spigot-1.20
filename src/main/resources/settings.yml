@@ -1,0 +1,19 @@
+settings:
+  dbType: "mysql" # Questo può essere o mysql o mariadb
+  database:
+    host: "192.168.1.2"
+    port: 3306
+    username: "u44_mJ9FTgrleX"
+    password: "CTS+0i5CH7pu+Gdq3iLuy=sj"
+    dbname: "s44_SmpCore"
+    tablePrefix: "smpc_"
+messages:
+  prefixes:
+    success: "&8[&a!&8] &7"
+    info: "&8[&e!&8] &7"
+    fail: "&8[&c!&8] &7"
+  errors:
+    no-perm:
+      command: "%fpNecessiti del permesso &c$node &7per avere accesso a questo comando."
+      action: "%fpNecessiti del permesso &c$node &7per eseguire quest'azione."
+    no-console: "%fpComando accessibile solo dagli utenti in gioco."
