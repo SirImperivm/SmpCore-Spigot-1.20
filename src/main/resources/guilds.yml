@@ -1,1 +1,26 @@
 guilds:
+  Z:
+    guildName: "Rossi"
+    membersLimit: 4
+    mainHome:
+      worldName: ""
+      posX:
+      posY:
+      posZ:
+      rotYaw:
+      rotPitch:
+    settings:
+      addOwner:
+        command1:
+          type: command
+          string: "luckperms:lp user %username% parent add caporosso"
+      addofficer:
+        command1:
+          type: command
+          string: "luckperms:lp user %username% parent add officerrosso"
+      addmember:
+        command1:
+          type: command
+          string: "luckperms:lp user %username% parent add rossi"
+    bank:
+      limit: 25000.0

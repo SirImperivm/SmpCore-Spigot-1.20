@@ -6,11 +6,13 @@ import me.sirimperivm.spigot.assets.managers.databases.Guilds;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 @SuppressWarnings("all")
 public class Db {
 
     private static Main plugin = Main.getPlugin();
+    private static Logger log = Logger.getLogger("SMPCore");
     private static Config conf = Main.getConf();
     private static Guilds guilds;
 
@@ -43,15 +45,15 @@ public class Db {
 
             try {
                 conn = DriverManager.getConnection(url, username, password);
-                plugin.log("success", "Plugin connesso al database con successo!");
+                log.info("Plugin connesso al database con successo!");
             } catch (SQLException e) {
                 setCanConnect(false);
-                plugin.log("severe", "Impossibile connettersi al database.");
+                log.severe("Impossibile connettersi al database.");
                 e.printStackTrace();
                 plugin.disablePlugin();
             }
         } else {
-            plugin.log("severe", "Impossibile connettersi al database.");
+            log.severe("Impossibile connettersi al database.");
             plugin.disablePlugin();
         }
     }
@@ -61,10 +63,10 @@ public class Db {
             try {
                 if (conn != null && !conn.isClosed()) {
                     conn.close();
-                    plugin.log("success", "Plugin disconnesso dal database.");
+                    log.info("Plugin disconnesso dal database.");
                 }
             } catch (SQLException e) {
-                plugin.log("severe", "Impossibile disconnettersi dal database.");
+                log.severe("Impossibile disconnettersi dal database.");
                 e.printStackTrace();
             }
         }

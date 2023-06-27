@@ -10,11 +10,13 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.CopyOption;
 import java.nio.file.Files;
+import java.util.logging.Logger;
 
 @SuppressWarnings("all")
 public class Config {
 
     private static Main plugin = Main.getPlugin();
+    private static Logger log = Logger.getLogger("SMPCore");
     private File folder = plugin.getDataFolder();
     private File settingsFile, guildsFile, helpsFile, guisFile;
     private FileConfiguration settings, guilds, helps, guis;
@@ -56,7 +58,7 @@ public class Config {
             Files.copy(plugin.getResource(n), f.toPath(), new CopyOption[0]);
             load(c, f);
         } catch (IOException e) {
-            plugin.log("severe", "Impossibile creare il file " + n + "!");
+            log.severe("Impossibile creare il file " + n + "!");
             e.printStackTrace();
         }
     }
@@ -66,7 +68,7 @@ public class Config {
         try {
             c.save(f);
         } catch (IOException e) {
-            plugin.log("severe", "Impossibile salvare il file " + n + "!");
+            log.severe("Impossibile salvare il file " + n + "!");
             e.printStackTrace();
         }
     }
@@ -76,7 +78,7 @@ public class Config {
         try {
             c.load(f);
         } catch (IOException | InvalidConfigurationException e) {
-            plugin.log("severe","Impossibile caricare il file " + n + "!");
+            log.severe("Impossibile caricare il file " + n + "!");
             e.printStackTrace();
         }
     }
