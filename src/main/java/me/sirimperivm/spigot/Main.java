@@ -43,10 +43,10 @@ public final class Main extends JavaPlugin {
         successPrefix = Colors.text(conf.getSettings().getString("messages.prefixes.success"));
         infoPrefix = Colors.text(conf.getSettings().getString("messages.prefixes.info"));
         failPrefix = Colors.text(conf.getSettings().getString("messages.prefixes.fail"));
-        mods = new Modules();
         data = new Db();
         papi = new PapiExpansions(plugin);
         registerExpansions();
+        mods = new Modules();
     }
 
     void closeup() {
