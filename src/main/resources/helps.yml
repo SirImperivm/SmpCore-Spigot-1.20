@@ -1,1 +1,8 @@
 helps:
+  admin-commands:
+    guilds:
+      - "&8&m                              "
+      - ""
+      - "&a/ga createguild &e<guildName> <guildTitle> <memberSize> &7- &fCon questo l'admin crea una gilda (alla sua posizione)."
+      - ""
+      - "&8&m                              "

@@ -6,6 +6,7 @@ import me.sirimperivm.spigot.assets.managers.Modules;
 import me.sirimperivm.spigot.assets.managers.placeholderapi.PapiExpansions;
 import me.sirimperivm.spigot.assets.managers.values.Vault;
 import me.sirimperivm.spigot.assets.utils.Colors;
+import me.sirimperivm.spigot.modules.commands.admin.AdminGuildsCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import static org.bukkit.Bukkit.getConsoleSender;
@@ -56,13 +57,14 @@ public final class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         setup();
-        getConsoleSender().sendMessage(Colors.text("<RAINBOW:acf>[SMPCore] Plugin attivato correttamente!</RAINBOW>"));
+        getServer().getPluginCommand("ga").setExecutor(new AdminGuildsCommand());
+        getConsoleSender().sendMessage(Colors.text("&a[SMPCore] Plugin attivato correttamente!"));
     }
 
     @Override
     public void onDisable() {
         closeup();
-        getConsoleSender().sendMessage(Colors.text("<RAINBOW:acf>[SMPCore] Plugin disattivato correttamente!</RAINBOW>"));
+        getConsoleSender().sendMessage(Colors.text("&a[SMPCore] Plugin disattivato correttamente!"));
     }
 
     public static Db getData() {

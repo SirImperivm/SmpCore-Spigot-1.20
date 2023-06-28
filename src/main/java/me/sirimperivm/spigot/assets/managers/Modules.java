@@ -2,6 +2,7 @@ package me.sirimperivm.spigot.assets.managers;
 
 import me.sirimperivm.spigot.Main;
 import me.sirimperivm.spigot.assets.other.Strings;
+import me.sirimperivm.spigot.assets.utils.Colors;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -11,20 +12,20 @@ import java.util.List;
 @SuppressWarnings("all")
 public class Modules {
 
-    private static List<String> generatedGuildsId;
-    private static List<String> generatedOwnersId;
+    private static List<String> generatedGuilds;
+    private static List<String> generatedOwners;
     private static Main plugin = Main.getPlugin();
     private static Config conf = Main.getConf();
     private static Db data = Main.getData();
 
     public Modules() {
-        generatedGuildsId = data.getGuilds().getGeneratedGuildsID();
-        generatedOwnersId = new ArrayList<>();
+        generatedGuilds = data.getGuilds().getGeneratedGuildsID();
+        generatedOwners = new ArrayList<>();
     }
 
     public void createGuild(Player p, String guildName, String guildTitle, int membersLimit) {
         String guildId = Strings.getRandomString(1);
-        while (generatedGuildsId.contains(guildId)) {
+        while (generatedGuilds.contains(guildId)) {
             guildId = Strings.getRandomString(1);
         }
 
@@ -63,15 +64,31 @@ public class Modules {
         conf.getGuilds().set(confPath + guildId + ".settings.remOfficer.command1.string", "luckperms:lp user %username% parent remove officerrosso");
         conf.getGuilds().set(confPath + guildId + ".settings.remMember.command1.type", "command");
         conf.getGuilds().set(confPath + guildId + ".settings.remMember.command1.string", "luckperms:lp user %username% parent remove rosso");
-        conf.getGuilds().set(confPath + guildId + ".bank.limit", 5000.0);
+        conf.getGuilds().set(confPath + guildId + ".bank.limit", conf.getSettings().getDouble("settings.guilds.bank.defaultBankLimit"));
         conf.save(conf.getGuilds(), conf.getGuildsFile());
+
+        for (String send : conf.getSettings().getStringList("messages.success.guilds.created")) {
+            p.sendMessage(Colors.text(send
+                    .replace("$guildId", guildId)
+                    .replace("$guildName", guildName)
+                    .replace("$guildTitle", Colors.text(guildTitle))
+                    .replace("$position", Config.getTransl("settings", "messages.success.guilds.positionFormat")
+                            .replace("$worldName", locWorld)
+                            .replace("$posX", String.valueOf(locX))
+                            .replace("$posY", String.valueOf(locY))
+                            .replace("$posZ", String.valueOf(locZ))
+                    )
+                    .replace("$membersLimit", String.valueOf(membersLimit))
+                    .replace("$bankLimit", String.valueOf(conf.getSettings().getDouble("settings.guilds.bank.defaultBankLimit")))
+            ));
+        }
     }
 
-    public static List<String> getGeneratedGuildsId() {
-        return generatedGuildsId;
+    public static List<String> getGeneratedGuilds() {
+        return generatedGuilds;
     }
 
-    public static List<String> getGeneratedOwnersId() {
-        return generatedOwnersId;
+    public static List<String> getGeneratedOwners() {
+        return generatedOwners;
     }
 }

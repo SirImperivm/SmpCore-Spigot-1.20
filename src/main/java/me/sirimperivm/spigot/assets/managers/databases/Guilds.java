@@ -40,7 +40,7 @@ public class Guilds {
 
     public void createTable() {
         if (!tableExists()) {
-            String query = "CREATE TABLE " + database + "(`id` INT AUTO_INCREMENT primary_key NOT NULL, `guildName` TEXT NOT NULL, `guildId` TEXT NOT NULL, `bankBalance` TEXT NULL);";
+            String query = "CREATE TABLE " + database + "(`id` INT AUTO_INCREMENT primary key NOT NULL, `guildName` TEXT NOT NULL, `guildId` TEXT NOT NULL, `bankBalance` TEXT NULL);";
 
             try {
                 PreparedStatement state = conn.prepareStatement(query);
@@ -110,7 +110,7 @@ public class Guilds {
             PreparedStatement state = conn.prepareStatement(query);
             ResultSet rs = state.executeQuery();
             while (rs.next()) {
-                generated.add(rs.getString("guildId"));
+                generated.add(rs.getString("guildId") + ";" + rs.getString("guildName"));
             }
         } catch (SQLException e) {
             log.severe("Impossibile recuperare tutti gli id generati.");
