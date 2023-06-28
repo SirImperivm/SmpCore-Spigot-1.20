@@ -17,12 +17,14 @@ messages:
     info: "&8[&e!&8] &7"
     fail: "&8[&c!&8] &7"
   success:
+    plugin:
+      reloaded: "%spPlugin ricaricato con successo."
     guilds:
       created:
         - "&7✦»&m               &7¦✦¦&m               &7«✦"
-        - "<GRADIENT:002200>Gilda creata con successo</GRADIENT:00FF00>"
+        - "<GRADIENT:00AA00>&lGilda creata con successo</GRADIENT:00FF00>"
         - ""
-        - "<SOLID:33DAFF>Dati gilda:"
+        - "<SOLID:33DAFF>&lDati gilda:"
         - " &e✦ &6ID &8» &6$guildId"
         - " &e✦ &6GuildName &8» &6$guildName"
         - " &e✦ &6GuildTitle &8» &6$guildTitle"
@@ -43,6 +45,13 @@ messages:
         greaterThanZero: "%fpIl limite di membri dev'essere superiore a 0."
 permissions:
   admin-commands:
+    core:
+      main: smpc.admincommands.core.main
+      reload: smpc.admincommands.core.reload
     guilds:
       main: smpc.admincommands.guilds.main
       create: smpc.admincommands.guilds.create
+  user-commands:
+    guilds:
+      main: smpc.usercommands.guilds.main
+      shop: smpc.usercommands.guilds.shop

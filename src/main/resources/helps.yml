@@ -1,8 +1,21 @@
 helps:
   admin-commands:
+    core:
+      - "&8&m                              "
+      - ""
+      - "&a/smpc reload &7- &fRicarica il plugin."
+      - ""
+      - "&8&m                              "
     guilds:
       - "&8&m                              "
       - ""
       - "&a/ga createguild &e<guildName> <guildTitle> <memberSize> &7- &fCon questo l'admin crea una gilda (alla sua posizione)."
+      - ""
+      - "&8&m                              "
+  user-commands:
+    guilds:
+      - "&8&m                              "
+      - ""
+      - "&a/g shop &7- &fApre lo shop delle gilde."
       - ""
       - "&8&m                              "

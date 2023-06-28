@@ -6,7 +6,9 @@ import me.sirimperivm.spigot.assets.managers.Modules;
 import me.sirimperivm.spigot.assets.managers.placeholderapi.PapiExpansions;
 import me.sirimperivm.spigot.assets.managers.values.Vault;
 import me.sirimperivm.spigot.assets.utils.Colors;
-import me.sirimperivm.spigot.modules.commands.admin.AdminGuildsCommand;
+import me.sirimperivm.spigot.modules.commands.admin.core.AdminSmpcCommand;
+import me.sirimperivm.spigot.modules.commands.admin.guilds.AdminGuildsCommand;
+import me.sirimperivm.spigot.modules.commands.users.guilds.GuildsCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import static org.bukkit.Bukkit.getConsoleSender;
@@ -58,7 +60,10 @@ public final class Main extends JavaPlugin {
     public void onEnable() {
         setup();
         getServer().getPluginCommand("ga").setExecutor(new AdminGuildsCommand());
+        getServer().getPluginCommand("smpc").setExecutor(new AdminSmpcCommand());
+        getServer().getPluginCommand("g").setExecutor(new GuildsCommand());
         getConsoleSender().sendMessage(Colors.text("&a[SMPCore] Plugin attivato correttamente!"));
+        getConsoleSender().sendMessage(Colors.text("<RAINBOW1>Plugin ideato e sviluppato da SirImperivm_</RAINBOW>"));
     }
 
     @Override

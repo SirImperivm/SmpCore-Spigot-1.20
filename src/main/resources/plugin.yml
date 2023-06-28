@@ -12,3 +12,9 @@ commands:
   ga:
     aliases:
       - guildsadmin
+  g:
+    aliases:
+      - guilds
+  smpc:
+    aliases:
+      - smpcore

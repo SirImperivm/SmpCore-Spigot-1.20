@@ -1,1 +1,110 @@
 guis:
+  shopGui:
+    title: "<SOLID:33FF93>&lAcquista una gilda"
+    rows: 6
+    items:
+      filler_nero:
+        material: BLACK_STAINED_GLASS_PANE
+        displayName: "&0*"
+        lore: []
+        model: 0
+        glowing: false
+        itemFlags: []
+        slots:
+          - 0
+          - 8
+          - 9
+          - 17
+          - 18
+          - 26
+          - 27
+          - 35
+          - 36
+          - 44
+          - 45
+          - 53
+        action: NOTHING
+      filler_bianco:
+        material: WHITE_STAINED_GLASS_PANE
+        displayName: "&f*"
+        lore: []
+        model: 0
+        glowing: false
+        itemFlags: []
+        slots:
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+          - 6
+          - 7
+          - 10
+          - 13
+          - 16
+          - 19
+          - 22
+          - 25
+          - 28
+          - 31
+          - 34
+          - 37
+          - 40
+          - 43
+          - 45
+          - 47
+          - 48
+          - 50
+          - 51
+          - 52
+        action: NOTHING
+      close:
+        material: BARRIER
+        displayName: "<SOLID:FF3600>&nChiudi."
+        lore: []
+        model: 0
+        glowing: false
+        itemFlags: []
+        slots:
+          - 49
+        action: CLOSE_MENU
+      buyRedGuild:
+        material: RED_WOOL
+        displayName: "&cCompra la gilda rossa."
+        lore:
+          - "&7✦»&m               &7¦✦¦&m               &7«✦"
+          - "&6Stato gilda: &aDisponibile"
+          - "&6Prezzo: &a€1000.0"
+          - ""
+          - "&6Acquistando questo avrai accesso alla gilda rossa"
+          - "&6di cui ne sarai leader, potrai aggiornare il livello tramite soldi."
+          - "&7✦»&m               &7¦✦¦&m               &7«✦"
+        boughtLore:
+          - "&7✦»&m               &7¦✦¦&m               &7«✦"
+          - "&6Stato gilda: &cAcquistata"
+          - "&7✦»&m               &7¦✦¦&m               &7«✦"
+        model: 127
+        glowing: true
+        itemFlags:
+          - HIDE_ATTRIBUTES
+        slots:
+          - 11
+          - 12
+          - 14
+          - 15
+          - 20
+          - 21
+          - 23
+          - 24
+          - 29
+          - 30
+          - 32
+          - 33
+          - 38
+          - 39
+          - 41
+          - 42
+        action: BUY_GUILD
+        settings:
+          guildId: # Qui si dovrà inserire l'id della gilda creata precedentemente.
+          price: 1000.0

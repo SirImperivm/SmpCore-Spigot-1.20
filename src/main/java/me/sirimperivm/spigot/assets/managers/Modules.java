@@ -53,17 +53,17 @@ public class Modules {
         conf.getGuilds().set(confPath + guildId + ".mainHome.rotYaw", locYaw);
         conf.getGuilds().set(confPath + guildId + ".mainHome.rotPitch", locPitch);
         conf.getGuilds().set(confPath + guildId + ".settings.addOwner.command1.type", "command");
-        conf.getGuilds().set(confPath + guildId + ".settings.addOwner.command1.string", "luckperms:lp user %username% parent add caporosso");
+        conf.getGuilds().set(confPath + guildId + ".settings.addOwner.command1.string", "");
         conf.getGuilds().set(confPath + guildId + ".settings.addOfficer.command1.type", "command");
-        conf.getGuilds().set(confPath + guildId + ".settings.addOfficer.command1.string", "luckperms:lp user %username% parent add officerrosso");
+        conf.getGuilds().set(confPath + guildId + ".settings.addOfficer.command1.string", "");
         conf.getGuilds().set(confPath + guildId + ".settings.addMember.command1.type", "command");
-        conf.getGuilds().set(confPath + guildId + ".settings.addMember.command1.string", "luckperms:lp user %username% parent add rosso");
+        conf.getGuilds().set(confPath + guildId + ".settings.addMember.command1.string", "");
         conf.getGuilds().set(confPath + guildId + ".settings.remOwner.command1.type", "command");
-        conf.getGuilds().set(confPath + guildId + ".settings.remOwner.command1.string", "luckperms:lp user %username% parent remove caporosso");
+        conf.getGuilds().set(confPath + guildId + ".settings.remOwner.command1.string", "");
         conf.getGuilds().set(confPath + guildId + ".settings.remOfficer.command1.type", "command");
-        conf.getGuilds().set(confPath + guildId + ".settings.remOfficer.command1.string", "luckperms:lp user %username% parent remove officerrosso");
+        conf.getGuilds().set(confPath + guildId + ".settings.remOfficer.command1.string", "");
         conf.getGuilds().set(confPath + guildId + ".settings.remMember.command1.type", "command");
-        conf.getGuilds().set(confPath + guildId + ".settings.remMember.command1.string", "luckperms:lp user %username% parent remove rosso");
+        conf.getGuilds().set(confPath + guildId + ".settings.remMember.command1.string", "");
         conf.getGuilds().set(confPath + guildId + ".bank.limit", conf.getSettings().getDouble("settings.guilds.bank.defaultBankLimit"));
         conf.save(conf.getGuilds(), conf.getGuildsFile());
 

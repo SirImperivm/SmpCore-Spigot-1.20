@@ -1,4 +1,4 @@
-package me.sirimperivm.spigot.modules.commands.admin;
+package me.sirimperivm.spigot.modules.commands.admin.guilds;
 
 import me.sirimperivm.spigot.Main;
 import me.sirimperivm.spigot.assets.managers.Config;
@@ -84,7 +84,11 @@ public class AdminGuildsCommand implements CommandExecutor {
                                     p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.alreadyExists"));
                                 }
                             }
+                        } else {
+                            getUsage(p);
                         }
+                    } else {
+                        getUsage(p);
                     }
                 }
             }
