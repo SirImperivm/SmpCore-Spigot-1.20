@@ -33,6 +33,9 @@ messages:
         - " &e✦ &6Limite Banca &8» &6$bankLimit"
         - "&7✦»&m               &7¦✦¦&m               &7«✦"
       positionFormat: "$worldName&8,&6$posX&8,&6$posY&8,&6$posZ&8."
+  info:
+    money:
+      withdrawn: "%ip &e-&7$value."
   errors:
     no-perm:
       command: "%fpNecessiti del permesso &c$node &7per avere accesso a questo comando."
@@ -43,6 +46,13 @@ messages:
       membersLimit:
         containsChars: "%fpNel limite di membri sono accettati solo numeri."
         greaterThanZero: "%fpIl limite di membri dev'essere superiore a 0."
+      money:
+        not-enough: "%fpNecessiti di &c$price&7 per acquistare la gilda $guildTitle&7."
+      guildId:
+        isNull: "%fpNon è stato impostato l'id della gilda relativo a questo slot."
+        notExists: "%fpNon è stato trovato l'id della gilda relativo a questo slot."
+    members:
+      alreadyHaveGuild: "%fpHai già una gilda."
 permissions:
   admin-commands:
     core:
@@ -55,3 +65,7 @@ permissions:
     guilds:
       main: smpc.usercommands.guilds.main
       shop: smpc.usercommands.guilds.shop
+  user-actions:
+    guilds:
+      shop:
+        use: smpc.user.guilds.shop.use

@@ -1,6 +1,7 @@
 package me.sirimperivm.spigot.assets.managers;
 
 import me.sirimperivm.spigot.Main;
+import me.sirimperivm.spigot.assets.managers.databases.GuildMembers;
 import me.sirimperivm.spigot.assets.managers.databases.Guilds;
 
 import java.sql.Connection;
@@ -15,6 +16,7 @@ public class Db {
     private static Logger log = Logger.getLogger("SMPCore");
     private static Config conf = Main.getConf();
     private static Guilds guilds;
+    private static GuildMembers guildMembers;
 
     public static Connection conn;
     public static String dbname = conf.getSettings().getString("settings.database.dbname");
@@ -75,10 +77,16 @@ public class Db {
     public Db() {
         dataConnect();
         guilds = new Guilds();
+        guildMembers = new GuildMembers();
         guilds.createTable();
+        guildMembers.createTable();
     }
 
     public static Guilds getGuilds() {
         return guilds;
+    }
+
+    public static GuildMembers getGuildMembers() {
+        return guildMembers;
     }
 }

@@ -23,47 +23,52 @@ public class Gui {
     private static Modules mods = Main.getMods();
 
     public Inventory shopGui() {
-        String confPath = "guis.shopGui.";
-        String title = Config.getTransl("guis", confPath + "title");
-        int size = conf.getGuis().getInt(confPath + "rows") * 9;
+        String path = "guis.shopGui.";
+        String title = Config.getTransl("guis", path + "title");
+        int size = 9 * conf.getGuis().getInt(path + "rows");
 
         Inventory inv = Bukkit.createInventory(null, size, title);
 
-        for (String item : conf.getGuis().getConfigurationSection(confPath + "items").getKeys(false)) {
+        for (String item : conf.getGuis().getConfigurationSection("guis.shopGui.items").getKeys(false)) {
             String itemsPath = "guis.shopGui.items." + item;
-            List<Integer> slots = conf.getGuis().getIntegerList(itemsPath + ".slots");
             String actionType = conf.getGuis().getString(itemsPath + ".action");
+            List<Integer> slots = conf.getGuis().getIntegerList(itemsPath + ".slots");
 
-            Material mat = Material.getMaterial(conf.getGuis().getString(itemsPath + ".material"));
-            ItemStack is = new ItemStack(mat);
-            ItemMeta meta = is.getItemMeta();
+            ItemStack material = new ItemStack(Material.getMaterial(conf.getGuis().getString(itemsPath + ".material")));
+            ItemMeta meta = material.getItemMeta();
             String displayName = conf.getGuis().getString(itemsPath + ".displayName");
+            boolean glowing = conf.getGuis().getBoolean(itemsPath + ".glowing");
+
             if (!displayName.equalsIgnoreCase("null")) {
                 meta.setDisplayName(Colors.text(displayName));
             }
-            meta.setLore(General.lore(conf.getGuis().getStringList(itemsPath + ".lore")));
             if (actionType.equalsIgnoreCase("BUY_GUILD")) {
                 String guildId = conf.getGuis().getString(itemsPath + ".settings.guildId");
-                if (!guildId.equals(null)) {
+                if (!guildId.equals("null")) {
                     boolean boughtStatus = data.getGuilds().boughtStatus(guildId);
-                    if (boughtStatus) {
+                    if (!boughtStatus) {
+                        meta.setLore(General.lore(conf.getGuis().getStringList(itemsPath + ".lore")));
+                    } else {
                         meta.setLore(General.lore(conf.getGuis().getStringList(itemsPath + ".boughtLore")));
                     }
                 } else {
-                    slots = new ArrayList<>();
+                    slots.clear();
                 }
+            } else {
+                meta.setLore(General.lore(conf.getGuis().getStringList(itemsPath + ".lore")));
             }
             meta.setCustomModelData(conf.getGuis().getInt(itemsPath + ".model"));
-            if (conf.getGuis().getBoolean(itemsPath + ".glowing")) {
+            if (glowing) {
                 meta.addEnchant(Enchantment.DURABILITY, 1, true);
                 meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             }
             for (String flag : conf.getGuis().getStringList(itemsPath + ".itemFlags")) {
                 meta.addItemFlags(ItemFlag.valueOf(flag));
             }
-            is.setItemMeta(meta);
+            material.setItemMeta(meta);
+
             for (Integer i : slots) {
-                inv.setItem(i, is);
+                inv.setItem(i, material);
             }
         }
         return inv;

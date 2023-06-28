@@ -40,7 +40,7 @@ public class Guilds {
 
     public void createTable() {
         if (!tableExists()) {
-            String query = "CREATE TABLE " + database + "(`id` INT AUTO_INCREMENT primary key NOT NULL, `guildName` TEXT NOT NULL, `guildId` TEXT NOT NULL, `bankBalance` TEXT NULL, `level` INT NOT NULL, `bought` BIT(1) NOT NULL);";
+            String query = "CREATE TABLE " + database + "(`id` INT AUTO_INCREMENT primary key NOT NULL, `guildName` TEXT NOT NULL, `guildId` TEXT NOT NULL, `bankBalance` TEXT NULL, `level` INT NOT NULL, `bought` INT NOT NULL);";
 
             try {
                 PreparedStatement state = conn.prepareStatement(query);
@@ -137,7 +137,7 @@ public class Guilds {
             ResultSet rs = state.executeQuery();
             while (rs.next()) {
                 if (rs.getString("guildId").equals(guildId)) {
-                    if (rs.getInt("bought") == 1) {
+                    if (rs.getInt("bought") > 0) {
                         value = true;
                         break;
                     }

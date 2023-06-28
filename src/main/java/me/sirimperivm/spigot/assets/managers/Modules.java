@@ -1,9 +1,12 @@
 package me.sirimperivm.spigot.assets.managers;
 
 import me.sirimperivm.spigot.Main;
+import me.sirimperivm.spigot.assets.managers.values.Vault;
 import me.sirimperivm.spigot.assets.other.Strings;
 import me.sirimperivm.spigot.assets.utils.Colors;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -13,21 +16,23 @@ import java.util.List;
 public class Modules {
 
     private static List<String> generatedGuilds;
-    private static List<String> generatedOwners;
+    private static List<String> generatedMembers;
     private static Main plugin = Main.getPlugin();
     private static Config conf = Main.getConf();
     private static Db data = Main.getData();
+    private static Vault vault = Main.getVault();
 
     public Modules() {
         generatedGuilds = data.getGuilds().getGeneratedGuildsID();
-        generatedOwners = new ArrayList<>();
+        generatedMembers = data.getGuildMembers().getGeneratedMembersID();
     }
 
     public void createGuild(Player p, String guildName, String guildTitle, int membersLimit) {
-        String guildId = Strings.getRandomString(1);
+        String guildId = Strings.generateUuid();
         while (generatedGuilds.contains(guildId)) {
-            guildId = Strings.getRandomString(1);
+            guildId = Strings.generateUuid();
         }
+        generatedGuilds.add(guildId + ";" + guildName);
 
         String confPath = "guilds.";
         Location loc = p.getLocation();
@@ -84,11 +89,54 @@ public class Modules {
         }
     }
 
+    public void createLeader(Player p, String guildId) {
+        String username = p.getName();
+        String memberId = Strings.generateUuid();
+        while (generatedMembers.contains(memberId)) {
+            memberId = Strings.generateUuid();
+        }
+        generatedMembers.add(memberId + ";" + username);
+
+        data.getGuildMembers().insertMemberData(username, memberId, guildId, "leader");
+
+        for (String setting : conf.getGuilds().getConfigurationSection("guilds." + guildId + ".settings.addOwner").getKeys(false)) {
+            String settingsPath = "guilds." + guildId + ".settings.addOwner." + setting;
+            String settingType = conf.getGuilds().getString(settingsPath + ".type");
+            if (settingType.equalsIgnoreCase("command")) {
+                String command = conf.getGuilds().getString(settingsPath + ".string");
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command
+                        .replace("%username%", p.getName())
+                );
+            }
+        }
+
+        String locationPath = "guilds." + guildId + ".mainHome";
+        World homeWorld = Bukkit.getWorld(conf.getGuilds().getString(locationPath + ".worldName"));
+        double posX = conf.getGuilds().getDouble(locationPath + ".posX");
+        double posY = conf.getGuilds().getDouble(locationPath + ".posY");
+        double posZ = conf.getGuilds().getDouble(locationPath + ".posZ");
+        float rotYaw = conf.getGuilds().getInt(locationPath + ".rotYaw");
+        float rotPitch = conf.getGuilds().getInt(locationPath + ".rotPitch");
+        Location home = new Location(homeWorld, posX, posY, posZ, rotYaw, rotPitch);
+
+        p.teleport(home);
+    }
+
+    public double getUserBalance(Player p) {
+        return vault.getEcon().getBalance(p);
+    }
+    public void takeMoney(Player p, double value) {
+        vault.getEcon().withdrawPlayer(p, value);
+    }
+    public void addMoney(Player p, double value) {
+        vault.getEcon().depositPlayer(p, value);
+    }
+
     public static List<String> getGeneratedGuilds() {
         return generatedGuilds;
     }
 
-    public static List<String> getGeneratedOwners() {
-        return generatedOwners;
+    public static List<String> getGeneratedMembers() {
+        return generatedMembers;
     }
 }

@@ -1,6 +1,6 @@
 guis:
   shopGui:
-    title: "<SOLID:33FF93>&lAcquista una gilda"
+    title: "<GRADIENT:00AA00>&lAcquista una gilda</GRADIENT:00FF00>"
     rows: 6
     items:
       filler_nero:
@@ -40,18 +40,18 @@ guis:
           - 6
           - 7
           - 10
-          - 13
           - 16
           - 19
-          - 22
           - 25
           - 28
           - 31
           - 34
           - 37
+          - 39
           - 40
+          - 41
           - 43
-          - 45
+          - 46
           - 47
           - 48
           - 50
@@ -89,22 +89,7 @@ guis:
           - HIDE_ATTRIBUTES
         slots:
           - 11
-          - 12
-          - 14
-          - 15
-          - 20
-          - 21
-          - 23
-          - 24
-          - 29
-          - 30
-          - 32
-          - 33
-          - 38
-          - 39
-          - 41
-          - 42
         action: BUY_GUILD
         settings:
-          guildId: # Qui si dovrà inserire l'id della gilda creata precedentemente.
+          guildId: "null" # Qui si dovrà inserire l'id della gilda creata precedentemente.
           price: 1000.0
