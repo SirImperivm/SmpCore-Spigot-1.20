@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 
 @SuppressWarnings("all")
 public class Rainbow implements Pattern {
-    java.util.regex.Pattern patt = java.util.regex.Pattern.compile("<RAINBOW([0-9]{1,3})>(.*?)</RAINBOW>");
+    java.util.regex.Pattern patt = java.util.regex.Pattern.compile("<RAINBOW:([0-9]{1,3})>(.*?)</RAINBOW>");
 
     @Override
     public String process(String string) {

@@ -40,9 +40,9 @@ public final class Main extends JavaPlugin {
         conf = new Config();
         conf.loadAll();
         vault = new Vault();
-        successPrefix = Config.getTransl("settings", "messages.prefixes.success");
-        infoPrefix = Config.getTransl("settings", "messages.prefixes.info");
-        failPrefix = Config.getTransl("settings", "messages.prefixes.fail");
+        successPrefix = Colors.text(conf.getSettings().getString("messages.prefixes.success"));
+        infoPrefix = Colors.text(conf.getSettings().getString("messages.prefixes.info"));
+        failPrefix = Colors.text(conf.getSettings().getString("messages.prefixes.fail"));
         mods = new Modules();
         data = new Db();
         papi = new PapiExpansions(plugin);
@@ -56,13 +56,13 @@ public final class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         setup();
-        getConsoleSender().sendMessage(Colors.text("<RAINBOW>[SMPCore] Plugin attivato correttamente!</RAINBOW>"));
+        getConsoleSender().sendMessage(Colors.text("<RAINBOW:acf>[SMPCore] Plugin attivato correttamente!</RAINBOW>"));
     }
 
     @Override
     public void onDisable() {
         closeup();
-        getConsoleSender().sendMessage(Colors.text("<RAINBOW>[SMPCore] Plugin disattivato correttamente!</RAINBOW>"));
+        getConsoleSender().sendMessage(Colors.text("<RAINBOW:acf>[SMPCore] Plugin disattivato correttamente!</RAINBOW>"));
     }
 
     public static Db getData() {
