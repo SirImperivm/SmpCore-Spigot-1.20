@@ -1,7 +1,6 @@
 name: SmpCore
 version: '${project.version}'
 main: me.sirimperivm.spigot.Main
-api-version: 1.20
 depend:
   - Vault
 softdepend:

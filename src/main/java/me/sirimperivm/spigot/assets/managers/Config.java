@@ -28,7 +28,7 @@ public class Config {
         guilds = new YamlConfiguration();
         helpsFile = new File(folder, "helps.yml");
         helps = new YamlConfiguration();
-        guisFile = new File(folder, "guis.yml.yml");
+        guisFile = new File(folder, "guis.yml");
         guis = new YamlConfiguration();
 
         if (!folder.exists()) {
