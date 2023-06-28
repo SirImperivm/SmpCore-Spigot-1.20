@@ -56,11 +56,14 @@ public final class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         setup();
+        getConsoleSender().sendMessage(Colors.text("&a[SMPCore] Plugin attivato correttamente!"));
+        getConsoleSender().sendMessage(Colors.text("&9Plugin sviluppato e ideato da SirImperivm_"));
     }
 
     @Override
     public void onDisable() {
         closeup();
+        getConsoleSender().sendMessage(Colors.text("&a[SMPCore] Plugin disattivato correttamente!"));
     }
 
     public static Db getData() {

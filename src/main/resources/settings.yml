@@ -3,9 +3,9 @@ settings:
   database:
     host: "192.168.1.2"
     port: 3306
-    username: "u20_4TdwERs6jC"
-    password: "3PS2!8Ez@CQ2gW3QU@364gt7"
-    dbname: "s20_SmpCore"
+    username: "u44_mJ9FTgrleX"
+    password: "CTS+0i5CH7pu+Gdq3iLuy=sj"
+    dbname: "s44_SmpCore"
     tablePrefix: "smpc_"
   guilds:
     bank:
