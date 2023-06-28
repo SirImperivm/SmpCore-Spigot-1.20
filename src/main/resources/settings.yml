@@ -7,6 +7,9 @@ settings:
     password: "3PS2!8Ez@CQ2gW3QU@364gt7"
     dbname: "s20_SmpCore"
     tablePrefix: "smpc_"
+  guilds:
+    bank:
+      startingBalance: 0.0
 messages:
   prefixes:
     success: "&8[&a!&8] &7"

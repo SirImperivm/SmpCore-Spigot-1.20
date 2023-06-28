@@ -40,7 +40,7 @@ public class Guilds {
 
     public void createTable() {
         if (!tableExists()) {
-            String query = "CREATE TABLE " + database + "(`id` INT AUTO_INCREMENT primary_key NOT NULL, `guildName` TEXT NOT NULL, `guildId` TEXT NOT NULL);";
+            String query = "CREATE TABLE " + database + "(`id` INT AUTO_INCREMENT primary_key NOT NULL, `guildName` TEXT NOT NULL, `guildId` TEXT NOT NULL, `bankBalance` TEXT NULL);";
 
             try {
                 PreparedStatement state = conn.prepareStatement(query);
@@ -52,6 +52,26 @@ public class Guilds {
                 plugin.disablePlugin();
             }
         }
+    }
+
+    public String getGuildName(String guildId) {
+        String guildName = "";
+        String query = "SELECT * FROM " + database;
+
+        try {
+            PreparedStatement state = conn.prepareStatement(query);
+            ResultSet rs = state.executeQuery();
+            while (rs.next()) {
+                if (rs.getString("guildId").equals(guildId)) {
+                    guildName = rs.getString("guildName");
+                    break;
+                }
+            }
+        } catch (SQLException e) {
+            log.severe("Impossibile ottenere il nome della gilda dall'id: " + guildId + "!");
+            e.printStackTrace();
+        }
+        return guildName;
     }
 
     public void insertGuildData(String guildName, String guildId) {
@@ -67,6 +87,18 @@ public class Guilds {
                     "\n Nome Gilda: " + guildName +
                     "\n Id Gilda: " + guildId + "" +
                     "\n...!");
+            e.printStackTrace();
+        }
+    }
+
+    public void updateGuildBalance(String guildId, String newBalance) {
+        String query = "UPDATE " + database + " SET bankBalance='" + newBalance + "' WHERE guildId='" + guildId + "'";
+
+        try {
+            PreparedStatement state = conn.prepareStatement(query);
+            state.executeUpdate();
+        } catch (SQLException e) {
+            log.severe("Impossibile aggiornare il bilancio della gilda: " + getGuildName(guildId) + "!");
             e.printStackTrace();
         }
     }
