@@ -74,6 +74,26 @@ public class Guilds {
         return guildName;
     }
 
+    public String getGuildId(String guildName) {
+        String guildId = "";
+        String query = "SELECT * FROM " + database;
+
+        try {
+            PreparedStatement state = conn.prepareStatement(query);
+            ResultSet rs = state.executeQuery();
+            while (rs.next()) {
+                if (rs.getString("guildName").equalsIgnoreCase(guildName)) {
+                    guildId = rs.getString("guildId");
+                    break;
+                }
+            }
+        } catch (SQLException e) {
+            log.severe("Impossibile ottenere l'id della gilda: " + guildName + "!");
+            e.printStackTrace();
+        }
+        return guildId;
+    }
+
     public void insertGuildData(String guildName, String guildId) {
         String query = "INSERT INTO " + database + "(guildName, guildId, level, bought) VALUES (?, ?, ?, ?);";
 
@@ -89,6 +109,18 @@ public class Guilds {
                     "\n Nome Gilda: " + guildName +
                     "\n Id Gilda: " + guildId + "" +
                     "\n...!");
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteGuildData(String guildId) {
+        String query = "DELETE FROM " + database + " WHERE guildId='" + guildId + "';";
+
+        try {
+            PreparedStatement state = conn.prepareStatement(query);
+            state.executeUpdate();
+        } catch (SQLException e) {
+            log.severe("Impossibile cancellare la gilda " + getGuildName(guildId) + "!");
             e.printStackTrace();
         }
     }
@@ -129,14 +161,14 @@ public class Guilds {
         }
     }
 
-    public boolean boughtStatus(String guildId) {
+    public boolean boughtStatus(String type, String key) {
         boolean value = false;
         String query = "SELECT * FROM " + database;
         try {
             PreparedStatement state = conn.prepareStatement(query);
             ResultSet rs = state.executeQuery();
             while (rs.next()) {
-                if (rs.getString("guildId").equals(guildId)) {
+                if (rs.getString(type).equals(key)) {
                     if (rs.getInt("bought") > 0) {
                         value = true;
                         break;
@@ -144,7 +176,7 @@ public class Guilds {
                 }
             }
         } catch (SQLException e) {
-            log.severe("Impossibile capire se la gilda " + getGuildName(guildId) + " è stata mai acquistata.");
+            log.severe("Impossibile capire se la gilda è stata mai acquistata.");
             e.printStackTrace();
         }
         return value;

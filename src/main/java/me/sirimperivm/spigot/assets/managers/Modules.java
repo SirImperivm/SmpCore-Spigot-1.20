@@ -29,8 +29,11 @@ public class Modules {
 
     public void createGuild(Player p, String guildName, String guildTitle, int membersLimit) {
         String guildId = Strings.generateUuid();
-        while (generatedGuilds.contains(guildId)) {
-            guildId = Strings.generateUuid();
+        for (String generated : generatedGuilds) {
+            String[] partGenerated = generated.split(";");
+            if (partGenerated[0].equals(guildId)) {
+                guildId = Strings.generateUuid();
+            }
         }
         generatedGuilds.add(guildId + ";" + guildName);
 
@@ -48,28 +51,28 @@ public class Modules {
         data.getGuilds().insertGuildData(guildName, guildId);
         data.getGuilds().updateGuildBalance(guildId, startingBalance);
 
-        conf.getGuilds().set(confPath + guildId + ".guildName", guildName);
-        conf.getGuilds().set(confPath + guildId + ".guildTitle", guildTitle);
-        conf.getGuilds().set(confPath + guildId + ".membersLimit", membersLimit);
-        conf.getGuilds().set(confPath + guildId + ".mainHome.worldName", locWorld);
-        conf.getGuilds().set(confPath + guildId + ".mainHome.posX", locX);
-        conf.getGuilds().set(confPath + guildId + ".mainHome.posY", locY);
-        conf.getGuilds().set(confPath + guildId + ".mainHome.posZ", locZ);
-        conf.getGuilds().set(confPath + guildId + ".mainHome.rotYaw", locYaw);
-        conf.getGuilds().set(confPath + guildId + ".mainHome.rotPitch", locPitch);
-        conf.getGuilds().set(confPath + guildId + ".settings.addOwner.command1.type", "command");
-        conf.getGuilds().set(confPath + guildId + ".settings.addOwner.command1.string", "");
-        conf.getGuilds().set(confPath + guildId + ".settings.addOfficer.command1.type", "command");
-        conf.getGuilds().set(confPath + guildId + ".settings.addOfficer.command1.string", "");
-        conf.getGuilds().set(confPath + guildId + ".settings.addMember.command1.type", "command");
-        conf.getGuilds().set(confPath + guildId + ".settings.addMember.command1.string", "");
-        conf.getGuilds().set(confPath + guildId + ".settings.remOwner.command1.type", "command");
-        conf.getGuilds().set(confPath + guildId + ".settings.remOwner.command1.string", "");
-        conf.getGuilds().set(confPath + guildId + ".settings.remOfficer.command1.type", "command");
-        conf.getGuilds().set(confPath + guildId + ".settings.remOfficer.command1.string", "");
-        conf.getGuilds().set(confPath + guildId + ".settings.remMember.command1.type", "command");
-        conf.getGuilds().set(confPath + guildId + ".settings.remMember.command1.string", "");
-        conf.getGuilds().set(confPath + guildId + ".bank.limit", conf.getSettings().getDouble("settings.guilds.bank.defaultBankLimit"));
+        conf.getGuilds().set(confPath + guildName + ".guildId", guildId);
+        conf.getGuilds().set(confPath + guildName + ".guildTitle", guildTitle);
+        conf.getGuilds().set(confPath + guildName + ".membersLimit", membersLimit);
+        conf.getGuilds().set(confPath + guildName + ".mainHome.worldName", locWorld);
+        conf.getGuilds().set(confPath + guildName + ".mainHome.posX", locX);
+        conf.getGuilds().set(confPath + guildName + ".mainHome.posY", locY);
+        conf.getGuilds().set(confPath + guildName + ".mainHome.posZ", locZ);
+        conf.getGuilds().set(confPath + guildName + ".mainHome.rotYaw", locYaw);
+        conf.getGuilds().set(confPath + guildName + ".mainHome.rotPitch", locPitch);
+        conf.getGuilds().set(confPath + guildName + ".settings.addOwner.command1.type", "command");
+        conf.getGuilds().set(confPath + guildName + ".settings.addOwner.command1.string", "");
+        conf.getGuilds().set(confPath + guildName + ".settings.addOfficer.command1.type", "command");
+        conf.getGuilds().set(confPath + guildName + ".settings.addOfficer.command1.string", "");
+        conf.getGuilds().set(confPath + guildName + ".settings.addMember.command1.type", "command");
+        conf.getGuilds().set(confPath + guildName + ".settings.addMember.command1.string", "");
+        conf.getGuilds().set(confPath + guildName + ".settings.remOwner.command1.type", "command");
+        conf.getGuilds().set(confPath + guildName + ".settings.remOwner.command1.string", "");
+        conf.getGuilds().set(confPath + guildName + ".settings.remOfficer.command1.type", "command");
+        conf.getGuilds().set(confPath + guildName + ".settings.remOfficer.command1.string", "");
+        conf.getGuilds().set(confPath + guildName + ".settings.remMember.command1.type", "command");
+        conf.getGuilds().set(confPath + guildName + ".settings.remMember.command1.string", "");
+        conf.getGuilds().set(confPath + guildName + ".bank.limit", conf.getSettings().getDouble("settings.guilds.bank.defaultBankLimit"));
         conf.save(conf.getGuilds(), conf.getGuildsFile());
 
         for (String send : conf.getSettings().getStringList("messages.success.guilds.created")) {
@@ -89,18 +92,58 @@ public class Modules {
         }
     }
 
+    public void deleteGuild(Player p, String guildName) {
+        String guildId = data.getGuilds().getGuildId(guildName);
+        data.getGuilds().deleteGuildData(guildId);
+
+        if (conf.getGuilds().getConfigurationSection("guilds").getKeys(false).contains(guildName)) {
+            conf.getGuilds().getConfigurationSection("guilds").getKeys(false).remove(guildName);
+        }
+
+        /*String confPath = "guilds.";
+        conf.getGuilds().set(confPath + guildName + ".guildId", null);
+        conf.getGuilds().set(confPath + guildName + ".guildTitle", null);
+        conf.getGuilds().set(confPath + guildName + ".membersLimit", null);
+        conf.getGuilds().set(confPath + guildName + ".mainHome.worldName", null);
+        conf.getGuilds().set(confPath + guildName + ".mainHome.posX", null);
+        conf.getGuilds().set(confPath + guildName + ".mainHome.posY", null);
+        conf.getGuilds().set(confPath + guildName + ".mainHome.posZ", null);
+        conf.getGuilds().set(confPath + guildName + ".mainHome.rotYaw", null);
+        conf.getGuilds().set(confPath + guildName + ".mainHome.rotPitch", null);
+        conf.getGuilds().set(confPath + guildName + ".settings.addOwner.command1.type", null);
+        conf.getGuilds().set(confPath + guildName + ".settings.addOwner.command1.string", null);
+        conf.getGuilds().set(confPath + guildName + ".settings.addOfficer.command1.type", null);
+        conf.getGuilds().set(confPath + guildName + ".settings.addOfficer.command1.string", null);
+        conf.getGuilds().set(confPath + guildName + ".settings.addMember.command1.type", null);
+        conf.getGuilds().set(confPath + guildName + ".settings.addMember.command1.string", null);
+        conf.getGuilds().set(confPath + guildName + ".settings.remOwner.command1.type", null);
+        conf.getGuilds().set(confPath + guildName + ".settings.remOwner.command1.string", null);
+        conf.getGuilds().set(confPath + guildName + ".settings.remOfficer.command1.type", null);
+        conf.getGuilds().set(confPath + guildName + ".settings.remOfficer.command1.string", null);
+        conf.getGuilds().set(confPath + guildName + ".settings.remMember.command1.type", null);
+        conf.getGuilds().set(confPath + guildName + ".settings.remMember.command1.string", null);
+        conf.getGuilds().set(confPath + guildName + ".bank.limit", null); */
+        conf.save(conf.getGuilds(), conf.getGuildsFile());
+        p.sendMessage(Config.getTransl("settings", "messages.success.guilds.deleted")
+                .replace("$guildName", guildName));
+    }
+
     public void createLeader(Player p, String guildId) {
         String username = p.getName();
         String memberId = Strings.generateUuid();
-        while (generatedMembers.contains(memberId)) {
-            memberId = Strings.generateUuid();
+        for (String generated : generatedMembers) {
+            String[] partGenerated = generated.split(";");
+            if (partGenerated[0].equals(memberId)) {
+                memberId = Strings.generateUuid();
+            }
         }
         generatedMembers.add(memberId + ";" + username);
 
         data.getGuildMembers().insertMemberData(username, memberId, guildId, "leader");
+        String guildName = data.getGuilds().getGuildName(guildId);
 
-        for (String setting : conf.getGuilds().getConfigurationSection("guilds." + guildId + ".settings.addOwner").getKeys(false)) {
-            String settingsPath = "guilds." + guildId + ".settings.addOwner." + setting;
+        for (String setting : conf.getGuilds().getConfigurationSection("guilds." + guildName + ".settings.addOwner").getKeys(false)) {
+            String settingsPath = "guilds." + guildName + ".settings.addOwner." + setting;
             String settingType = conf.getGuilds().getString(settingsPath + ".type");
             if (settingType.equalsIgnoreCase("command")) {
                 String command = conf.getGuilds().getString(settingsPath + ".string");
@@ -110,7 +153,7 @@ public class Modules {
             }
         }
 
-        String locationPath = "guilds." + guildId + ".mainHome";
+        String locationPath = "guilds." + guildName + ".mainHome";
         World homeWorld = Bukkit.getWorld(conf.getGuilds().getString(locationPath + ".worldName"));
         double posX = conf.getGuilds().getDouble(locationPath + ".posX");
         double posY = conf.getGuilds().getDouble(locationPath + ".posY");

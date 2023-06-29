@@ -83,7 +83,7 @@ public class GuildMembers {
             PreparedStatement state = conn.prepareStatement(query);
             ResultSet rs = state.executeQuery();
             while (rs.next()) {
-                generated.add(rs.getString("userId") + ";" + rs.getString("username"));
+                generated.add(rs.getString("memberId") + ";" + rs.getString("username"));
             }
         } catch (SQLException e) {
             log.severe("Impossibile recuperare tutti gli id generati.");

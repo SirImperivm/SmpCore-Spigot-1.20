@@ -33,6 +33,7 @@ messages:
         - " &e✦ &6Limite Banca &8» &6$bankLimit"
         - "&7✦»&m               &7¦✦¦&m               &7«✦"
       positionFormat: "$worldName&8,&6$posX&8,&6$posY&8,&6$posZ&8."
+      deleted: "%spHai cancellato la gilda &a$guildName&7."
   info:
     money:
       withdrawn: "%ip &e-&7$value."
@@ -51,6 +52,8 @@ messages:
       guildId:
         isNull: "%fpNon è stato impostato l'id della gilda relativo a questo slot."
         notExists: "%fpNon è stato trovato l'id della gilda relativo a questo slot."
+      delete-guilds:
+        not-exists: "%fpNon esiste una gilda con questo nome."
     members:
       alreadyHaveGuild: "%fpHai già una gilda."
 permissions:
@@ -61,6 +64,7 @@ permissions:
     guilds:
       main: smpc.admincommands.guilds.main
       create: smpc.admincommands.guilds.create
+      delete: smpc.admincommands.guilds.delete
   user-commands:
     guilds:
       main: smpc.usercommands.guilds.main

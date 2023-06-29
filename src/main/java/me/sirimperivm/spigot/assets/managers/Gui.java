@@ -43,9 +43,9 @@ public class Gui {
                 meta.setDisplayName(Colors.text(displayName));
             }
             if (actionType.equalsIgnoreCase("BUY_GUILD")) {
-                String guildId = conf.getGuis().getString(itemsPath + ".settings.guildId");
-                if (!guildId.equals("null")) {
-                    boolean boughtStatus = data.getGuilds().boughtStatus(guildId);
+                String guildName = conf.getGuis().getString(itemsPath + ".settings.guildName");
+                if (!guildName.equals("null")) {
+                    boolean boughtStatus = data.getGuilds().boughtStatus("guildName", guildName);
                     if (!boughtStatus) {
                         meta.setLore(General.lore(conf.getGuis().getStringList(itemsPath + ".lore")));
                     } else {

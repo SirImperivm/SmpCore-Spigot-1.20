@@ -43,7 +43,31 @@ public class AdminGuildsCommand implements CommandExecutor {
                     } else if (a.length == 1) {
                         getUsage(p);
                     } else if (a.length == 2) {
-                        getUsage(p);
+                        if (a[0].equalsIgnoreCase("deleteguild")) {
+                            if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.admin-commands.guilds.delete"))) {
+                                return true;
+                            } else {
+                                String oldGuildName = a[1];
+                                List<String> generatedGuilds = mods.getGeneratedGuilds();
+                                boolean guildExists = false;
+                                for (String generated : generatedGuilds) {
+                                    String[] partGenerated = generated.split(";");
+                                    String guildName = partGenerated[1];
+                                    if (oldGuildName.equalsIgnoreCase(guildName)) {
+                                        guildExists = true;
+                                        break;
+                                    }
+                                }
+
+                                if (guildExists) {
+                                    mods.deleteGuild(p, oldGuildName);
+                                } else {
+                                    p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.delete-guilds.not-exists"));
+                                }
+                            }
+                        } else {
+                            getUsage(p);
+                        }
                     } else if (a.length == 3) {
                         getUsage(p);
                     } else if (a.length == 4) {

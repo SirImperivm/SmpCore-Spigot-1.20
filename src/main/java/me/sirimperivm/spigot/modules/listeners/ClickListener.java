@@ -46,13 +46,23 @@ public class ClickListener implements Listener {
                         if (actionType.equalsIgnoreCase("CLOSE_MENU")) {
                             p.closeInventory();
                         } else if (actionType.equalsIgnoreCase("BUY_GUILD")) {
-                            String guildId = conf.getGuis().getString(itemsPath + ".settings.guildId");
-                            String guildName;
+                            String guildName = conf.getGuis().getString(itemsPath + ".settings.guildName");
+                            String guildId;
                             String guildTitle;
-                            if (!guildId.equalsIgnoreCase("null")) {
-                                if (mods.getGeneratedGuilds().contains(guildId)) {
-                                    guildName = data.getGuilds().getGuildName(guildId);
-                                    guildTitle = Config.getTransl("guilds", "guilds." + guildId + ".guildTitle");
+                            if (!guildName.equalsIgnoreCase("null")) {
+                                boolean contained = false;
+                                List<String> generatedGuilds = mods.getGeneratedGuilds();
+                                for (String generated : generatedGuilds) {
+                                    String[] partGenerated = generated.split(";");
+                                    String containedGuildName = partGenerated[1];
+                                    if (guildName.equalsIgnoreCase(containedGuildName)) {
+                                        contained = true;
+                                        break;
+                                    }
+                                }
+                                if (contained) {
+                                    guildId = conf.getGuilds().getString("guilds." + guildName + ".guildId");
+                                    guildTitle = Config.getTransl("guilds", "guilds." + guildName + ".guildTitle");
 
                                     double userBalance = mods.getUserBalance(p);
                                     double price = conf.getGuis().getDouble(itemsPath + ".settings.price");
