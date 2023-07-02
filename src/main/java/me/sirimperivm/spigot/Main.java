@@ -9,6 +9,7 @@ import me.sirimperivm.spigot.assets.utils.Colors;
 import me.sirimperivm.spigot.modules.commands.admin.core.AdminSmpcCommand;
 import me.sirimperivm.spigot.modules.commands.admin.guilds.AdminGuildsCommand;
 import me.sirimperivm.spigot.modules.commands.users.guilds.GuildsCommand;
+import me.sirimperivm.spigot.modules.listeners.ClickListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import static org.bukkit.Bukkit.getConsoleSender;
@@ -62,6 +63,8 @@ public final class Main extends JavaPlugin {
         getServer().getPluginCommand("ga").setExecutor(new AdminGuildsCommand());
         getServer().getPluginCommand("smpc").setExecutor(new AdminSmpcCommand());
         getServer().getPluginCommand("g").setExecutor(new GuildsCommand());
+
+        getServer().getPluginManager().registerEvents(new ClickListener(), this);
         getConsoleSender().sendMessage(Colors.text("&a[SMPCore] Plugin attivato correttamente!"));
         getConsoleSender().sendMessage(Colors.text("<RAINBOW1>Plugin ideato e sviluppato da SirImperivm_</RAINBOW>"));
     }

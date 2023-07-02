@@ -3,8 +3,8 @@ settings:
   database:
     host: "192.168.1.2"
     port: 3306
-    username: "u44_mJ9FTgrleX"
-    password: "CTS+0i5CH7pu+Gdq3iLuy=sj"
+    username: "u44_D85VVtD94J"
+    password: "Alnn^m8S!ghwst63p=IfrB!R"
     dbname: "s44_SmpCore"
     tablePrefix: "smpc_"
   guilds:
