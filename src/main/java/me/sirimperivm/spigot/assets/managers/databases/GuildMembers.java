@@ -99,7 +99,7 @@ public class GuildMembers {
             PreparedStatement state = conn.prepareStatement(query);
             ResultSet rs = state.executeQuery();
             while (rs.next()) {
-                guildMembers.add(rs.getString("username") + ";" + rs.getString("guildName"));
+                guildMembers.add(rs.getString("username") + ";" + rs.getString("guildId"));
             }
         } catch (SQLException e) {
             log.severe("Impossibile associare i partecipanti di una gilda.");

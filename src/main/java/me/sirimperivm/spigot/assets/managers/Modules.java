@@ -103,9 +103,9 @@ public class Modules {
         guildMembers = data.getGuildMembers().getGuildMembers();
         for (String members : guildMembers) {
             String[] splitter = members.split(";");
-            String gName = splitter[1];
+            String gId = splitter[1];
             String username = splitter[0];
-            if (gName.equalsIgnoreCase(guildName)) {
+            if (gId.equalsIgnoreCase(guildId)) {
                 Player spawnedPlayer = Bukkit.getPlayer(username);
                 if (spawnedPlayer != null) {
                     sendPlayerToLobby(spawnedPlayer);
