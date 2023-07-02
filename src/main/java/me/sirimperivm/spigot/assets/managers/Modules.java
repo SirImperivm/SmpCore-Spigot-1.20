@@ -98,11 +98,10 @@ public class Modules {
         String guildId = data.getGuilds().getGuildId(guildName);
         data.getGuilds().deleteGuildData(guildId);
 
-        FileConfiguration guildsConfiguration = conf.getGuilds();
-        ConfigurationSection guildsSection = guildsConfiguration.getConfigurationSection("guilds");
-
-        if (guildsSection != null) {
-            guildsConfiguration.set(guildsSection.getName(), null);
+        for (String key : conf.getGuilds().getConfigurationSection("guilds").getKeys(false)) {
+            if (key.equals(guildId)) {
+                conf.getGuilds().set("guilds." + key, null);
+            }
         }
 
         /*String confPath = "guilds.";
