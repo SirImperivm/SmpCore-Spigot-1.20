@@ -7,6 +7,8 @@ import me.sirimperivm.spigot.assets.utils.Colors;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -96,8 +98,11 @@ public class Modules {
         String guildId = data.getGuilds().getGuildId(guildName);
         data.getGuilds().deleteGuildData(guildId);
 
-        if (conf.getGuilds().getConfigurationSection("guilds").getKeys(false).contains(guildName)) {
-            conf.getGuilds().getConfigurationSection("guilds").getKeys(false).remove(guildName);
+        FileConfiguration guildsConfiguration = conf.getGuilds();
+        ConfigurationSection guildsSection = guildsConfiguration.getConfigurationSection("guilds");
+
+        if (guildsSection != null) {
+            guildsConfiguration.set(guildsSection.getName(), null);
         }
 
         /*String confPath = "guilds.";
@@ -124,6 +129,7 @@ public class Modules {
         conf.getGuilds().set(confPath + guildName + ".settings.remMember.command1.string", null);
         conf.getGuilds().set(confPath + guildName + ".bank.limit", null); */
         conf.save(conf.getGuilds(), conf.getGuildsFile());
+        generatedGuilds = data.getGuilds().getGeneratedGuildsID();
         p.sendMessage(Config.getTransl("settings", "messages.success.guilds.deleted")
                 .replace("$guildName", guildName));
     }
