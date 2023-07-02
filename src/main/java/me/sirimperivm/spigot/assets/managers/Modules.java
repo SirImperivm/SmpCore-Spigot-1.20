@@ -99,7 +99,7 @@ public class Modules {
         data.getGuilds().deleteGuildData(guildId);
 
         for (String key : conf.getGuilds().getConfigurationSection("guilds").getKeys(false)) {
-            if (key.equals(guildId)) {
+            if (key.equals(guildName)) {
                 conf.getGuilds().set("guilds." + key, null);
             }
         }
