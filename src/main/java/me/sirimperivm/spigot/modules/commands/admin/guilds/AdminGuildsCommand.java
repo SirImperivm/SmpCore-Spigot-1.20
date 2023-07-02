@@ -41,28 +41,40 @@ public class AdminGuildsCommand implements CommandExecutor {
                     if (a.length == 0) {
                         getUsage(p);
                     } else if (a.length == 1) {
-                        getUsage(p);
+                        if (a[0].equalsIgnoreCase("setlobby")) {
+                            if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.admin-commands.guilds.setlobby"))) {
+                                return true;
+                            } else {
+                                mods.setLobby(p);
+                            }
+                        } else {
+                            getUsage(p);
+                        }
                     } else if (a.length == 2) {
                         if (a[0].equalsIgnoreCase("deleteguild")) {
                             if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.admin-commands.guilds.delete"))) {
                                 return true;
                             } else {
                                 String oldGuildName = a[1];
-                                List<String> generatedGuilds = mods.getGeneratedGuilds();
-                                boolean guildExists = false;
-                                for (String generated : generatedGuilds) {
-                                    String[] partGenerated = generated.split(";");
-                                    String guildName = partGenerated[1];
-                                    if (oldGuildName.equalsIgnoreCase(guildName)) {
-                                        guildExists = true;
-                                        break;
+                                if (mods.isLobbyLocated()) {
+                                    List<String> generatedGuilds = mods.getGeneratedGuilds();
+                                    boolean guildExists = false;
+                                    for (String generated : generatedGuilds) {
+                                        String[] partGenerated = generated.split(";");
+                                        String guildName = partGenerated[1];
+                                        if (oldGuildName.equalsIgnoreCase(guildName)) {
+                                            guildExists = true;
+                                            break;
+                                        }
                                     }
-                                }
 
-                                if (guildExists) {
-                                    mods.deleteGuild(p, oldGuildName);
+                                    if (guildExists) {
+                                        mods.deleteGuild(p, oldGuildName);
+                                    } else {
+                                        p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.delete-guilds.not-exists"));
+                                    }
                                 } else {
-                                    p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.delete-guilds.not-exists"));
+                                    p.sendMessage(Config.getTransl("settings", "messages.errors.lobby.not-located"));
                                 }
                             }
                         } else {
@@ -76,36 +88,40 @@ public class AdminGuildsCommand implements CommandExecutor {
                                 return true;
                             } else {
                                 String newGuildName = a[1];
-                                List<String> generatedGuilds = mods.getGeneratedGuilds();
-                                boolean alreadyExists = false;
-                                for (String generated : generatedGuilds) {
-                                    String[] partGenerated = generated.split(";");
-                                    String guildName = partGenerated[1];
-                                    if (newGuildName.equals(guildName)) {
-                                        alreadyExists = true;
-                                        break;
-                                    }
-                                }
-                                if (!alreadyExists) {
-                                    boolean containsChars = false;
-                                    for (char mLimitChar : a[3].toCharArray()) {
-                                        if (!((mLimitChar >= '0') && (mLimitChar <= '9'))) {
-                                            containsChars = true;
+                                if (mods.isLobbyLocated()) {
+                                    List<String> generatedGuilds = mods.getGeneratedGuilds();
+                                    boolean alreadyExists = false;
+                                    for (String generated : generatedGuilds) {
+                                        String[] partGenerated = generated.split(";");
+                                        String guildName = partGenerated[1];
+                                        if (newGuildName.equals(guildName)) {
+                                            alreadyExists = true;
                                             break;
                                         }
                                     }
-                                    if (!containsChars) {
-                                        int memberLimit = Integer.parseInt(a[3]);
-                                        if (memberLimit > 0) {
-                                            mods.createGuild(p, newGuildName, a[2], memberLimit);
+                                    if (!alreadyExists) {
+                                        boolean containsChars = false;
+                                        for (char mLimitChar : a[3].toCharArray()) {
+                                            if (!((mLimitChar >= '0') && (mLimitChar <= '9'))) {
+                                                containsChars = true;
+                                                break;
+                                            }
+                                        }
+                                        if (!containsChars) {
+                                            int memberLimit = Integer.parseInt(a[3]);
+                                            if (memberLimit > 0) {
+                                                mods.createGuild(p, newGuildName, a[2], memberLimit);
+                                            } else {
+                                                p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.membersLimit.greaterThanZero"));
+                                            }
                                         } else {
-                                            p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.membersLimit.greaterThanZero"));
+                                            p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.membersLimit.containsChars"));
                                         }
                                     } else {
-                                        p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.membersLimit.containsChars"));
+                                        p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.alreadyExists"));
                                     }
                                 } else {
-                                    p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.alreadyExists"));
+                                    p.sendMessage(Config.getTransl("settings", "messages.errors.lobby.not-located"));
                                 }
                             }
                         } else {

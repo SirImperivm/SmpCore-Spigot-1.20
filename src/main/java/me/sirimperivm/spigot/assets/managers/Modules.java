@@ -19,6 +19,7 @@ public class Modules {
 
     private static List<String> generatedGuilds;
     private static List<String> generatedMembers;
+    private static List<String> guildMembers;
     private static Main plugin = Main.getPlugin();
     private static Config conf = Main.getConf();
     private static Db data = Main.getData();
@@ -27,6 +28,7 @@ public class Modules {
     public Modules() {
         generatedGuilds = data.getGuilds().getGeneratedGuildsID();
         generatedMembers = data.getGuildMembers().getGeneratedMembersID();
+        guildMembers = new ArrayList<>();
     }
 
     public void createGuild(Player p, String guildName, String guildTitle, int membersLimit) {
@@ -98,39 +100,50 @@ public class Modules {
         String guildId = data.getGuilds().getGuildId(guildName);
         data.getGuilds().deleteGuildData(guildId);
 
+        guildMembers = data.getGuildMembers().getGuildMembers();
+        for (String members : guildMembers) {
+            String[] splitter = members.split(";");
+            String gName = splitter[1];
+            String username = splitter[0];
+            if (gName.equalsIgnoreCase(guildName)) {
+                Player spawnedPlayer = Bukkit.getPlayer(username);
+                if (spawnedPlayer != null) {
+                    sendPlayerToLobby(spawnedPlayer);
+                    spawnedPlayer.sendMessage(Config.getTransl("settings", "messages.info.guild.deleted.sendToPlayer"));
+                }
+            }
+        }
+
         for (String key : conf.getGuilds().getConfigurationSection("guilds").getKeys(false)) {
             if (key.equals(guildName)) {
                 conf.getGuilds().set("guilds." + key, null);
             }
         }
-
-        /*String confPath = "guilds.";
-        conf.getGuilds().set(confPath + guildName + ".guildId", null);
-        conf.getGuilds().set(confPath + guildName + ".guildTitle", null);
-        conf.getGuilds().set(confPath + guildName + ".membersLimit", null);
-        conf.getGuilds().set(confPath + guildName + ".mainHome.worldName", null);
-        conf.getGuilds().set(confPath + guildName + ".mainHome.posX", null);
-        conf.getGuilds().set(confPath + guildName + ".mainHome.posY", null);
-        conf.getGuilds().set(confPath + guildName + ".mainHome.posZ", null);
-        conf.getGuilds().set(confPath + guildName + ".mainHome.rotYaw", null);
-        conf.getGuilds().set(confPath + guildName + ".mainHome.rotPitch", null);
-        conf.getGuilds().set(confPath + guildName + ".settings.addOwner.command1.type", null);
-        conf.getGuilds().set(confPath + guildName + ".settings.addOwner.command1.string", null);
-        conf.getGuilds().set(confPath + guildName + ".settings.addOfficer.command1.type", null);
-        conf.getGuilds().set(confPath + guildName + ".settings.addOfficer.command1.string", null);
-        conf.getGuilds().set(confPath + guildName + ".settings.addMember.command1.type", null);
-        conf.getGuilds().set(confPath + guildName + ".settings.addMember.command1.string", null);
-        conf.getGuilds().set(confPath + guildName + ".settings.remOwner.command1.type", null);
-        conf.getGuilds().set(confPath + guildName + ".settings.remOwner.command1.string", null);
-        conf.getGuilds().set(confPath + guildName + ".settings.remOfficer.command1.type", null);
-        conf.getGuilds().set(confPath + guildName + ".settings.remOfficer.command1.string", null);
-        conf.getGuilds().set(confPath + guildName + ".settings.remMember.command1.type", null);
-        conf.getGuilds().set(confPath + guildName + ".settings.remMember.command1.string", null);
-        conf.getGuilds().set(confPath + guildName + ".bank.limit", null); */
         conf.save(conf.getGuilds(), conf.getGuildsFile());
+
         generatedGuilds = data.getGuilds().getGeneratedGuildsID();
         p.sendMessage(Config.getTransl("settings", "messages.success.guilds.deleted")
                 .replace("$guildName", guildName));
+    }
+
+    public void setLobby(Player p) {
+        String settingsPath = "settings.lobby.location";
+
+        String worldName = p.getLocation().getWorld().getName();
+        double posX = p.getLocation().getX();
+        double posY = p.getLocation().getY();
+        double posZ = p.getLocation().getZ();
+        float rotYaw = p.getLocation().getYaw();
+        float rotPitch = p.getLocation().getPitch();
+
+        conf.getSettings().set(settingsPath + ".world", worldName);
+        conf.getSettings().set(settingsPath + ".posX", posX);
+        conf.getSettings().set(settingsPath + ".posY", posY);
+        conf.getSettings().set(settingsPath + ".posZ", posZ);
+        conf.getSettings().set(settingsPath + ".rotYaw", rotYaw);
+        conf.getSettings().set(settingsPath + ".rotPitch", rotPitch);
+        conf.save(conf.getSettings(), conf.getSettingsFile());
+        p.sendMessage(Config.getTransl("settings", "messages.success.lobby.located"));
     }
 
     public void createLeader(Player p, String guildId) {
@@ -170,6 +183,22 @@ public class Modules {
         p.teleport(home);
     }
 
+    public void sendPlayerToLobby(Player p) {
+        World locWorld = Bukkit.getWorld(conf.getSettings().getString("settings.lobby.location.world"));
+        double locX = conf.getSettings().getDouble("settings.lobby.location.posX");
+        double locY = conf.getSettings().getDouble("settings.lobby.location.posY");
+        double locZ = conf.getSettings().getDouble("settings.lobby.location.posZ");
+        float rotYaw = conf.getSettings().getInt("settings.lobby.locations.rotYaw");
+        float rotPitch = conf.getSettings().getInt("settings.lobby.locations.rotPitch");
+
+        Location spawn = new Location(locWorld, locX, locY, locZ, rotYaw, rotPitch);
+        p.teleport(spawn);
+    }
+
+    public boolean isLobbyLocated() {
+        return !conf.getSettings().getString("settings.lobby.location.world").equalsIgnoreCase("null");
+    }
+
     public double getUserBalance(Player p) {
         return vault.getEcon().getBalance(p);
     }
@@ -186,5 +215,9 @@ public class Modules {
 
     public static List<String> getGeneratedMembers() {
         return generatedMembers;
+    }
+
+    public static List<String> getGuildMembers() {
+        return guildMembers;
     }
 }

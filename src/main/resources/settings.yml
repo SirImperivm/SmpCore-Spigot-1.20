@@ -11,6 +11,14 @@ settings:
     bank:
       startingBalance: 0.0
       defaultBankLimit: 5000.0
+  lobby:
+    location:
+      world: "null"
+      posX: 0.0
+      posY: 0.0
+      posZ: 0.0
+      rotYaw: 0.00
+      rotPitch: 0.00
 messages:
   prefixes:
     success: "&8[&a!&8] &7"
@@ -34,9 +42,14 @@ messages:
         - "&7✦»&m               &7¦✦¦&m               &7«✦"
       positionFormat: "$worldName&8,&6$posX&8,&6$posY&8,&6$posZ&8."
       deleted: "%spHai cancellato la gilda &a$guildName&7."
+    lobby:
+      located: "%spHai impostato correttamente la lobby."
   info:
     money:
       withdrawn: "%ip &e-&7$value."
+    guild:
+      deleted:
+        sendToPlayer: "%ipLa tua gilda è stata rimossa dalla configurazione."
   errors:
     no-perm:
       command: "%fpNecessiti del permesso &c$node &7per avere accesso a questo comando."
@@ -56,6 +69,8 @@ messages:
         not-exists: "%fpNon esiste una gilda con questo nome."
     members:
       alreadyHaveGuild: "%fpHai già una gilda."
+    lobby:
+      not-located: "%fpNon hai mai impostato lo spawn principale. &c(/ga setlobby)"
 permissions:
   admin-commands:
     core:
@@ -63,6 +78,7 @@ permissions:
       reload: smpc.admincommands.core.reload
     guilds:
       main: smpc.admincommands.guilds.main
+      setlobby: smpc.admincommands.guilds.setlobby
       create: smpc.admincommands.guilds.create
       delete: smpc.admincommands.guilds.delete
   user-commands:

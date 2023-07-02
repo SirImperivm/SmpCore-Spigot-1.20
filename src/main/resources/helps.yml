@@ -9,6 +9,7 @@ helps:
     guilds:
       - "&8&m                              "
       - ""
+      - "&a/guildsadmin(ga) setlobby &7- &fImposta lo spawn principale."
       - "&a/guildsadmin(ga) createguild &e<guildName> <guildTitle> <memberSize> &7- &fCon questo l'admin crea una gilda (alla sua posizione)."
       - "&a/guildsadmin(ga) deleteguild &e<guildName> &7- &fRimuove una gilda dalla configurazione."
       - "&a/guildsadmin(ga) addmember &e<player> <guildName> &7- &fAggiunge un utente ad una gilda esistente."

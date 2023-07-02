@@ -91,4 +91,20 @@ public class GuildMembers {
         }
         return generated;
     }
+
+    public List<String> getGuildMembers() {
+        List<String> guildMembers = new ArrayList<>();
+        String query = "SELECT * FROM " + database;
+        try {
+            PreparedStatement state = conn.prepareStatement(query);
+            ResultSet rs = state.executeQuery();
+            while (rs.next()) {
+                guildMembers.add(rs.getString("username") + ";" + rs.getString("guildName"));
+            }
+        } catch (SQLException e) {
+            log.severe("Impossibile associare i partecipanti di una gilda.");
+            e.printStackTrace();
+        }
+        return guildMembers;
+    }
 }
