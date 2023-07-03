@@ -6,6 +6,7 @@ import me.sirimperivm.spigot.assets.managers.Db;
 import me.sirimperivm.spigot.assets.managers.Modules;
 import me.sirimperivm.spigot.assets.utils.Colors;
 import me.sirimperivm.spigot.assets.utils.Errors;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -71,7 +72,7 @@ public class AdminGuildsCommand implements CommandExecutor {
                                     if (guildExists) {
                                         mods.deleteGuild(p, oldGuildName);
                                     } else {
-                                        p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.delete-guilds.not-exists"));
+                                        p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.not-exists"));
                                     }
                                 } else {
                                     p.sendMessage(Config.getTransl("settings", "messages.errors.lobby.not-located"));
@@ -81,7 +82,37 @@ public class AdminGuildsCommand implements CommandExecutor {
                             getUsage(p);
                         }
                     } else if (a.length == 3) {
-                        getUsage(p);
+                        if (a[0].equalsIgnoreCase("addmember")) {
+                            if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.admin-commands.guilds.addmember"))) {
+                                return true;
+                            } else {
+                                Player t = Bukkit.getPlayerExact(a[1]);
+                                if (t == null || !Bukkit.getOnlinePlayers().contains(t)) {
+                                    p.sendMessage(Config.getTransl("settings", "messages.errors.player.not-found"));
+                                } else {
+                                    List<String> generatedGuilds = mods.getGeneratedGuilds();
+                                    boolean guildExists = false;
+                                    for (String generated : generatedGuilds) {
+                                        String[] splitter = generated.split(";");
+                                        if (a[2].equalsIgnoreCase(splitter[1])) {
+                                            guildExists = true;
+                                            break;
+                                        }
+                                    }
+
+                                    if (guildExists) {
+                                        String guildId = data.getGuilds().getGuildId(a[2]);
+                                        mods.addMember(p, guildId);
+                                        p.sendMessage(Config.getTransl("settings", "messages.success.guilds.add-member")
+                                                .replace("$guildName", a[2]));
+                                    } else {
+                                        p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.not-exists"));
+                                    }
+                                }
+                            }
+                        } else {
+                            getUsage(p);
+                        }
                     } else if (a.length == 4) {
                         if (a[0].equalsIgnoreCase("createguild")) {
                             if (Errors.noPermCommand(p, conf.getSettings().getString("permissions.admin-commands.guilds.create"))) {

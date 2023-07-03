@@ -98,6 +98,9 @@ public class Modules {
 
     public void deleteGuild(Player p, String guildName) {
         String guildId = data.getGuilds().getGuildId(guildName);
+
+        removeMember(p);
+
         data.getGuilds().deleteGuildData(guildId);
 
         guildMembers = data.getGuildMembers().getGuildMembers();
@@ -170,17 +173,54 @@ public class Modules {
                 );
             }
         }
+        sendPlayerToGhome(p, guildName);
+    }
 
-        String locationPath = "guilds." + guildName + ".mainHome";
-        World homeWorld = Bukkit.getWorld(conf.getGuilds().getString(locationPath + ".worldName"));
-        double posX = conf.getGuilds().getDouble(locationPath + ".posX");
-        double posY = conf.getGuilds().getDouble(locationPath + ".posY");
-        double posZ = conf.getGuilds().getDouble(locationPath + ".posZ");
-        float rotYaw = conf.getGuilds().getInt(locationPath + ".rotYaw");
-        float rotPitch = conf.getGuilds().getInt(locationPath + ".rotPitch");
-        Location home = new Location(homeWorld, posX, posY, posZ, rotYaw, rotPitch);
+    public void removeMember(Player p) {
+        String username = p.getName();
+        String memberId;
+        boolean isMember = false;
+        for (String generated : generatedMembers) {
+            String[] splitter = generated.split(";");
+            if (splitter[1].equalsIgnoreCase(username)) {
+                isMember = true;
+            }
+            if (isMember) {
+                memberId = splitter[0];
+                break;
+            }
+        }
 
-        p.teleport(home);
+        if (isMember) {
+
+        }
+    }
+
+    public void addMember(Player p, String guildId) {
+        String username = p.getName();
+        String memberId = Strings.generateUuid();
+        for (String generated : generatedMembers) {
+            String[] splitter = generated.split(";");
+            if (splitter[0].equalsIgnoreCase(memberId)) {
+                memberId = Strings.generateUuid();
+            }
+        }
+        generatedMembers.add(memberId + ";" + username);
+
+        data.getGuildMembers().insertMemberData(username, memberId, guildId, "member");
+        String guildName = data.getGuilds().getGuildName(guildId);
+
+        for (String setting : conf.getSettings().getConfigurationSection("guilds." + guildName + ".settings.addMember").getKeys(false)) {
+            String settingsPath = "guilds." + guildName + ".settings.addOwner." + setting;
+            String settingType = conf.getGuilds().getString(settingsPath + ".type");
+            if (settingType.equalsIgnoreCase("command")) {
+                String command = conf.getGuilds().getString(settingsPath + ".string");
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command
+                        .replace("%username%", p.getName())
+                );
+            }
+        }
+        sendPlayerToGhome(p, guildName);
     }
 
     public void sendPlayerToLobby(Player p) {
@@ -193,6 +233,19 @@ public class Modules {
 
         Location spawn = new Location(locWorld, locX, locY, locZ, rotYaw, rotPitch);
         p.teleport(spawn);
+    }
+
+    public void sendPlayerToGhome(Player p, String guildName) {
+        String locationPath = "guilds." + guildName + ".mainHome";
+        World homeWorld = Bukkit.getWorld(conf.getGuilds().getString(locationPath + ".worldName"));
+        double posX = conf.getGuilds().getDouble(locationPath + ".posX");
+        double posY = conf.getGuilds().getDouble(locationPath + ".posY");
+        double posZ = conf.getGuilds().getDouble(locationPath + ".posZ");
+        float rotYaw = conf.getGuilds().getInt(locationPath + ".rotYaw");
+        float rotPitch = conf.getGuilds().getInt(locationPath + ".rotPitch");
+        Location home = new Location(homeWorld, posX, posY, posZ, rotYaw, rotPitch);
+
+        p.teleport(home);
     }
 
     public boolean isLobbyLocated() {

@@ -42,6 +42,7 @@ messages:
         - "&7✦»&m               &7¦✦¦&m               &7«✦"
       positionFormat: "$worldName&8,&6$posX&8,&6$posY&8,&6$posZ&8."
       deleted: "%spHai cancellato la gilda &a$guildName&7."
+      add-member: "%spMembro aggiunto alla gilda &a$guildName&7."
     lobby:
       located: "%spHai impostato correttamente la lobby."
   info:
@@ -65,12 +66,13 @@ messages:
       guildId:
         isNull: "%fpNon è stato impostato l'id della gilda relativo a questo slot."
         notExists: "%fpNon è stato trovato l'id della gilda relativo a questo slot."
-      delete-guilds:
-        not-exists: "%fpNon esiste una gilda con questo nome."
+      not-exists: "%fpNon esiste una gilda con questo nome."
     members:
       alreadyHaveGuild: "%fpHai già una gilda."
     lobby:
       not-located: "%fpNon hai mai impostato lo spawn principale. &c(/ga setlobby)"
+    player:
+      not-found: "%fpUtente con questo nome non trovato."
 permissions:
   admin-commands:
     core:
@@ -81,6 +83,7 @@ permissions:
       setlobby: smpc.admincommands.guilds.setlobby
       create: smpc.admincommands.guilds.create
       delete: smpc.admincommands.guilds.delete
+      addmember: smpc.admincommands.guilds.addmember
   user-commands:
     guilds:
       main: smpc.usercommands.guilds.main
