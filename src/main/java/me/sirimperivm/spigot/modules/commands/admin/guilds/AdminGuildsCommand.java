@@ -82,37 +82,7 @@ public class AdminGuildsCommand implements CommandExecutor {
                             getUsage(p);
                         }
                     } else if (a.length == 3) {
-                        if (a[0].equalsIgnoreCase("addmember")) {
-                            if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.admin-commands.guilds.addmember"))) {
-                                return true;
-                            } else {
-                                Player t = Bukkit.getPlayerExact(a[1]);
-                                if (t == null || !Bukkit.getOnlinePlayers().contains(t)) {
-                                    p.sendMessage(Config.getTransl("settings", "messages.errors.player.not-found"));
-                                } else {
-                                    List<String> generatedGuilds = mods.getGeneratedGuilds();
-                                    boolean guildExists = false;
-                                    for (String generated : generatedGuilds) {
-                                        String[] splitter = generated.split(";");
-                                        if (a[2].equalsIgnoreCase(splitter[1])) {
-                                            guildExists = true;
-                                            break;
-                                        }
-                                    }
-
-                                    if (guildExists) {
-                                        String guildId = data.getGuilds().getGuildId(a[2]);
-                                        mods.addMember(p, guildId);
-                                        p.sendMessage(Config.getTransl("settings", "messages.success.guilds.add-member")
-                                                .replace("$guildName", a[2]));
-                                    } else {
-                                        p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.not-exists"));
-                                    }
-                                }
-                            }
-                        } else {
-                            getUsage(p);
-                        }
+                        getUsage(p);
                     } else if (a.length == 4) {
                         if (a[0].equalsIgnoreCase("createguild")) {
                             if (Errors.noPermCommand(p, conf.getSettings().getString("permissions.admin-commands.guilds.create"))) {

@@ -7,6 +7,7 @@ import me.sirimperivm.spigot.assets.managers.Gui;
 import me.sirimperivm.spigot.assets.managers.Modules;
 import me.sirimperivm.spigot.assets.utils.Colors;
 import me.sirimperivm.spigot.assets.utils.Errors;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -34,9 +35,11 @@ public class GuildsCommand implements CommandExecutor {
                 return true;
             } else {
                 if (a.length == 0) {
-                    getUsage(s);
+                    s.sendMessage(Colors.text("<RAINBOW1>SMPCore: Plugin ideato e sviluppato da SirImperivm_</RAINBOW>"));
                 } else if (a.length == 1) {
-                    if (a[0].equalsIgnoreCase("shop")) {
+                    if (a[0].equalsIgnoreCase("help")) {
+                        getUsage(s);
+                    } else if (a[0].equalsIgnoreCase("shop")) {
                         if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.user-commands.guilds.shop"))) {
                             return true;
                         } else {
@@ -47,6 +50,37 @@ public class GuildsCommand implements CommandExecutor {
                                 Gui gm = new Gui();
                                 p.openInventory(gm.shopGui());
                             }
+                        }
+                    } else if (a.length == 2) {
+                        if (a[0].equalsIgnoreCase("invite")) {
+                            if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.user-commands.guilds.invite"))) {
+                                return true;
+                            } else {
+                                if (Errors.noConsole(s)) {
+                                    return true;
+                                } else {
+                                    Player p = (Player) s;
+                                    Player t = Bukkit.getPlayerExact(a[1]);
+                                    if (t == null || !Bukkit.getOnlinePlayers().contains(t)) {
+                                        p.sendMessage(Config.getTransl("settings", "messages.errors.player.not-found"));
+                                    } else {
+                                        String playerName = p.getName();
+                                        String playerGuildId = data.getGuildMembers().getGuildIdFromMember(playerName);
+                                        String playerGuildName = data.getGuilds().getGuildName(playerGuildId);
+
+                                        String targetName = t.getName();
+                                        String targetGuildId = data.getGuildMembers().getGuildIdFromMember(targetName);
+
+                                        if (!targetGuildId.equalsIgnoreCase("null")) {
+
+                                        } else {
+                                            p.sendMessage(Config.getTransl("settings", "messages.errors.members.target.is-on-a-guild"));
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            getUsage(s);
                         }
                     } else {
                         getUsage(s);

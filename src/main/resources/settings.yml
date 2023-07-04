@@ -51,6 +51,10 @@ messages:
     guild:
       deleted:
         sendToPlayer: "%ipLa tua gilda è stata rimossa dalla configurazione."
+      members:
+        invited:
+          you: "%ipL'utente &e$playerName&7 ti ha invitato nella gilda &e$guildName&7. Hai 15 secondi per accettare con &e/g accept&7."
+          members: "%ipL'utente &e$playerName&7 è stato invitato nella tua gilda."
   errors:
     no-perm:
       command: "%fpNecessiti del permesso &c$node &7per avere accesso a questo comando."
@@ -69,6 +73,8 @@ messages:
       not-exists: "%fpNon esiste una gilda con questo nome."
     members:
       alreadyHaveGuild: "%fpHai già una gilda."
+      target:
+        is-on-a-guild: "%fpL'utente è già membro di una gilda."
     lobby:
       not-located: "%fpNon hai mai impostato lo spawn principale. &c(/ga setlobby)"
     player:
@@ -88,6 +94,7 @@ permissions:
     guilds:
       main: smpc.usercommands.guilds.main
       shop: smpc.usercommands.guilds.shop
+      invite: smpc.usercommands.guilds.invite
   user-actions:
     guilds:
       shop:

@@ -24,11 +24,12 @@ helps:
     guilds:
       - "&8&m                              "
       - ""
+      - "&a/guilds(g) help &7- &fMostra i comandi utili."
       - "&a/guilds(g) shop &7- &fApre lo shop delle gilde."
       - "&a/guilds(g) home &7- &fTi riporta allo spawn della gilda."
+      - "&a/guilds(g) accept &7- &fAccetta un invito in corso relativo ad una gilda."
       - "&a/guilds(g) leave &7- &fEsci da una gilda."
       - "&a/guilds(g) invite &e<player> &7- &fInvita un utente in gilda (lui deve accettare)."
-      - "&a/guilds(g) accept &e<guildName> &7- &fAccetta un invito in corso relativo ad una gilda."
       - "&a/guilds(g) kick &e<guildMember> &7- &fEspelle un membro dalla gilda."
       - "&a/guilds(g) setofficer &e<guildMember> &7- &fPromuove un membro della gilda ad ufficiale."
       - "&a/guilds(g) unsetofficer &e<guildMember> &7- &fDegrada un ufficiale della gilda a membro."

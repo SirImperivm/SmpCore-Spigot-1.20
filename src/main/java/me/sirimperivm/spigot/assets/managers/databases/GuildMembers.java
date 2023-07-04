@@ -107,4 +107,23 @@ public class GuildMembers {
         }
         return guildMembers;
     }
+
+    public String getGuildIdFromMember(String username) {
+        String guildId = "null";
+        String query = "SELECT * FROM " + database;
+        try {
+            PreparedStatement state = conn.prepareStatement(query);
+            ResultSet rs = state.executeQuery();
+            while (rs.next()) {
+                if (rs.getString("username").equalsIgnoreCase(username)) {
+                    guildId = rs.getString("guildId");
+                    break;
+                }
+            }
+        } catch (SQLException e) {
+            log.severe("Impossibile ottenere l'id della gilda relativa all'utente " + username + "!");
+            e.printStackTrace();
+        }
+        return guildId;
+    }
 }

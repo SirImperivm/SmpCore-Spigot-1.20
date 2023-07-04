@@ -12,6 +12,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @SuppressWarnings("all")
@@ -20,6 +21,7 @@ public class Modules {
     private static List<String> generatedGuilds;
     private static List<String> generatedMembers;
     private static List<String> guildMembers;
+    private static HashMap<String, String> invites;
     private static Main plugin = Main.getPlugin();
     private static Config conf = Main.getConf();
     private static Db data = Main.getData();
@@ -29,6 +31,7 @@ public class Modules {
         generatedGuilds = data.getGuilds().getGeneratedGuildsID();
         generatedMembers = data.getGuildMembers().getGeneratedMembersID();
         guildMembers = new ArrayList<>();
+        invites = new HashMap<String, String>();
     }
 
     public void createGuild(Player p, String guildName, String guildTitle, int membersLimit) {
@@ -99,8 +102,6 @@ public class Modules {
     public void deleteGuild(Player p, String guildName) {
         String guildId = data.getGuilds().getGuildId(guildName);
 
-        removeMember(p);
-
         data.getGuilds().deleteGuildData(guildId);
 
         guildMembers = data.getGuildMembers().getGuildMembers();
@@ -149,6 +150,11 @@ public class Modules {
         p.sendMessage(Config.getTransl("settings", "messages.success.lobby.located"));
     }
 
+    public void inviteMember(Player target, String guildName) {
+        String username = target.getName();
+        invites.put(username, guildName);
+    }
+
     public void createLeader(Player p, String guildId) {
         String username = p.getName();
         String memberId = Strings.generateUuid();
@@ -164,53 +170,6 @@ public class Modules {
         String guildName = data.getGuilds().getGuildName(guildId);
 
         for (String setting : conf.getGuilds().getConfigurationSection("guilds." + guildName + ".settings.addOwner").getKeys(false)) {
-            String settingsPath = "guilds." + guildName + ".settings.addOwner." + setting;
-            String settingType = conf.getGuilds().getString(settingsPath + ".type");
-            if (settingType.equalsIgnoreCase("command")) {
-                String command = conf.getGuilds().getString(settingsPath + ".string");
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command
-                        .replace("%username%", p.getName())
-                );
-            }
-        }
-        sendPlayerToGhome(p, guildName);
-    }
-
-    public void removeMember(Player p) {
-        String username = p.getName();
-        String memberId;
-        boolean isMember = false;
-        for (String generated : generatedMembers) {
-            String[] splitter = generated.split(";");
-            if (splitter[1].equalsIgnoreCase(username)) {
-                isMember = true;
-            }
-            if (isMember) {
-                memberId = splitter[0];
-                break;
-            }
-        }
-
-        if (isMember) {
-
-        }
-    }
-
-    public void addMember(Player p, String guildId) {
-        String username = p.getName();
-        String memberId = Strings.generateUuid();
-        for (String generated : generatedMembers) {
-            String[] splitter = generated.split(";");
-            if (splitter[0].equalsIgnoreCase(memberId)) {
-                memberId = Strings.generateUuid();
-            }
-        }
-        generatedMembers.add(memberId + ";" + username);
-
-        data.getGuildMembers().insertMemberData(username, memberId, guildId, "member");
-        String guildName = data.getGuilds().getGuildName(guildId);
-
-        for (String setting : conf.getSettings().getConfigurationSection("guilds." + guildName + ".settings.addMember").getKeys(false)) {
             String settingsPath = "guilds." + guildName + ".settings.addOwner." + setting;
             String settingType = conf.getGuilds().getString(settingsPath + ".type");
             if (settingType.equalsIgnoreCase("command")) {
@@ -272,5 +231,9 @@ public class Modules {
 
     public static List<String> getGuildMembers() {
         return guildMembers;
+    }
+
+    public static HashMap<String, String> getInvites() {
+        return invites;
     }
 }
