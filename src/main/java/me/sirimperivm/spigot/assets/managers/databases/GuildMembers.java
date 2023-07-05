@@ -7,6 +7,8 @@ import org.bukkit.entity.Player;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -125,5 +127,42 @@ public class GuildMembers {
             e.printStackTrace();
         }
         return guildId;
+    }
+
+    public HashMap<String, List<String>> guildsData() {
+        HashMap<String, List<String>> guildsData = new HashMap<String, List<String>>();
+        String query = "SELECT * FROM " + database;
+        try {
+            PreparedStatement state = conn.prepareStatement(query);
+            ResultSet rs = state.executeQuery();
+            while (rs.next()) {
+                List<String> guildAndRole = new ArrayList<String>();
+                guildAndRole.add(rs.getString("guildId"));
+                guildAndRole.add(rs.getString("guildRole"));
+                guildsData.put(rs.getString("username"), guildAndRole);
+            }
+        } catch (SQLException e) {
+            log.severe("Impossibile ricevere i dati inerenti alle gilde dei membri.");
+            e.printStackTrace();
+        }
+        return guildsData;
+    }
+
+    public int getMembersCount(String guildId) {
+        int count = 0;
+        String query = "SELECT * FROM " + database;
+        try {
+            PreparedStatement state = conn.prepareStatement(query);
+            ResultSet rs = state.executeQuery();
+            while (rs.next()) {
+                if (rs.getString("guildId").equalsIgnoreCase(guildId)) {
+                    count++;
+                }
+            }
+        } catch (SQLException e) {
+            log.severe("Impossibile ottenere il conto dei membri per la gilda " + data.getGuilds().getGuildName(guildId) + "!");
+            e.printStackTrace();
+        }
+        return count;
     }
 }

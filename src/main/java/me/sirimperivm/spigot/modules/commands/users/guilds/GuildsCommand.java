@@ -13,6 +13,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
+import java.util.List;
+
 @SuppressWarnings("all")
 public class GuildsCommand implements CommandExecutor {
 
@@ -51,36 +54,65 @@ public class GuildsCommand implements CommandExecutor {
                                 p.openInventory(gm.shopGui());
                             }
                         }
-                    } else if (a.length == 2) {
-                        if (a[0].equalsIgnoreCase("invite")) {
-                            if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.user-commands.guilds.invite"))) {
+                    } else if (a[0].equalsIgnoreCase("accept")) {
+                        if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.user-commands.guilds.accept"))) {
+                            return true;
+                        } else {
+                            if (Errors.noConsole(s)) {
                                 return true;
                             } else {
-                                if (Errors.noConsole(s)) {
-                                    return true;
+                                Player p = (Player) s;
+                                String playerName = p.getName();
+
+                                HashMap<String, String> invites = mods.getInvites();
+                                if (invites.containsKey(playerName)) {
+
                                 } else {
-                                    Player p = (Player) s;
-                                    Player t = Bukkit.getPlayerExact(a[1]);
-                                    if (t == null || !Bukkit.getOnlinePlayers().contains(t)) {
-                                        p.sendMessage(Config.getTransl("settings", "messages.errors.player.not-found"));
-                                    } else {
-                                        String playerName = p.getName();
-                                        String playerGuildId = data.getGuildMembers().getGuildIdFromMember(playerName);
-                                        String playerGuildName = data.getGuilds().getGuildName(playerGuildId);
 
+                                }
+                            }
+                        }
+                    } else {
+                        getUsage(s);
+                    }
+                } else if (a.length == 2) {
+                    if (a[0].equalsIgnoreCase("invite")) {
+                        if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.user-commands.guilds.invite"))) {
+                            return true;
+                        } else {
+                            if (Errors.noConsole(s)) {
+                                return true;
+                            } else {
+                                Player p = (Player) s;
+                                Player t = Bukkit.getPlayer(a[1]);
+                                if (t == null || !Bukkit.getOnlinePlayers().contains(t)) {
+                                    p.sendMessage(Config.getTransl("settings", "messages.errors.players.not-found"));
+                                } else {
+                                    String playerName = p.getName();
+                                    HashMap<String, List<String>> guildsData = mods.getGuildsData();
+                                    if (guildsData.containsKey(playerName)) {
                                         String targetName = t.getName();
-                                        String targetGuildId = data.getGuildMembers().getGuildIdFromMember(targetName);
+                                        if (!guildsData.containsKey(targetName)) {
+                                            List<String> guildSettings = guildsData.get(playerName);
+                                            String guildId = guildSettings.get(0);
+                                            int membersCount = data.getGuildMembers().getMembersCount(guildId);
+                                            String guildName = data.getGuilds().getGuildName(guildId);
+                                            int membersLimit = conf.getGuilds().getInt("guilds." + guildName + ".membersLimit");
 
-                                        if (!targetGuildId.equalsIgnoreCase("null")) {
-
+                                            if (membersCount <= membersLimit) {
+                                                mods.inviteMember(t, guildName);
+                                            } else {
+                                                p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.members.limi-reached")
+                                                        .replace("$membersLimit", String.valueOf(membersLimit)));
+                                            }
                                         } else {
                                             p.sendMessage(Config.getTransl("settings", "messages.errors.members.target.is-on-a-guild"));
                                         }
+                                    } else {
+                                        p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.dont-have"));
                                     }
                                 }
                             }
-                        } else {
-                            getUsage(s);
                         }
                     } else {
                         getUsage(s);

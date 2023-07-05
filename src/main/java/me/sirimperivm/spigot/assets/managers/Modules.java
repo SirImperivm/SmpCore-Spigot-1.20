@@ -10,6 +10,8 @@ import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +24,7 @@ public class Modules {
     private static List<String> generatedMembers;
     private static List<String> guildMembers;
     private static HashMap<String, String> invites;
+    private static HashMap<String, List<String>> guildsData;
     private static Main plugin = Main.getPlugin();
     private static Config conf = Main.getConf();
     private static Db data = Main.getData();
@@ -32,6 +35,7 @@ public class Modules {
         generatedMembers = data.getGuildMembers().getGeneratedMembersID();
         guildMembers = new ArrayList<>();
         invites = new HashMap<String, String>();
+        guildsData = data.getGuildMembers().guildsData();
     }
 
     public void createGuild(Player p, String guildName, String guildTitle, int membersLimit) {
@@ -153,6 +157,15 @@ public class Modules {
     public void inviteMember(Player target, String guildName) {
         String username = target.getName();
         invites.put(username, guildName);
+        target.sendMessage(Config.getTransl("settings", "messages.info.guild.members.invited.you")
+                .replace("$guildName", guildName));
+        BukkitScheduler schedule = Bukkit.getScheduler();
+        schedule.runTaskLater(plugin, () -> {
+            if (invites.containsKey(username)) {
+                target.sendMessage(Config.getTransl("settings", "messages.info.general.time.expired"));
+                invites.remove(username);
+            }
+        }, (long) 20 * 15);
     }
 
     public void createLeader(Player p, String guildId) {
@@ -235,5 +248,9 @@ public class Modules {
 
     public static HashMap<String, String> getInvites() {
         return invites;
+    }
+
+    public static HashMap<String, List<String>> getGuildsData() {
+        return guildsData;
     }
 }

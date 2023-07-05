@@ -53,8 +53,11 @@ messages:
         sendToPlayer: "%ipLa tua gilda è stata rimossa dalla configurazione."
       members:
         invited:
-          you: "%ipL'utente &e$playerName&7 ti ha invitato nella gilda &e$guildName&7. Hai 15 secondi per accettare con &e/g accept&7."
+          you: "%ipSei stato invitato a far parte della gilda &e$guildName&7. Hai 15 secondi per accettare con &e/g accept&7."
           members: "%ipL'utente &e$playerName&7 è stato invitato nella tua gilda."
+    general:
+      time:
+        expired: "%ipTempo scaduto."
   errors:
     no-perm:
       command: "%fpNecessiti del permesso &c$node &7per avere accesso a questo comando."
@@ -71,13 +74,17 @@ messages:
         isNull: "%fpNon è stato impostato l'id della gilda relativo a questo slot."
         notExists: "%fpNon è stato trovato l'id della gilda relativo a questo slot."
       not-exists: "%fpNon esiste una gilda con questo nome."
+      dont-have: "%fpNon sei membro di nessuna gilda."
+      invites:
+        not-received: "%fpNon hai ricevuto nessun invito."
     members:
       alreadyHaveGuild: "%fpHai già una gilda."
       target:
         is-on-a-guild: "%fpL'utente è già membro di una gilda."
+      limit-reached: "%fpHai raggiunto il limite massimo di utenti per la tua gilda &c$membersLimit&7."
     lobby:
       not-located: "%fpNon hai mai impostato lo spawn principale. &c(/ga setlobby)"
-    player:
+    players:
       not-found: "%fpUtente con questo nome non trovato."
 permissions:
   admin-commands:
@@ -95,6 +102,7 @@ permissions:
       main: smpc.usercommands.guilds.main
       shop: smpc.usercommands.guilds.shop
       invite: smpc.usercommands.guilds.invite
+      accept: smpc.usercommands.guilds.accept
   user-actions:
     guilds:
       shop:
