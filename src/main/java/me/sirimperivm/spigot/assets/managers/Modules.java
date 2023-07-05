@@ -1,16 +1,19 @@
 package me.sirimperivm.spigot.assets.managers;
 
+import io.th0rgal.oraxen.api.OraxenItems;
 import me.sirimperivm.spigot.Main;
 import me.sirimperivm.spigot.assets.managers.values.Vault;
+import me.sirimperivm.spigot.assets.other.General;
 import me.sirimperivm.spigot.assets.other.Strings;
 import me.sirimperivm.spigot.assets.utils.Colors;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
+import me.sirimperivm.spigot.other.Enchants;
+import org.bukkit.*;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.ArrayList;
@@ -71,17 +74,17 @@ public class Modules {
         conf.getGuilds().set(confPath + guildName + ".mainHome.posZ", locZ);
         conf.getGuilds().set(confPath + guildName + ".mainHome.rotYaw", locYaw);
         conf.getGuilds().set(confPath + guildName + ".mainHome.rotPitch", locPitch);
-        conf.getGuilds().set(confPath + guildName + ".settings.addOwner.command1.type", "command");
+        conf.getGuilds().set(confPath + guildName + ".settings.addOwner.command1.type", "sendCommand");
         conf.getGuilds().set(confPath + guildName + ".settings.addOwner.command1.string", "");
-        conf.getGuilds().set(confPath + guildName + ".settings.addOfficer.command1.type", "command");
+        conf.getGuilds().set(confPath + guildName + ".settings.addOfficer.command1.type", "sendCommand");
         conf.getGuilds().set(confPath + guildName + ".settings.addOfficer.command1.string", "");
-        conf.getGuilds().set(confPath + guildName + ".settings.addMember.command1.type", "command");
+        conf.getGuilds().set(confPath + guildName + ".settings.addMember.command1.type", "sendCommand");
         conf.getGuilds().set(confPath + guildName + ".settings.addMember.command1.string", "");
-        conf.getGuilds().set(confPath + guildName + ".settings.remOwner.command1.type", "command");
+        conf.getGuilds().set(confPath + guildName + ".settings.remOwner.command1.type", "sendCommand");
         conf.getGuilds().set(confPath + guildName + ".settings.remOwner.command1.string", "");
-        conf.getGuilds().set(confPath + guildName + ".settings.remOfficer.command1.type", "command");
+        conf.getGuilds().set(confPath + guildName + ".settings.remOfficer.command1.type", "sendCommand");
         conf.getGuilds().set(confPath + guildName + ".settings.remOfficer.command1.string", "");
-        conf.getGuilds().set(confPath + guildName + ".settings.remMember.command1.type", "command");
+        conf.getGuilds().set(confPath + guildName + ".settings.remMember.command1.type", "sendCommand");
         conf.getGuilds().set(confPath + guildName + ".settings.remMember.command1.string", "");
         conf.getGuilds().set(confPath + guildName + ".bank.limit", conf.getSettings().getDouble("settings.guilds.bank.defaultBankLimit"));
         conf.save(conf.getGuilds(), conf.getGuildsFile());
@@ -166,6 +169,117 @@ public class Modules {
                 invites.remove(username);
             }
         }, (long) 20 * 15);
+    }
+
+    public void insertMember(Player p, String guildName, String guildRole) {
+        String memberId = Strings.generateUuid();
+        for (String generated : generatedMembers) {
+            String[] splitter = generated.split(";");
+            if (splitter[1].equalsIgnoreCase(memberId)) {
+                memberId = Strings.generateUuid();
+            }
+        }
+
+        String username = p.getName();
+        String guildId = data.getGuilds().getGuildId(guildName);
+
+        List<String> guildAndRole = new ArrayList<>();
+        guildAndRole.add(guildId);
+        guildAndRole.add(guildRole);
+
+        if (guildsData.containsKey(username)) {
+            guildsData.replace(username, guildAndRole);
+        } else {
+            guildsData.put(username, guildAndRole);
+        }
+
+        data.getGuildMembers().insertMemberData(username, memberId, guildId, guildRole);
+        sendPrize(p, guildId, "addMember");
+    }
+
+    void sendPrize(Player p, String guildId, String type) {
+        String guildName = data.getGuilds().getGuildName(guildId);
+        String username = p.getName();
+        for (String setting : conf.getGuilds().getConfigurationSection("guilds." + guildName + ".settings." + type).getKeys(false)) {
+            String settingsPath = "guilds." + guildName + ".settings." + type + "." + setting;
+            String settingType = conf.getGuilds().getString(settingsPath + ".type");
+            switch (settingType) {
+                case "sendCommand":
+                    String command = conf.getGuilds().getString(settingsPath + ".string");
+                    command = command.replace("%username%", username);
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
+                    break;
+                case "giveItem":
+                    String itemType = conf.getGuilds().getString(settingsPath + ".itemType");
+                    switch (itemType) {
+                        case "oraxen":
+                            String oraxenId = conf.getGuilds().getString(settingsPath + ".oraxenId");
+                            ItemStack oraxenItem = OraxenItems.getItemById(oraxenId).build();
+                            p.getInventory().addItem(oraxenItem);
+                            break;
+                        default:
+                            String materialName = conf.getGuilds().getString(settingsPath + ".material");
+                            ItemStack item = new ItemStack(Material.getMaterial(materialName));
+                            if (materialName.startsWith("LEATHER_")) {
+                                String color = conf.getGuilds().getString(settingsPath + ".color");
+
+                                LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
+                                String[] colorSplitter = color.split(",");
+                                int R = Integer.parseInt(colorSplitter[0]);
+                                int G = Integer.parseInt(colorSplitter[1]);
+                                int B = Integer.parseInt(colorSplitter[2]);
+                                meta.setColor(Color.fromRGB(R, G, B));
+
+                                String displayName = conf.getGuilds().getString(settingsPath + ".displayName");
+                                if (!displayName.equalsIgnoreCase("null")) {
+                                    meta.setDisplayName(Colors.text(displayName));
+                                }
+
+                                meta.setLore(General.lore(conf.getGuilds().getStringList(settingsPath + ".lore")));
+
+                                meta.setCustomModelData(conf.getGuilds().getInt(settingsPath + ".model"));
+
+                                for (String flag : conf.getGuilds().getStringList(settingsPath + ".flags")) {
+                                    meta.addItemFlags(ItemFlag.valueOf(flag));
+                                }
+                                item.setItemMeta(meta);
+                                for (String enchants : conf.getGuilds().getStringList(settingsPath + ".enchantments")) {
+                                    String[] splitter = enchants.split(";");
+                                    Enchantment enchantment = Enchants.getEnchant(splitter[0]);
+                                    int enchLevel = Integer.parseInt(splitter[1]);
+                                    item.addUnsafeEnchantment(enchantment, enchLevel);
+                                }
+                            } else {
+                                ItemMeta meta = item.getItemMeta();
+
+                                String displayName = conf.getGuilds().getString(settingsPath + ".displayName");
+                                if (!displayName.equalsIgnoreCase("null")) {
+                                    meta.setDisplayName(Colors.text(displayName));
+                                }
+
+                                meta.setLore(General.lore(conf.getGuilds().getStringList(settingsPath + ".lore")));
+
+                                meta.setCustomModelData(conf.getGuilds().getInt(settingsPath + ".model"));
+
+                                for (String flag : conf.getGuilds().getStringList(settingsPath + ".flags")) {
+                                    meta.addItemFlags(ItemFlag.valueOf(flag));
+                                }
+                                item.setItemMeta(meta);
+                                for (String enchants : conf.getGuilds().getStringList(settingsPath + ".enchantments")) {
+                                    String[] splitter = enchants.split(";");
+                                    Enchantment enchantment = Enchants.getEnchant(splitter[0]);
+                                    int enchLevel = Integer.parseInt(splitter[1]);
+                                    item.addUnsafeEnchantment(enchantment, enchLevel);
+                                }
+                            }
+                            p.getInventory().addItem(item);
+                            break;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     public void createLeader(Player p, String guildId) {

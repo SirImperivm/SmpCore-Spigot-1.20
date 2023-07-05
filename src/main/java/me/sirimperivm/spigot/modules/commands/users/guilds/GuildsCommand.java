@@ -66,9 +66,9 @@ public class GuildsCommand implements CommandExecutor {
 
                                 HashMap<String, String> invites = mods.getInvites();
                                 if (invites.containsKey(playerName)) {
-
+                                    mods.insertMember(p, invites.get(playerName), "member");
                                 } else {
-
+                                    p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.invites.not-received"));
                                 }
                             }
                         }
@@ -102,7 +102,7 @@ public class GuildsCommand implements CommandExecutor {
                                             if (membersCount <= membersLimit) {
                                                 mods.inviteMember(t, guildName);
                                             } else {
-                                                p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.members.limi-reached")
+                                                p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.members.limit-reached")
                                                         .replace("$membersLimit", String.valueOf(membersLimit)));
                                             }
                                         } else {
