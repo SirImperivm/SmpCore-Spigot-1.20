@@ -12,6 +12,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
 import java.util.List;
 
 @SuppressWarnings("all")
@@ -82,7 +83,47 @@ public class AdminGuildsCommand implements CommandExecutor {
                             getUsage(p);
                         }
                     } else if (a.length == 3) {
-                        getUsage(p);
+                        if (a[0].equalsIgnoreCase("addmember")) {
+                            if (Errors.noPermCommand(p, conf.getSettings().getString("permissions.admin-commands.guilds.addmember"))) {
+                                return true;
+                            } else {
+                                Player t = Bukkit.getPlayerExact(a[1]);
+                                if (t == null || !Bukkit.getOnlinePlayers().contains(t)) {
+                                    p.sendMessage(Config.getTransl("settings", "messages.errors.players.not-found"));
+                                } else {
+                                    String targetName = t.getName();
+                                    HashMap<String, List<String>> guildsData = mods.getGuildsData();
+                                    if (!guildsData.containsKey(targetName)) {
+                                        List<String> guildsList = mods.getGeneratedGuilds();
+                                        boolean guildExist = false;
+                                        for (String guild : guildsList) {
+                                            String[] splitter = guild.split(";");
+                                            if (splitter[1].equalsIgnoreCase(a[2])) {
+                                                guildExist = true;
+                                                break;
+                                            }
+                                        }
+
+                                        if (guildExist) {
+                                            String guildId = data.getGuilds().getGuildId(a[2]);
+                                            int membersCount = data.getGuildMembers().getMembersCount(guildId);
+                                            int membersLimit = conf.getGuilds().getInt("guilds." + a[2] + ".membersLimit");
+                                            if (membersCount <= membersLimit) {
+                                                mods.inviteMember(t, a[2]);
+                                            } else {
+                                                p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.admin.limit-reached"));
+                                            }
+                                        } else {
+                                            p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.not-exists"));
+                                        }
+                                    } else {
+                                        p.sendMessage(Config.getTransl("settings", "messages.errors.members.target.is-on-a-guild"));
+                                    }
+                                }
+                            }
+                        } else {
+                            getUsage(p);
+                        }
                     } else if (a.length == 4) {
                         if (a[0].equalsIgnoreCase("createguild")) {
                             if (Errors.noPermCommand(p, conf.getSettings().getString("permissions.admin-commands.guilds.create"))) {

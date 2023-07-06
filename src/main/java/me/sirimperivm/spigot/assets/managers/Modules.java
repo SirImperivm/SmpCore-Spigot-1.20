@@ -194,10 +194,15 @@ public class Modules {
         }
 
         data.getGuildMembers().insertMemberData(username, memberId, guildId, guildRole);
-        sendPrize(p, guildId, "addMember");
+        setters(p, guildId, "addMember");
+        sendPlayerToGhome(p, guildName);
     }
 
-    void sendPrize(Player p, String guildId, String type) {
+    public void promoteMember(Player p, String guildName) {
+
+    }
+
+    void setters(Player p, String guildId, String type) {
         String guildName = data.getGuilds().getGuildName(guildId);
         String username = p.getName();
         for (String setting : conf.getGuilds().getConfigurationSection("guilds." + guildName + ".settings." + type).getKeys(false)) {
@@ -296,16 +301,7 @@ public class Modules {
         data.getGuildMembers().insertMemberData(username, memberId, guildId, "leader");
         String guildName = data.getGuilds().getGuildName(guildId);
 
-        for (String setting : conf.getGuilds().getConfigurationSection("guilds." + guildName + ".settings.addOwner").getKeys(false)) {
-            String settingsPath = "guilds." + guildName + ".settings.addOwner." + setting;
-            String settingType = conf.getGuilds().getString(settingsPath + ".type");
-            if (settingType.equalsIgnoreCase("command")) {
-                String command = conf.getGuilds().getString(settingsPath + ".string");
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command
-                        .replace("%username%", p.getName())
-                );
-            }
-        }
+        setters(p, guildId, "addOwner");
         sendPlayerToGhome(p, guildName);
     }
 

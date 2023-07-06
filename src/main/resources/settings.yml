@@ -81,7 +81,9 @@ messages:
       alreadyHaveGuild: "%fpHai già una gilda."
       target:
         is-on-a-guild: "%fpL'utente è già membro di una gilda."
-      limit-reached: "%fpHai raggiunto il limite massimo di utenti per la tua gilda &c$membersLimit&7."
+      limit-reached: "%fpHai raggiunto il limite massimo di utenti per la tua gilda &8(&c$membersLimit&8)&7."
+    admin:
+      limit-reached: "%fpQuesta gilda ha già raggiunto il limite di utenti."
     lobby:
       not-located: "%fpNon hai mai impostato lo spawn principale. &c(/ga setlobby)"
     players:

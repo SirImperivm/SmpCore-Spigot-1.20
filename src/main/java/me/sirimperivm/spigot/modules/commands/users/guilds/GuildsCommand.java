@@ -84,7 +84,7 @@ public class GuildsCommand implements CommandExecutor {
                                 return true;
                             } else {
                                 Player p = (Player) s;
-                                Player t = Bukkit.getPlayer(a[1]);
+                                Player t = Bukkit.getPlayerExact(a[1]);
                                 if (t == null || !Bukkit.getOnlinePlayers().contains(t)) {
                                     p.sendMessage(Config.getTransl("settings", "messages.errors.players.not-found"));
                                 } else {
