@@ -43,6 +43,8 @@ messages:
       positionFormat: "$worldName&8,&6$posX&8,&6$posY&8,&6$posZ&8."
       deleted: "%spHai cancellato la gilda &a$guildName&7."
       add-member: "%spMembro aggiunto alla gilda &a$guildName&7."
+      invites:
+        accepted: "%spSei entrato nella gilda &a$guildName&7."
     lobby:
       located: "%spHai impostato correttamente la lobby."
   info:
@@ -105,6 +107,7 @@ permissions:
       shop: smpc.usercommands.guilds.shop
       invite: smpc.usercommands.guilds.invite
       accept: smpc.usercommands.guilds.accept
+      home: smpc.usercommands.guilds.home
   user-actions:
     guilds:
       shop:

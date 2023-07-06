@@ -67,8 +67,28 @@ public class GuildsCommand implements CommandExecutor {
                                 HashMap<String, String> invites = mods.getInvites();
                                 if (invites.containsKey(playerName)) {
                                     mods.insertMember(p, invites.get(playerName), "member");
+                                    invites.remove(playerName);
                                 } else {
                                     p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.invites.not-received"));
+                                }
+                            }
+                        }
+                    } else if (a[0].equalsIgnoreCase("home")) {
+                        if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.user-commands.guilds.home"))) {
+                            return true;
+                        } else {
+                            if (Errors.noConsole(s)) {
+                                return true;
+                            } else {
+                                Player p = (Player) s;
+                                String playerName = p.getName();
+                                HashMap<String, List<String>> guildsData = mods.getGuildsData();
+                                if (guildsData.containsKey(playerName)) {
+                                    String guildId = guildsData.get(playerName).get(0);
+                                    String guildName = data.getGuilds().getGuildName(guildId);
+                                    mods.sendPlayerToGhome(p, guildName);
+                                } else {
+                                    p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.dont-have"));
                                 }
                             }
                         }

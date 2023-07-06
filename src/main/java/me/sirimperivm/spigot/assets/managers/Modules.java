@@ -198,7 +198,7 @@ public class Modules {
         sendPlayerToGhome(p, guildName);
     }
 
-    public void promoteMember(Player p, String guildName) {
+    public void removeMember(Player p, String guildName) {
 
     }
 

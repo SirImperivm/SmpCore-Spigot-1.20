@@ -78,6 +78,18 @@ public class GuildMembers {
         }
     }
 
+    public void updateMemberData(String username, String key, String value) {
+        String query = "UPDATE " + database + " SET " + key + "=" + value + " WHERE username=" + username;
+
+        try {
+            PreparedStatement state = conn.prepareStatement(query);
+            state.executeUpdate();
+        } catch (SQLException e) {
+            log.severe("Impossibile modificare i dati del membro " + username + "!");
+            e.printStackTrace();
+        }
+    }
+
     public List<String> getGeneratedMembersID() {
         List<String> generated = new ArrayList<>();
         String query = "SELECT * FROM " + database;
