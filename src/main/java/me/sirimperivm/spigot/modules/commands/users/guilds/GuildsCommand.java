@@ -134,6 +134,37 @@ public class GuildsCommand implements CommandExecutor {
                                 }
                             }
                         }
+                    } else if (a[0].equalsIgnoreCase("kick")) {
+                        if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.user-commands.guilds.kick"))) {
+                            return true;
+                        } else {
+                            if (Errors.noConsole(s)) {
+                                return true;
+                            } else {
+                                Player p = (Player) s;
+                                String playerName = p.getName();
+                                HashMap<String, List<String>> guildsData = mods.getGuildsData();
+                                if (guildsData.containsKey(playerName)) {
+                                    List<String> playerGuildAndRole = guildsData.get(playerName);
+                                    String playerGuildId = playerGuildAndRole.get(0);
+                                    String playerGuildName = data.getGuilds().getGuildName(playerGuildId);
+                                    if (guildsData.containsKey(a[1])) {
+                                        List<String> targetGuildAndRole = guildsData.get(a[1]);
+                                        String targetGuildId = targetGuildAndRole.get(0);
+                                        String targetGuildName = data.getGuilds().getGuildName(targetGuildId);
+                                        if (targetGuildName.equalsIgnoreCase(playerGuildName)) {
+                                            data.getTasks().insertTask("expelGuildMember", a[1], 1);
+                                        } else {
+                                            p.sendMessage(Config.getTransl("settings", "messages.errors.members.target.isnt-a-guild-member"));
+                                        }
+                                    } else {
+                                        p.sendMessage(Config.getTransl("settings", "messages.errors.members.target.isnt-on-a-guild"));
+                                    }
+                                } else {
+                                    p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.dont-have"));
+                                }
+                            }
+                        }
                     } else {
                         getUsage(s);
                     }

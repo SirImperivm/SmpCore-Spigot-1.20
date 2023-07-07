@@ -8,6 +8,7 @@ import me.sirimperivm.spigot.assets.other.Strings;
 import me.sirimperivm.spigot.assets.utils.Colors;
 import me.sirimperivm.spigot.other.Enchants;
 import org.bukkit.*;
+import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -39,6 +40,17 @@ public class Modules {
         guildMembers = new ArrayList<>();
         invites = new HashMap<String, String>();
         guildsData = data.getGuildMembers().guildsData();
+        executeTasksLoop();
+    }
+
+    public void executeTasksLoop() {
+        List<Integer> taskList = data.getTasks().returnAllTasks();
+        BukkitScheduler scheduler = Bukkit.getScheduler();
+        scheduler.runTaskTimer(plugin, () -> {
+            for (Integer taskId : taskList) {
+                data.getTasks().executeTask(taskId);
+            }
+        }, 20L, 20L);
     }
 
     public void createGuild(Player p, String guildName, String guildTitle, int membersLimit) {
@@ -74,18 +86,18 @@ public class Modules {
         conf.getGuilds().set(confPath + guildName + ".mainHome.posZ", locZ);
         conf.getGuilds().set(confPath + guildName + ".mainHome.rotYaw", locYaw);
         conf.getGuilds().set(confPath + guildName + ".mainHome.rotPitch", locPitch);
-        conf.getGuilds().set(confPath + guildName + ".settings.addOwner.command1.type", "sendCommand");
-        conf.getGuilds().set(confPath + guildName + ".settings.addOwner.command1.string", "");
-        conf.getGuilds().set(confPath + guildName + ".settings.addOfficer.command1.type", "sendCommand");
-        conf.getGuilds().set(confPath + guildName + ".settings.addOfficer.command1.string", "");
-        conf.getGuilds().set(confPath + guildName + ".settings.addMember.command1.type", "sendCommand");
-        conf.getGuilds().set(confPath + guildName + ".settings.addMember.command1.string", "");
-        conf.getGuilds().set(confPath + guildName + ".settings.remOwner.command1.type", "sendCommand");
-        conf.getGuilds().set(confPath + guildName + ".settings.remOwner.command1.string", "");
-        conf.getGuilds().set(confPath + guildName + ".settings.remOfficer.command1.type", "sendCommand");
-        conf.getGuilds().set(confPath + guildName + ".settings.remOfficer.command1.string", "");
-        conf.getGuilds().set(confPath + guildName + ".settings.remMember.command1.type", "sendCommand");
-        conf.getGuilds().set(confPath + guildName + ".settings.remMember.command1.string", "");
+        conf.getGuilds().set(confPath + guildName + ".settings.addOwner.addGroup1.type", "addGroup");
+        conf.getGuilds().set(confPath + guildName + ".settings.addOwner.addGroup1.group", "");
+        conf.getGuilds().set(confPath + guildName + ".settings.addOfficer.addGroup1.type", "addGroup");
+        conf.getGuilds().set(confPath + guildName + ".settings.addOfficer.addGroup1.group", "");
+        conf.getGuilds().set(confPath + guildName + ".settings.addMember.addGroup1.type", "addGroup");
+        conf.getGuilds().set(confPath + guildName + ".settings.addMember.addGroup1.group", "");
+        conf.getGuilds().set(confPath + guildName + ".settings.remOwner.removeGroup1.type", "removeGroup");
+        conf.getGuilds().set(confPath + guildName + ".settings.remOwner.removeGroup1.group", "");
+        conf.getGuilds().set(confPath + guildName + ".settings.removeGroup1.type", "removeGroup");
+        conf.getGuilds().set(confPath + guildName + ".settings.removeGroup1.group", "");
+        conf.getGuilds().set(confPath + guildName + ".settings.removeGroup1.type", "removeGroup");
+        conf.getGuilds().set(confPath + guildName + ".settings.removeGroup1.group", "");
         conf.getGuilds().set(confPath + guildName + ".bank.limit", conf.getSettings().getDouble("settings.guilds.bank.defaultBankLimit"));
         conf.save(conf.getGuilds(), conf.getGuildsFile());
 
@@ -198,16 +210,13 @@ public class Modules {
         sendPlayerToGhome(p, guildName);
     }
 
-    public void removeMember(Player p, String guildName) {
-
-    }
-
     void setters(Player p, String guildId, String type) {
         String guildName = data.getGuilds().getGuildName(guildId);
         String username = p.getName();
         for (String setting : conf.getGuilds().getConfigurationSection("guilds." + guildName + ".settings." + type).getKeys(false)) {
             String settingsPath = "guilds." + guildName + ".settings." + type + "." + setting;
             String settingType = conf.getGuilds().getString(settingsPath + ".type");
+            String groupName = null;
             switch (settingType) {
                 case "sendCommand":
                     String command = conf.getGuilds().getString(settingsPath + ".string");
@@ -280,6 +289,14 @@ public class Modules {
                             p.getInventory().addItem(item);
                             break;
                     }
+                    break;
+                case "addGroup":
+                    groupName = conf.getGuilds().getString(settingsPath + ".group");
+                    Main.getVault().getPerms().playerAddGroup(p, groupName);
+                    break;
+                case "removeGroup":
+                    groupName = conf.getGuilds().getString(settingsPath + ".group");
+                    Main.getVault().getPerms().playerRemoveGroup(p, groupName);
                     break;
                 default:
                     break;

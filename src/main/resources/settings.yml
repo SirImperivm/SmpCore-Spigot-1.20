@@ -83,6 +83,9 @@ messages:
       alreadyHaveGuild: "%fpHai già una gilda."
       target:
         is-on-a-guild: "%fpL'utente è già membro di una gilda."
+        isnt-on-a-guild: "%fpL'utente non è membro di alcuna gilda."
+        is-leader: "%fpL'utente è il leader di una gilda, non può essere espulso."
+        isnt-a-guild-member: "%fpL'utente non è membro della tua gilda."
       limit-reached: "%fpHai raggiunto il limite massimo di utenti per la tua gilda &8(&c$membersLimit&8)&7."
     admin:
       limit-reached: "%fpQuesta gilda ha già raggiunto il limite di utenti."
@@ -108,6 +111,7 @@ permissions:
       invite: smpc.usercommands.guilds.invite
       accept: smpc.usercommands.guilds.accept
       home: smpc.usercommands.guilds.home
+      kick: smpc.usercommands.guilds.kick
   user-actions:
     guilds:
       shop:

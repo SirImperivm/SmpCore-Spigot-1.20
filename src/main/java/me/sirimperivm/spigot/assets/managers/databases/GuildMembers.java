@@ -3,11 +3,9 @@ package me.sirimperivm.spigot.assets.managers.databases;
 import me.sirimperivm.spigot.Main;
 import me.sirimperivm.spigot.assets.managers.Config;
 import me.sirimperivm.spigot.assets.managers.Db;
-import org.bukkit.entity.Player;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
@@ -34,7 +32,7 @@ public class GuildMembers {
             value = rs.next();
         } catch (SQLException e) {
             data.setCanConnect(false);
-            log.severe("Impossibile capire se è presente la tabella delle guilds tra i database.");
+            log.severe("Impossibile capire se è presente la tabella dei membri delle guilds tra i database.");
             e.printStackTrace();
             plugin.disablePlugin();
         }
@@ -74,6 +72,18 @@ public class GuildMembers {
                     "\n GuildId: " + guildId +
                     "\n GuildRole " + guildRole +
                     "\n...!");
+            e.printStackTrace();
+        }
+    }
+
+    public void removeMemberData(String username) {
+        String query = "DELETE FROM " + database + " WHERE username=" + username + ";";
+
+        try {
+            PreparedStatement state = conn.prepareStatement(query);
+            state.executeUpdate();
+        } catch (SQLException e) {
+            log.severe("Impossibile cancellare il dato del membro " + username + "!");
             e.printStackTrace();
         }
     }
@@ -120,25 +130,6 @@ public class GuildMembers {
             e.printStackTrace();
         }
         return guildMembers;
-    }
-
-    public String getGuildIdFromMember(String username) {
-        String guildId = "null";
-        String query = "SELECT * FROM " + database;
-        try {
-            PreparedStatement state = conn.prepareStatement(query);
-            ResultSet rs = state.executeQuery();
-            while (rs.next()) {
-                if (rs.getString("username").equalsIgnoreCase(username)) {
-                    guildId = rs.getString("guildId");
-                    break;
-                }
-            }
-        } catch (SQLException e) {
-            log.severe("Impossibile ottenere l'id della gilda relativa all'utente " + username + "!");
-            e.printStackTrace();
-        }
-        return guildId;
     }
 
     public HashMap<String, List<String>> guildsData() {
