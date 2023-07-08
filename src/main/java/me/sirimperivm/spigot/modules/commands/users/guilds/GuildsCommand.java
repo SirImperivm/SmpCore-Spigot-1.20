@@ -92,6 +92,8 @@ public class GuildsCommand implements CommandExecutor {
                                 }
                             }
                         }
+                    } else if (a[0].equalsIgnoreCase("leave")) {
+
                     } else {
                         getUsage(s);
                     }

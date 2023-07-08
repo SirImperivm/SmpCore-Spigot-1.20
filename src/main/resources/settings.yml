@@ -57,6 +57,7 @@ messages:
         invited:
           you: "%ipSei stato invitato a far parte della gilda &e$guildName&7. Hai 15 secondi per accettare con &e/g accept&7."
           members: "%ipL'utente &e$playerName&7 è stato invitato nella tua gilda."
+        kicked: "%ipSei stato kickato dalla gilda."
     general:
       time:
         expired: "%ipTempo scaduto."

@@ -3,6 +3,7 @@ package me.sirimperivm.spigot.assets.managers.databases;
 import me.sirimperivm.spigot.Main;
 import me.sirimperivm.spigot.assets.managers.Config;
 import me.sirimperivm.spigot.assets.managers.Db;
+import me.sirimperivm.spigot.assets.managers.Modules;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -18,6 +19,7 @@ public class Tasks {
     private static Config conf = Main.getConf();
     private static Logger log = Logger.getLogger("SMPCore");
     private static Db data = Main.getData();
+    private static Modules mods = Main.getMods();
     static Connection conn = data.conn;
     String dbName = data.dbname;
     String tablePrefix = data.tablePrefix;
@@ -100,6 +102,7 @@ public class Tasks {
                         String taskValue = rs.getString("taskValue");
                         Player target = Bukkit.getPlayerExact(taskValue);
                         if (target != null) {
+                            mods.removeMember(target);
                             updatePersistent(taskId, 0);
                         }
                         break;

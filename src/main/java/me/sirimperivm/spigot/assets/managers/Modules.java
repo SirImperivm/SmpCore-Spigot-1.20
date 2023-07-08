@@ -8,7 +8,6 @@ import me.sirimperivm.spigot.assets.other.Strings;
 import me.sirimperivm.spigot.assets.utils.Colors;
 import me.sirimperivm.spigot.other.Enchants;
 import org.bukkit.*;
-import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -129,11 +128,7 @@ public class Modules {
             String gId = splitter[1];
             String username = splitter[0];
             if (gId.equalsIgnoreCase(guildId)) {
-                Player spawnedPlayer = Bukkit.getPlayer(username);
-                if (spawnedPlayer != null) {
-                    sendPlayerToLobby(spawnedPlayer);
-                    spawnedPlayer.sendMessage(Config.getTransl("settings", "messages.info.guild.deleted.sendToPlayer"));
-                }
+                data.getTasks().insertTask("expelGuildMember", username, 1);
             }
         }
 
@@ -208,6 +203,32 @@ public class Modules {
         data.getGuildMembers().insertMemberData(username, memberId, guildId, guildRole);
         setters(p, guildId, "addMember");
         sendPlayerToGhome(p, guildName);
+    }
+
+    public void removeMember(Player p) {
+        String playerName = p.getName();
+        if (guildsData.containsKey(playerName)) {
+            List<String> guildsAndRole = guildsData.get(playerName);
+            String guildId = guildsAndRole.get(0);
+            String guildRole = guildsAndRole.get(1);
+            String setterType = null;
+            switch (guildRole) {
+                case "leader":
+                    setterType = "remOwner";
+                    break;
+                case "officer":
+                    setterType = "remOfficer";
+                    break;
+                default:
+                    setterType = "remMember";
+                    break;
+            }
+
+            data.getGuildMembers().removeMemberData(playerName);
+            setters(p, guildId, setterType);
+            sendPlayerToLobby(p);
+            p.sendMessage(Config.getTransl("settings", "messages.info.guild.members.kicked"));
+        }
     }
 
     void setters(Player p, String guildId, String type) {
