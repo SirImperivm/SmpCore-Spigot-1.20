@@ -45,6 +45,7 @@ messages:
       add-member: "%spMembro aggiunto alla gilda &a$guildName&7."
       invites:
         accepted: "%spSei entrato nella gilda &a$guildName&7."
+      left: "%spSei uscito dalla tua gilda."
     lobby:
       located: "%spHai impostato correttamente la lobby."
   info:
@@ -58,6 +59,8 @@ messages:
           you: "%ipSei stato invitato a far parte della gilda &e$guildName&7. Hai 15 secondi per accettare con &e/g accept&7."
           members: "%ipL'utente &e$playerName&7 è stato invitato nella tua gilda."
         kicked: "%ipSei stato kickato dalla gilda."
+        kicked-others: "%ipL'utente &e$player&7 è stato kickato dalla gilda."
+        left: "%ipL'utente &e$player&7 è leftato dalla gilda."
     general:
       time:
         expired: "%ipTempo scaduto."
@@ -88,6 +91,8 @@ messages:
         is-leader: "%fpL'utente è il leader di una gilda, non può essere espulso."
         isnt-a-guild-member: "%fpL'utente non è membro della tua gilda."
       limit-reached: "%fpHai raggiunto il limite massimo di utenti per la tua gilda &8(&c$membersLimit&8)&7."
+      leader:
+        cant-leave: "%fpIl leader della gilda non può uscire prima di dare la leadership a qualcun'altro. &8(&c/g newleadership <membro>&8)"
     admin:
       limit-reached: "%fpQuesta gilda ha già raggiunto il limite di utenti."
     lobby:
@@ -113,6 +118,7 @@ permissions:
       accept: smpc.usercommands.guilds.accept
       home: smpc.usercommands.guilds.home
       kick: smpc.usercommands.guilds.kick
+      leave: smpc.usercommands.guilds.leave
   user-actions:
     guilds:
       shop:

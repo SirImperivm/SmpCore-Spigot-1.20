@@ -225,9 +225,62 @@ public class Modules {
             }
 
             data.getGuildMembers().removeMemberData(playerName);
+            guildsData = data.getGuildMembers().guildsData();
             setters(p, guildId, setterType);
             sendPlayerToLobby(p);
+            sendGuildersBroadcast(guildId, conf.getSettings().getString("messages.info.guild.members.kicked-others")
+                    .replace("%sp", plugin.getSuccessPrefix())
+                    .replace("%ip", plugin.getInfoPrefix())
+                    .replace("%fp", plugin.getFailPrefix())
+                    .replace("$player", playerName)
+            );
             p.sendMessage(Config.getTransl("settings", "messages.info.guild.members.kicked"));
+        }
+    }
+
+    public void leaveMember(Player p) {
+        String playerName = p.getName();
+        if (guildsData.containsKey(playerName)) {
+            List<String> guildsAndRole = guildsData.get(playerName);
+            String guildId = guildsAndRole.get(0);
+            String guildRole = guildsAndRole.get(1);
+            String guildName = data.getGuilds().getGuildName(guildId);
+            String setterType = null;
+            switch (guildRole) {
+                case "leader":
+                    p.sendMessage(Config.getTransl("settings", "messages.errors.members.leader.cant-leave"));
+                    break;
+                case "officer":
+                    setterType = "remOfficer";
+                    data.getGuildMembers().removeMemberData(playerName);
+                    guildsData = data.getGuildMembers().guildsData();
+                    setters(p, guildId, setterType);
+                    sendPlayerToLobby(p);
+                    p.sendMessage(Config.getTransl("settings", "messages.success.guilds.left")
+                            .replace("$guildName", guildName));
+                    sendGuildersBroadcast(guildId, conf.getSettings().getString("messages.info.guild.members.left")
+                            .replace("%sp", plugin.getSuccessPrefix())
+                            .replace("%ip", plugin.getInfoPrefix())
+                            .replace("%fp", plugin.getFailPrefix())
+                            .replace("$player", playerName)
+                    );
+                    break;
+                default:
+                    setterType = "remMember";
+                    data.getGuildMembers().removeMemberData(playerName);
+                    guildsData = data.getGuildMembers().guildsData();
+                    setters(p, guildId, setterType);
+                    sendPlayerToLobby(p);
+                    p.sendMessage(Config.getTransl("settings", "messages.success.guilds.left")
+                            .replace("$guildName", guildName));
+                    sendGuildersBroadcast(guildId, conf.getSettings().getString("messages.info.guild.members.left")
+                            .replace("%sp", plugin.getSuccessPrefix())
+                            .replace("%ip", plugin.getInfoPrefix())
+                            .replace("%fp", plugin.getFailPrefix())
+                            .replace("$player", playerName)
+                    );
+                    break;
+            }
         }
     }
 
@@ -370,6 +423,17 @@ public class Modules {
 
     public boolean isLobbyLocated() {
         return !conf.getSettings().getString("settings.lobby.location.world").equalsIgnoreCase("null");
+    }
+
+    public void sendGuildersBroadcast(String guildId, String message) {
+        for (String key : guildsData.keySet()) {
+            List<String> guildsAndRole = guildsData.get(key);
+            String gId = guildsAndRole.get(0);
+            String gRole = guildsAndRole.get(1);
+            if (gId.equalsIgnoreCase(guildId)) {
+                data.getTasks().insertTask("sendGuildersBroadcast", key + "£" + message, 1);
+            }
+        }
     }
 
     public double getUserBalance(Player p) {

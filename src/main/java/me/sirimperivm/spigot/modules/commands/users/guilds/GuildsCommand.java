@@ -93,7 +93,22 @@ public class GuildsCommand implements CommandExecutor {
                             }
                         }
                     } else if (a[0].equalsIgnoreCase("leave")) {
-
+                        if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.user-commands.guilds.leave"))) {
+                            return true;
+                        } else {
+                            if (Errors.noConsole(s)) {
+                                return true;
+                            } else {
+                                Player p = (Player) s;
+                                String playerName = p.getName();
+                                HashMap<String, List<String>> guildsData = mods.getGuildsData();
+                                if (guildsData.containsKey(playerName)) {
+                                    mods.leaveMember(p);
+                                } else {
+                                    p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.dont-have"));
+                                }
+                            }
+                        }
                     } else {
                         getUsage(s);
                     }

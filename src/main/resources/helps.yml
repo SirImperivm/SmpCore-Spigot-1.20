@@ -35,7 +35,7 @@ helps:
       - "&a/guilds(g) kick &e<guildMember> &7- &fEspelle un membro dalla gilda."
       - "&a/guilds(g) officer set &e<guildMember> &7- &fPromuove un membro della gilda ad ufficiale."
       - "&a/guilds(g) officer remove &e<guildMember> &7- &fDegrada un ufficiale della gilda a membro."
-      - "&a/guilds(g) setleadership &e<guildMember> &7- &fIl leader della gilda viene degradato ad ufficiale, e l'altro ufficiale scelto diventerà nuovo leader."
+      - "&a/guilds(g) newleadership &e<guildMember> &7- &fIl leader della gilda viene degradato ad ufficiale, e l'altro ufficiale scelto diventerà nuovo leader."
       - "&a/guilds(g) info &e<guildName> &7- &fMostra info relative ad una gilda."
       - ""
       - "&8&m                              "

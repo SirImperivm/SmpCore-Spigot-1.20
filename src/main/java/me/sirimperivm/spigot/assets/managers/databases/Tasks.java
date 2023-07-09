@@ -4,6 +4,7 @@ import me.sirimperivm.spigot.Main;
 import me.sirimperivm.spigot.assets.managers.Config;
 import me.sirimperivm.spigot.assets.managers.Db;
 import me.sirimperivm.spigot.assets.managers.Modules;
+import me.sirimperivm.spigot.assets.utils.Colors;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -96,13 +97,24 @@ public class Tasks {
             ResultSet rs = state.executeQuery();
             while (rs.next()) {
                 String taskType = rs.getString("taskType");
+                String taskValue = rs.getString("taskValue");
                 int persistent = rs.getInt("persistent");
+                Player target = null;
                 switch (taskType) {
                     case "expelGuildMember":
-                        String taskValue = rs.getString("taskValue");
-                        Player target = Bukkit.getPlayerExact(taskValue);
-                        if (target != null) {
+                        target = Bukkit.getPlayerExact(taskValue);
+                        if (Bukkit.getOnlinePlayers().contains(target)) {
                             mods.removeMember(target);
+                            updatePersistent(taskId, 0);
+                        }
+                        break;
+                    case "sendGuildersBroadcast":
+                        String[] splitter = taskValue.split("£");
+                        String username = splitter[0];
+                        String message = splitter[1];
+                        target = Bukkit.getPlayerExact(username);
+                        if (Bukkit.getOnlinePlayers().contains(target)) {
+                            target.sendMessage(Colors.text(message));
                             updatePersistent(taskId, 0);
                         }
                         break;
