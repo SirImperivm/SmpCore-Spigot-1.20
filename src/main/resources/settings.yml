@@ -49,6 +49,8 @@ messages:
       left: "%spSei uscito dalla tua gilda."
     lobby:
       located: "%spHai impostato correttamente la lobby."
+    officer:
+      set: "%spHai promosso &a$username &7ad ufficiale nella tua gilda."
   info:
     money:
       withdrawn: "%ip &e-&7$value."
@@ -62,6 +64,13 @@ messages:
         kicked: "%ipSei stato kickato dalla gilda."
         kicked-others: "%ipL'utente &e$player&7 è stato kickato dalla gilda."
         left: "%ipL'utente &e$player&7 è leftato dalla gilda."
+        officer:
+          set: "%ipSei stato promosso ad officer nella tua gilda."
+          remove: "%ipSei stato degradato da officer a membro nella tua gilda."
+        broadcast:
+          officer:
+            set: "%ipL'utente &e$username&7 è stato impostato come ufficiale della tua gilda."
+            remove: "%ipL'utente &e$username&7 è stato degradato da ufficiale a membro nella tua gilda."
     general:
       time:
         expired: "%ipTempo scaduto."
@@ -94,6 +103,9 @@ messages:
       limit-reached: "%fpHai raggiunto il limite massimo di utenti per la tua gilda &8(&c$membersLimit&8)&7."
       leader:
         cant-leave: "%fpIl leader della gilda non può uscire prima di dare la leadership a qualcun'altro. &8(&c/g newleadership <membro>&8)"
+      officer:
+        already: "%fpL'utente &c$username&7 è già ufficiale nella tua gilda."
+        isnt: "%fpL'utente &c$username&7 non è ufficiale nella tua gilda."
     admin:
       limit-reached: "%fpQuesta gilda ha già raggiunto il limite di utenti."
     lobby:
@@ -121,6 +133,10 @@ permissions:
       home: smpc.usercommands.guilds.home
       kick: smpc.usercommands.guilds.kick
       leave: smpc.usercommands.guilds.leave
+      officer:
+        main: smpc.usercommands.guilds.officers.use
+        set: smpc.usercommands.guilds.officers.use
+        remove: smpc.usercommands.guilds.officers.use
   user-actions:
     guilds:
       shop:

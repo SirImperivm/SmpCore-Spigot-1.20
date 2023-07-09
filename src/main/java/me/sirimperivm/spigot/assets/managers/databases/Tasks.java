@@ -99,27 +99,30 @@ public class Tasks {
                 String taskType = rs.getString("taskType");
                 String taskValue = rs.getString("taskValue");
                 int persistent = rs.getInt("persistent");
-                Player target = null;
-                switch (taskType) {
-                    case "expelGuildMember":
-                        target = Bukkit.getPlayerExact(taskValue);
-                        if (Bukkit.getOnlinePlayers().contains(target)) {
-                            mods.removeMember(target);
-                            updatePersistent(taskId, 0);
-                        }
-                        break;
-                    case "sendGuildersBroadcast":
-                        String[] splitter = taskValue.split("£");
-                        String username = splitter[0];
-                        String message = splitter[1];
-                        target = Bukkit.getPlayerExact(username);
-                        if (Bukkit.getOnlinePlayers().contains(target)) {
-                            target.sendMessage(Colors.text(message));
-                            updatePersistent(taskId, 0);
-                        }
-                        break;
-                    default:
-                        break;
+                if (taskType.equalsIgnoreCase("expelGuildMember")) {
+                    Player target = Bukkit.getPlayerExact(taskValue);
+                    if (Bukkit.getOnlinePlayers().contains(target)) {
+                        mods.removeMember(target);
+                        updatePersistent(taskId, 0);
+                    }
+                } else if (taskType.equalsIgnoreCase("sendGuildersBroadcast")) {
+                    String[] splitter = taskValue.split("£");
+                    String username = splitter[0];
+                    String message = splitter[1];
+                    Player target = Bukkit.getPlayerExact(username);
+                    if (Bukkit.getOnlinePlayers().contains(target)) {
+                        target.sendMessage(Colors.text(message));
+                        updatePersistent(taskId, 0);
+                    }
+                } else if (taskType.equalsIgnoreCase("sendUserMessage")) {
+                    String[] splitter = taskValue.split("£");
+                    String username = splitter[0];
+                    String message = splitter[1];
+                    Player target = Bukkit.getPlayerExact(username);
+                    if (Bukkit.getOnlinePlayers().contains(target)) {
+                        target.sendMessage(Colors.text(message));
+                        updatePersistent(taskId, 0);
+                    }
                 }
                 if (persistent == 0) {
                     deleteTask(taskId);

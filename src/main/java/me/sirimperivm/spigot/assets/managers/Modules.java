@@ -34,12 +34,16 @@ public class Modules {
     private static Vault vault = Main.getVault();
 
     public Modules() {
+        refreshSettings();
+        executeTasksLoop();
+    }
+
+    void refreshSettings() {
         generatedGuilds = data.getGuilds().getGeneratedGuildsID();
         generatedMembers = data.getGuildMembers().getGeneratedMembersID();
         guildMembers = new ArrayList<>();
         invites = new HashMap<String, String>();
         guildsData = data.getGuildMembers().guildsData();
-        executeTasksLoop();
     }
 
     public void executeTasksLoop() {
@@ -50,6 +54,10 @@ public class Modules {
                 data.getTasks().executeTask(taskId);
             }
         }, 20L, 20L);
+
+        scheduler.runTaskTimer(plugin, () -> {
+            refreshSettings();
+        }, 20L, 5*20L);
     }
 
     public void createGuild(Player p, String guildName, String guildTitle, int membersLimit) {
@@ -434,22 +442,6 @@ public class Modules {
                 data.getTasks().insertTask("sendGuildersBroadcast", key + "£" + message, 1);
             }
         }
-    }
-
-    public String getUserRole(Player p) {
-        String username = p.getName();
-        if (guildsData.containsKey(username)) {
-            return guildsData.get(username).get(1);
-        }
-        return "null";
-    }
-
-    public String getUserGuild(Player p) {
-        String username = p.getName();
-        if (guildsData.containsKey(username)) {
-            return guildsData.get(username).get(0);
-        }
-        return "null";
     }
 
     public double getUserBalance(Player p) {
