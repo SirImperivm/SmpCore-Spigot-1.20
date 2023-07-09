@@ -436,6 +436,22 @@ public class Modules {
         }
     }
 
+    public String getUserRole(Player p) {
+        String username = p.getName();
+        if (guildsData.containsKey(username)) {
+            return guildsData.get(username).get(1);
+        }
+        return "null";
+    }
+
+    public String getUserGuild(Player p) {
+        String username = p.getName();
+        if (guildsData.containsKey(username)) {
+            return guildsData.get(username).get(0);
+        }
+        return "null";
+    }
+
     public double getUserBalance(Player p) {
         return vault.getEcon().getBalance(p);
     }

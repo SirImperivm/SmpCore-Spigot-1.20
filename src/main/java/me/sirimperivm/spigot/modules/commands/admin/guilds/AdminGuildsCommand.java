@@ -121,6 +121,22 @@ public class AdminGuildsCommand implements CommandExecutor {
                                     }
                                 }
                             }
+                        } else if (a[0].equalsIgnoreCase("deletemember")) {
+                            if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.admin-commands.guilds.deletemember"))) {
+                                return true;
+                            } else {
+                                String targetName = a[1];
+                                HashMap<String, List<String>> guildsData = mods.getGuildsData();
+                                if (guildsData.containsKey(targetName)) {
+                                    String guildId = guildsData.get(targetName).get(0);
+                                    String guildName = data.getGuilds().getGuildName(guildId);
+                                    data.getTasks().insertTask("expelGuildMember", targetName, 1);
+                                    p.sendMessage(Config.getTransl("settings", "messages.success.guilds.remove-member")
+                                            .replace("$guildName", guildName));
+                                } else {
+                                    p.sendMessage(Config.getTransl("settings", "messages.errors.members.target.isnt-on-a-guild"));
+                                }
+                            }
                         } else {
                             getUsage(p);
                         }

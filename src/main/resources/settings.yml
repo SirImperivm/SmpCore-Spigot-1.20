@@ -43,6 +43,7 @@ messages:
       positionFormat: "$worldName&8,&6$posX&8,&6$posY&8,&6$posZ&8."
       deleted: "%spHai cancellato la gilda &a$guildName&7."
       add-member: "%spMembro aggiunto alla gilda &a$guildName&7."
+      remove-member: "%spMembro rimosso dalla gilda &a$guildName&7."
       invites:
         accepted: "%spSei entrato nella gilda &a$guildName&7."
       left: "%spSei uscito dalla tua gilda."
@@ -110,6 +111,7 @@ permissions:
       create: smpc.admincommands.guilds.create
       delete: smpc.admincommands.guilds.delete
       addmember: smpc.admincommands.guilds.addmember
+      deletemember: smpc.admincommands.guilds.deletemember
   user-commands:
     guilds:
       main: smpc.usercommands.guilds.main
