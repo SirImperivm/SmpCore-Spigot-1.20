@@ -71,6 +71,10 @@ messages:
           officer:
             set: "%ipL'utente &e$username&7 è stato impostato come ufficiale della tua gilda."
             remove: "%ipL'utente &e$username&7 è stato degradato da ufficiale a membro nella tua gilda."
+        admin:
+          role:
+            officer-set: "%ipUtente promosso con successo."
+            member-set: "%ipUtente degradato con successo."
     general:
       time:
         expired: "%ipTempo scaduto."
@@ -108,6 +112,11 @@ messages:
         isnt: "%fpL'utente &c$username&7 non è ufficiale nella tua gilda."
     admin:
       limit-reached: "%fpQuesta gilda ha già raggiunto il limite di utenti."
+      members:
+        target:
+          role-not-found: "%fpIl ruolo scelto non è valido, scegli tra (officer e member)."
+          is-already-officer: "%fpL'utente è già ufficiale nella sua gilda."
+          is-already-member: "%fpL'utente è già membro nella sua gilda."
     lobby:
       not-located: "%fpNon hai mai impostato lo spawn principale. &c(/ga setlobby)"
     players:
@@ -124,6 +133,7 @@ permissions:
       delete: smpc.admincommands.guilds.delete
       addmember: smpc.admincommands.guilds.addmember
       deletemember: smpc.admincommands.guilds.deletemember
+      changerole: smpc.admincommands.guilds.changerole
   user-commands:
     guilds:
       main: smpc.usercommands.guilds.main

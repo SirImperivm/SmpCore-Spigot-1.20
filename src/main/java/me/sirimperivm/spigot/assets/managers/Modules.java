@@ -246,6 +246,30 @@ public class Modules {
         }
     }
 
+    public void setOfficer(Player p) {
+        String playerName = p.getName();
+        List<String> guildAndRole = guildsData.get(playerName);
+        String guildId = guildAndRole.get(0);
+
+        data.getGuildMembers().updateMemberData(playerName, "guildRole", "officer");
+        guildsData = data.getGuildMembers().guildsData();
+        setters(p, guildId, "remMember");
+        setters(p, guildId, "addOfficer");
+        p.sendMessage(Config.getTransl("settings", "messages.info.guild.members.officer.set"));
+    }
+
+    public void removeOfficer(Player p) {
+        String playerName = p.getName();
+        List<String> guildAndRole = guildsData.get(playerName);
+        String guildId = guildAndRole.get(0);
+
+        data.getGuildMembers().updateMemberData(playerName, "guildRole", "member");
+        guildsData = data.getGuildMembers().guildsData();
+        setters(p, guildId, "remOfficer");
+        setters(p, guildId, "addMember");
+        p.sendMessage(Config.getTransl("settings", "messages.info.guild.members.officer.remove"));
+    }
+
     public void leaveMember(Player p) {
         String playerName = p.getName();
         if (guildsData.containsKey(playerName)) {

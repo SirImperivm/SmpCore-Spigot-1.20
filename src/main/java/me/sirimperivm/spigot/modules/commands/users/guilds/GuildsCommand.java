@@ -210,7 +210,7 @@ public class GuildsCommand implements CommandExecutor {
                                                 if (playerGuildName.equalsIgnoreCase(targetGuildName)) {
                                                     String targetGuildRole = guildsData.get(targetName).get(1);
                                                     if (!targetGuildRole.equalsIgnoreCase("officer")) {
-                                                        data.getGuildMembers().updateMemberData(targetName, "guildRole", "officer");
+                                                        data.getTasks().insertTask("setOfficer", targetGuildName, 1);
                                                         data.getTasks().insertTask("sendUserMessage", targetName + "£" + conf.getSettings().getString("messages.info.guild.officer.set")
                                                                 .replace("%sp", plugin.getSuccessPrefix())
                                                                 .replace("%ip", plugin.getInfoPrefix())
@@ -252,7 +252,7 @@ public class GuildsCommand implements CommandExecutor {
                                                 if (playerGuildName.equalsIgnoreCase(targetGuildName)) {
                                                     String targetGuildRole = guildsData.get(targetName).get(1);
                                                     if (targetGuildRole.equalsIgnoreCase("officer")) {
-                                                        data.getGuildMembers().updateMemberData(targetName, "guildRole", "member");
+                                                        data.getTasks().insertTask("removeOfficer", targetGuildName, 1);
                                                         data.getTasks().insertTask("sendUserMessage", targetName + "£" + conf.getSettings().getString("messages.info.guild.officer.remove")
                                                                         .replace("%sp", plugin.getSuccessPrefix())
                                                                         .replace("%ip", plugin.getInfoPrefix())

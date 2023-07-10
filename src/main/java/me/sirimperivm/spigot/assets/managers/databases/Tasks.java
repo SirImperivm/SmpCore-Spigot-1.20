@@ -123,6 +123,18 @@ public class Tasks {
                         target.sendMessage(Colors.text(message));
                         updatePersistent(taskId, 0);
                     }
+                } else if (taskType.equalsIgnoreCase("setOfficer")) {
+                    Player target = Bukkit.getPlayerExact(taskValue);
+                    if (Bukkit.getOnlinePlayers().contains(target)) {
+                        mods.setOfficer(target);
+                        updatePersistent(taskId, 0);
+                    }
+                } else if (taskType.equalsIgnoreCase("removeOfficer")) {
+                    Player target = Bukkit.getPlayerExact(taskValue);
+                    if (Bukkit.getOnlinePlayers().contains(target)) {
+                        mods.removeOfficer(target);
+                        updatePersistent(taskId, 0);
+                    }
                 }
                 if (persistent == 0) {
                     deleteTask(taskId);

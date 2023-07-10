@@ -122,7 +122,7 @@ public class AdminGuildsCommand implements CommandExecutor {
                                 }
                             }
                         } else if (a[0].equalsIgnoreCase("deletemember")) {
-                            if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.admin-commands.guilds.deletemember"))) {
+                            if (Errors.noPermCommand(p, conf.getSettings().getString("permissions.admin-commands.guilds.deletemember"))) {
                                 return true;
                             } else {
                                 String targetName = a[1];
@@ -133,6 +133,63 @@ public class AdminGuildsCommand implements CommandExecutor {
                                     data.getTasks().insertTask("expelGuildMember", targetName, 1);
                                     p.sendMessage(Config.getTransl("settings", "messages.success.guilds.remove-member")
                                             .replace("$guildName", guildName));
+                                } else {
+                                    p.sendMessage(Config.getTransl("settings", "messages.errors.members.target.isnt-on-a-guild"));
+                                }
+                            }
+                        } else if (a[0].equalsIgnoreCase("changerole")) {
+                            if (Errors.noPermCommand(p, conf.getSettings().getString("permissions.admin-commands.guilds.changerole"))) {
+                                return true;
+                            } else {
+                                String targetName = a[1];
+                                String newRole = a[2];
+                                HashMap<String, List<String>> guildsData = mods.getGuildsData();
+                                if (guildsData.containsKey(targetName)) {
+                                    List<String> guildAndRole = guildsData.get(targetName);
+                                    String guildId = guildAndRole.get(0);
+                                    String guildRole = guildAndRole.get(1);
+                                    String guildName = data.getGuilds().getGuildName(guildId);
+                                    switch (newRole) {
+                                        case "officer":
+                                            if (!guildRole.toLowerCase().equalsIgnoreCase(newRole)) {
+                                                data.getTasks().insertTask("setOfficer", guildName, 1);
+                                                data.getTasks().insertTask("sendUserMessage", targetName + "£" + conf.getSettings().getString("messages.info.guild.officer.set")
+                                                                .replace("%sp", plugin.getSuccessPrefix())
+                                                                .replace("%ip", plugin.getInfoPrefix())
+                                                                .replace("%fp", plugin.getFailPrefix()),
+                                                        1);
+                                                mods.sendGuildersBroadcast(guildId, conf.getSettings().getString("messages.info.guild.members.broadcast.officer.set")
+                                                        .replace("%sp", plugin.getSuccessPrefix())
+                                                        .replace("%ip", plugin.getInfoPrefix())
+                                                        .replace("%fp", plugin.getFailPrefix())
+                                                        .replace("$username", targetName)
+                                                );
+                                            } else {
+                                                p.sendMessage(Config.getTransl("settings", "messages.errors.admin.members.target.is-already-officer"));
+                                            }
+                                            break;
+                                        case "member":
+                                            if (!guildRole.toLowerCase().equalsIgnoreCase(newRole)) {
+                                                data.getTasks().insertTask("removeOfficer", guildName, 1);
+                                                data.getTasks().insertTask("sendUserMessage", targetName + "£" + conf.getSettings().getString("messages.info.guild.officer.remove")
+                                                                .replace("%sp", plugin.getSuccessPrefix())
+                                                                .replace("%ip", plugin.getInfoPrefix())
+                                                                .replace("%fp", plugin.getFailPrefix()),
+                                                        1);
+                                                mods.sendGuildersBroadcast(guildId, conf.getSettings().getString("messages.info.guild.members.broadcast.officer.remove")
+                                                        .replace("%sp", plugin.getSuccessPrefix())
+                                                        .replace("%ip", plugin.getInfoPrefix())
+                                                        .replace("%fp", plugin.getFailPrefix())
+                                                        .replace("$username", targetName)
+                                                );
+                                            } else {
+                                                p.sendMessage(Config.getTransl("settings", "messages.errors.admin.members.target.is-already-member"));
+                                            }
+                                            break;
+                                        default:
+                                            p.sendMessage(Config.getTransl("settings", "messages.errors.admin.members.target.role-not-found"));
+                                            break;
+                                    }
                                 } else {
                                     p.sendMessage(Config.getTransl("settings", "messages.errors.members.target.isnt-on-a-guild"));
                                 }
