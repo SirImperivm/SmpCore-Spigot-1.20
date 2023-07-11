@@ -269,6 +269,9 @@ public class Modules {
         setters(p, guildId, "addMember");
         p.sendMessage(Config.getTransl("settings", "messages.info.guild.members.officer.remove"));
     }
+    public void setLeadership(String guildId, Player p) {
+
+    }
 
     public void leaveMember(Player p) {
         String playerName = p.getName();
