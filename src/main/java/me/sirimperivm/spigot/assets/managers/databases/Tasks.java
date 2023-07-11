@@ -89,8 +89,9 @@ public class Tasks {
         }
     }
 
-    public void executeTask(int taskId) {
+    public void executeTask() {
         String query = "SELECT * FROM " + database;
+        int taskId = 0;
 
         try {
             PreparedStatement state = conn.prepareStatement(query);
@@ -98,6 +99,7 @@ public class Tasks {
             while (rs.next()) {
                 String taskType = rs.getString("taskType");
                 String taskValue = rs.getString("taskValue");
+                taskId = rs.getInt("taskId");
                 int persistent = rs.getInt("persistent");
                 if (taskType.equalsIgnoreCase("expelGuildMember")) {
                     Player target = Bukkit.getPlayerExact(taskValue);

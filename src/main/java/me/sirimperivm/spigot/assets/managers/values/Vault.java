@@ -2,7 +2,6 @@ package me.sirimperivm.spigot.assets.managers.values;
 
 import me.sirimperivm.spigot.Main;
 import net.milkbowl.vault.economy.Economy;
-import net.milkbowl.vault.permission.Permission;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import java.util.logging.Logger;
@@ -12,7 +11,6 @@ public class Vault {
 
     private static Main plugin = Main.getPlugin();
     private static Economy econ = null;
-    private static Permission perms = null;
     private static Logger log = Logger.getLogger("SMPCore");
 
     public Vault() {
@@ -35,17 +33,7 @@ public class Vault {
         return econ != null;
     }
 
-    private boolean setupPermissions() {
-        RegisteredServiceProvider<Permission> rsp = plugin.getServer().getServicesManager().getRegistration(Permission.class);
-        perms = rsp.getProvider();
-        return perms != null;
-    }
-
     public static Economy getEcon() {
         return econ;
-    }
-
-    public static Permission getPerms() {
-        return perms;
     }
 }

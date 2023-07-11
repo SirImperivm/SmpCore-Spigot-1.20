@@ -10,7 +10,7 @@ settings:
   guilds:
     bank:
       startingBalance: 0.0
-      defaultBankLimit: 5000.0
+      defaultBankLimit: -1.0
   lobby:
     location:
       world: "null"

@@ -51,7 +51,7 @@ public class Modules {
         BukkitScheduler scheduler = Bukkit.getScheduler();
         scheduler.runTaskTimer(plugin, () -> {
             for (Integer taskId : taskList) {
-                data.getTasks().executeTask(taskId);
+                data.getTasks().executeTask();
             }
         }, 20L, 20L);
 
@@ -93,18 +93,18 @@ public class Modules {
         conf.getGuilds().set(confPath + guildName + ".mainHome.posZ", locZ);
         conf.getGuilds().set(confPath + guildName + ".mainHome.rotYaw", locYaw);
         conf.getGuilds().set(confPath + guildName + ".mainHome.rotPitch", locPitch);
-        conf.getGuilds().set(confPath + guildName + ".settings.addOwner.addGroup1.type", "addGroup");
-        conf.getGuilds().set(confPath + guildName + ".settings.addOwner.addGroup1.group", "");
-        conf.getGuilds().set(confPath + guildName + ".settings.addOfficer.addGroup1.type", "addGroup");
-        conf.getGuilds().set(confPath + guildName + ".settings.addOfficer.addGroup1.group", "");
-        conf.getGuilds().set(confPath + guildName + ".settings.addMember.addGroup1.type", "addGroup");
-        conf.getGuilds().set(confPath + guildName + ".settings.addMember.addGroup1.group", "");
-        conf.getGuilds().set(confPath + guildName + ".settings.remOwner.removeGroup1.type", "removeGroup");
-        conf.getGuilds().set(confPath + guildName + ".settings.remOwner.removeGroup1.group", "");
-        conf.getGuilds().set(confPath + guildName + ".settings.removeGroup1.type", "removeGroup");
-        conf.getGuilds().set(confPath + guildName + ".settings.removeGroup1.group", "");
-        conf.getGuilds().set(confPath + guildName + ".settings.removeGroup1.type", "removeGroup");
-        conf.getGuilds().set(confPath + guildName + ".settings.removeGroup1.group", "");
+        conf.getGuilds().set(confPath + guildName + ".settings.addLeader.command1.type", "sendCommand");
+        conf.getGuilds().set(confPath + guildName + ".settings.addLeader.command1.group", "");
+        conf.getGuilds().set(confPath + guildName + ".settings.addOfficer.command1.type", "sendCommand");
+        conf.getGuilds().set(confPath + guildName + ".settings.addOfficer.command1.group", "");
+        conf.getGuilds().set(confPath + guildName + ".settings.addMember.command1.type", "sendCommand");
+        conf.getGuilds().set(confPath + guildName + ".settings.addMember.command1.group", "");
+        conf.getGuilds().set(confPath + guildName + ".settings.remLeader.command1.type", "sendCommand");
+        conf.getGuilds().set(confPath + guildName + ".settings.remLeader.command1.group", "");
+        conf.getGuilds().set(confPath + guildName + ".settings.remOfficer.command1.type", "sendCommand");
+        conf.getGuilds().set(confPath + guildName + ".settings.remOfficer.command1.group", "");
+        conf.getGuilds().set(confPath + guildName + ".settings.remMember.command1.type", "sendCommand");
+        conf.getGuilds().set(confPath + guildName + ".settings.remMember.command1.group", "");
         conf.getGuilds().set(confPath + guildName + ".bank.limit", conf.getSettings().getDouble("settings.guilds.bank.defaultBankLimit"));
         conf.save(conf.getGuilds(), conf.getGuildsFile());
 
@@ -222,7 +222,7 @@ public class Modules {
             String setterType = null;
             switch (guildRole) {
                 case "leader":
-                    setterType = "remOwner";
+                    setterType = "remLeader";
                     break;
                 case "officer":
                     setterType = "remOfficer";
@@ -398,14 +398,6 @@ public class Modules {
                             p.getInventory().addItem(item);
                             break;
                     }
-                    break;
-                case "addGroup":
-                    groupName = conf.getGuilds().getString(settingsPath + ".group");
-                    Main.getVault().getPerms().playerAddGroup(p, groupName);
-                    break;
-                case "removeGroup":
-                    groupName = conf.getGuilds().getString(settingsPath + ".group");
-                    Main.getVault().getPerms().playerRemoveGroup(p, groupName);
                     break;
                 default:
                     break;
