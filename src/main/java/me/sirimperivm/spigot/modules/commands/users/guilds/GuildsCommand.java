@@ -12,6 +12,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -137,8 +138,21 @@ public class GuildsCommand implements CommandExecutor {
                                             String guildName = data.getGuilds().getGuildName(guildId);
                                             int membersLimit = conf.getGuilds().getInt("guilds." + guildName + ".membersLimit");
 
-                                            if (membersCount <= membersLimit) {
-                                                mods.inviteMember(t, guildName);
+                                            if (membersCount < membersLimit) {
+                                                mods.getInvites().put(targetName, data.getGuilds().getGuildName(guildId));
+                                                mods.sendGuildersBroadcast(guildId, Config.getTransl("settings", "messages.info.guild.members.invited.members")
+                                                        .replace("$playerName", targetName));
+                                                t.sendMessage(Config.getTransl("settings", "messages.info.guild.members.invited.you")
+                                                        .replace("$guildName", guildName));
+                                                new BukkitRunnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        if (mods.getInvites().containsKey(targetName)) {
+                                                            t.sendMessage(Config.getTransl("settings", "messages.info.general.time.expired"));
+                                                            mods.getInvites().remove(targetName);
+                                                        }
+                                                    }
+                                                }.runTaskLater(plugin, 15 * 20);
                                             } else {
                                                 p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.members.limit-reached")
                                                         .replace("$membersLimit", String.valueOf(membersLimit)));

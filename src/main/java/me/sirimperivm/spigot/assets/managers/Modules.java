@@ -94,17 +94,17 @@ public class Modules {
         conf.getGuilds().set(confPath + guildName + ".mainHome.rotYaw", locYaw);
         conf.getGuilds().set(confPath + guildName + ".mainHome.rotPitch", locPitch);
         conf.getGuilds().set(confPath + guildName + ".settings.addLeader.command1.type", "sendCommand");
-        conf.getGuilds().set(confPath + guildName + ".settings.addLeader.command1.group", "");
+        conf.getGuilds().set(confPath + guildName + ".settings.addLeader.command1.string", "");
         conf.getGuilds().set(confPath + guildName + ".settings.addOfficer.command1.type", "sendCommand");
-        conf.getGuilds().set(confPath + guildName + ".settings.addOfficer.command1.group", "");
+        conf.getGuilds().set(confPath + guildName + ".settings.addOfficer.command1.string", "");
         conf.getGuilds().set(confPath + guildName + ".settings.addMember.command1.type", "sendCommand");
-        conf.getGuilds().set(confPath + guildName + ".settings.addMember.command1.group", "");
+        conf.getGuilds().set(confPath + guildName + ".settings.addMember.command1.string", "");
         conf.getGuilds().set(confPath + guildName + ".settings.remLeader.command1.type", "sendCommand");
-        conf.getGuilds().set(confPath + guildName + ".settings.remLeader.command1.group", "");
+        conf.getGuilds().set(confPath + guildName + ".settings.remLeader.command1.string", "");
         conf.getGuilds().set(confPath + guildName + ".settings.remOfficer.command1.type", "sendCommand");
-        conf.getGuilds().set(confPath + guildName + ".settings.remOfficer.command1.group", "");
+        conf.getGuilds().set(confPath + guildName + ".settings.remOfficer.command1.string", "");
         conf.getGuilds().set(confPath + guildName + ".settings.remMember.command1.type", "sendCommand");
-        conf.getGuilds().set(confPath + guildName + ".settings.remMember.command1.group", "");
+        conf.getGuilds().set(confPath + guildName + ".settings.remMember.command1.string", "");
         conf.getGuilds().set(confPath + guildName + ".bank.limit", conf.getSettings().getDouble("settings.guilds.bank.defaultBankLimit"));
         conf.save(conf.getGuilds(), conf.getGuildsFile());
 
@@ -418,6 +418,7 @@ public class Modules {
         }
         generatedMembers.add(memberId + ";" + username);
 
+        data.getGuilds().updateBoughtGuild(guildId, 1);
         data.getGuildMembers().insertMemberData(username, memberId, guildId, "leader");
         String guildName = data.getGuilds().getGuildName(guildId);
 
