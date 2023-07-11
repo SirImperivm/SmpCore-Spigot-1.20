@@ -39,6 +39,7 @@ public class GuildsCommand implements CommandExecutor {
             } else {
                 if (a.length == 0) {
                     s.sendMessage(Colors.text("<RAINBOW1>SMPCore: Plugin ideato e sviluppato da SirImperivm_</RAINBOW>"));
+                    s.sendMessage(Colors.text("<SOLID:00FFFF>Esegui /g help per informazioni sui comandi."));
                 } else if (a.length == 1) {
                     if (a[0].equalsIgnoreCase("help")) {
                         getUsage(s);

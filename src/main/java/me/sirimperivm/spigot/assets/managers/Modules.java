@@ -299,6 +299,7 @@ public class Modules {
                             .replace("%fp", plugin.getFailPrefix())
                             .replace("$player", playerName)
                     );
+                    sendPlayerToLobby(p);
                     break;
                 default:
                     setterType = "remMember";
@@ -314,6 +315,7 @@ public class Modules {
                             .replace("%fp", plugin.getFailPrefix())
                             .replace("$player", playerName)
                     );
+                    sendPlayerToLobby(p);
                     break;
             }
         }
@@ -419,7 +421,7 @@ public class Modules {
         data.getGuildMembers().insertMemberData(username, memberId, guildId, "leader");
         String guildName = data.getGuilds().getGuildName(guildId);
 
-        setters(p, guildId, "addOwner");
+        setters(p, guildId, "addLeader");
         sendPlayerToGhome(p, guildName);
     }
 
