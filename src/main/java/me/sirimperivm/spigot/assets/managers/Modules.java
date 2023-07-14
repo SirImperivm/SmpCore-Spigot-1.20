@@ -14,11 +14,16 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Logger;
 
 @SuppressWarnings("all")
 public class Modules {
@@ -29,11 +34,14 @@ public class Modules {
     private static HashMap<String, String> invites;
     private static HashMap<String, List<String>> guildsData;
     private static Main plugin = Main.getPlugin();
+    private static Logger log = Logger.getLogger("SMPCore");
     private static Config conf = Main.getConf();
     private static Db data = Main.getData();
     private static Vault vault = Main.getVault();
 
     public Modules() {
+        invites = new HashMap<String, String>();
+        guildMembers = new ArrayList<>();
         refreshSettings();
         executeTasksLoop();
     }
@@ -41,23 +49,80 @@ public class Modules {
     void refreshSettings() {
         generatedGuilds = data.getGuilds().getGeneratedGuildsID();
         generatedMembers = data.getGuildMembers().getGeneratedMembersID();
-        guildMembers = new ArrayList<>();
-        invites = new HashMap<String, String>();
         guildsData = data.getGuildMembers().guildsData();
     }
 
+    public void deleteTask(int taskId) {
+        data.getTasks().deleteTask(taskId);
+    }
+
     public void executeTasksLoop() {
-        List<Integer> taskList = data.getTasks().returnAllTasks();
-        BukkitScheduler scheduler = Bukkit.getScheduler();
-        scheduler.runTaskTimer(plugin, () -> {
-            for (Integer taskId : taskList) {
-                data.getTasks().executeTask();
+        BukkitScheduler schedule = Bukkit.getScheduler();
+        schedule.runTaskTimer(plugin, () -> {
+            String query = "SELECT * FROM " + data.getTasks().database;
+
+            try {
+                PreparedStatement state = data.conn.prepareStatement(query);
+                ResultSet rs = state.executeQuery();
+                while (rs.next()) {
+                    int taskId = rs.getInt("taskId");
+                    String taskType = rs.getString("taskType");
+                    String taskValue = rs.getString("taskValue");
+                    if (taskType.equalsIgnoreCase("expelGuildMember")) {
+                        Player target = Bukkit.getPlayerExact(taskValue);
+                        if (target != null) {
+                            removeMember(target);
+                            deleteTask(taskId);
+                        }
+                    }
+                    if (taskType.equalsIgnoreCase("sendGuildersBroadcast")) {
+                        String[] splitter = taskValue.split("£");
+                        String username = splitter[0];
+                        String message = splitter[1];
+                        Player target = Bukkit.getPlayerExact(username);
+                        if (target != null) {
+                            target.sendMessage(Colors.text(message));
+                            deleteTask(taskId);
+                        }
+                    }
+                    if (taskType.equalsIgnoreCase("sendUserMessage")) {
+                        String[] splitter = taskValue.split("£");
+                        String username = splitter[0];
+                        String message = splitter[1];
+                        Player target = Bukkit.getPlayerExact(username);
+                        if (target != null) {
+                            target.sendMessage(Colors.text(message));
+                            deleteTask(taskId);
+                        }
+                    }
+                    if (taskType.equalsIgnoreCase("setOfficer")) {
+                        Player target = Bukkit.getPlayerExact(taskValue);
+                        if (target != null) {
+                            setOfficer(target);
+                            deleteTask(taskId);
+                        }
+                    }
+                    if (taskType.equalsIgnoreCase("removeOfficer")) {
+                        Player target = Bukkit.getPlayerExact(taskValue);
+                        if (target != null) {
+                            removeOfficer(target);
+                            deleteTask(taskId);
+                        }
+                    }
+                }
+            } catch (SQLException e) {
+                log.severe("Impossibile eseguire una task!");
+                e.printStackTrace();
             }
         }, 20L, 20L);
 
+       /* List<Integer> taskList = data.getTasks().returnAllTasks();
+        BukkitScheduler scheduler = Bukkit.getScheduler();
+
         scheduler.runTaskTimer(plugin, () -> {
+            data.getTasks().executeTasks();
             refreshSettings();
-        }, 20L, 5*20L);
+        }, 20L, 20L); */
     }
 
     public void createGuild(Player p, String guildName, String guildTitle, int membersLimit) {
@@ -136,7 +201,7 @@ public class Modules {
             String gId = splitter[1];
             String username = splitter[0];
             if (gId.equalsIgnoreCase(guildId)) {
-                data.getTasks().insertTask("expelGuildMember", username, 1);
+                data.getTasks().insertTask("expelGuildMember", username);
             }
         }
 
@@ -174,16 +239,20 @@ public class Modules {
 
     public void inviteMember(Player target, String guildName) {
         String username = target.getName();
-        invites.put(username, guildName);
         target.sendMessage(Config.getTransl("settings", "messages.info.guild.members.invited.you")
                 .replace("$guildName", guildName));
-        BukkitScheduler schedule = Bukkit.getScheduler();
-        schedule.runTaskLater(plugin, () -> {
-            if (invites.containsKey(username)) {
-                target.sendMessage(Config.getTransl("settings", "messages.info.general.time.expired"));
-                invites.remove(username);
+        sendGuildersBroadcast(data.getGuilds().getGuildId(guildName), Config.getTransl("settings", "messages.info.guild.members.invited.members")
+                .replace("$playerName", username));
+        invites.put(username, guildName);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (invites.containsKey(username)) {
+                    target.sendMessage(Config.getTransl("settings", "messages.info.general.time.expired"));
+                    invites.remove(username);
+                }
             }
-        }, (long) 20 * 15);
+        }.runTaskLater(plugin, 20 * 15);
     }
 
     public void insertMember(Player p, String guildName, String guildRole) {
@@ -451,19 +520,19 @@ public class Modules {
         p.teleport(home);
     }
 
-    public boolean isLobbyLocated() {
-        return !conf.getSettings().getString("settings.lobby.location.world").equalsIgnoreCase("null");
-    }
-
     public void sendGuildersBroadcast(String guildId, String message) {
         for (String key : guildsData.keySet()) {
             List<String> guildsAndRole = guildsData.get(key);
             String gId = guildsAndRole.get(0);
             String gRole = guildsAndRole.get(1);
             if (gId.equalsIgnoreCase(guildId)) {
-                data.getTasks().insertTask("sendGuildersBroadcast", key + "£" + message, 1);
+                data.getTasks().insertTask("sendGuildersBroadcast", key + "£" + message);
             }
         }
+    }
+
+    public boolean isLobbyLocated() {
+        return !conf.getSettings().getString("settings.lobby.location.world").equalsIgnoreCase("null");
     }
 
     public double getUserBalance(Player p) {
@@ -494,5 +563,9 @@ public class Modules {
 
     public static HashMap<String, List<String>> getGuildsData() {
         return guildsData;
+    }
+
+    public static Db getData() {
+        return data;
     }
 }

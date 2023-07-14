@@ -3,6 +3,7 @@ package me.sirimperivm.spigot.assets.managers.databases;
 import me.sirimperivm.spigot.Main;
 import me.sirimperivm.spigot.assets.managers.Config;
 import me.sirimperivm.spigot.assets.managers.Db;
+import me.sirimperivm.spigot.assets.managers.Modules;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public class Guilds {
     private static Config conf = Main.getConf();
     private static Logger log = Logger.getLogger("SMPCore");
     private static Db data = Main.getData();
+    private static Modules mods = data.mods;
 
     static Connection conn = data.conn;
     String dbName = data.dbname;

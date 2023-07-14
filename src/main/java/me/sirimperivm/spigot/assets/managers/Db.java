@@ -16,10 +16,10 @@ public class Db {
     private static Main plugin = Main.getPlugin();
     private static Logger log = Logger.getLogger("SMPCore");
     private static Config conf = Main.getConf();
+    public static Modules mods = Main.getMods();
     private static Guilds guilds;
     private static GuildMembers guildMembers;
     private static Tasks tasks;
-
     public static Connection conn;
     public static String dbname = conf.getSettings().getString("settings.database.dbname");
     public static String tablePrefix = conf.getSettings().getString("settings.database.tablePrefix");

@@ -4,9 +4,6 @@ import me.sirimperivm.spigot.Main;
 import me.sirimperivm.spigot.assets.managers.Config;
 import me.sirimperivm.spigot.assets.managers.Db;
 import me.sirimperivm.spigot.assets.managers.Modules;
-import me.sirimperivm.spigot.assets.utils.Colors;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -20,12 +17,12 @@ public class Tasks {
     private static Config conf = Main.getConf();
     private static Logger log = Logger.getLogger("SMPCore");
     private static Db data = Main.getData();
-    private static Modules mods = Main.getMods();
+    private static Modules mods = data.mods;
     static Connection conn = data.conn;
     String dbName = data.dbname;
     String tablePrefix = data.tablePrefix;
     String tableName = "tasks";
-    String database = dbName + "." + tablePrefix + tableName;
+    public String database = dbName + "." + tablePrefix + tableName;
 
     boolean tableExists() {
         boolean value = false;
@@ -44,7 +41,7 @@ public class Tasks {
 
     public void createTable() {
         if (!tableExists()) {
-            String query = "CREATE TABLE " + database + "(`taskId` INT AUTO_INCREMENT primary key NOT NULL, `taskType` TEXT NOT NULL, `taskValue` TEXT NULL, `persistent` INT NOT NULL);";
+            String query = "CREATE TABLE " + database + "(`taskId` INT AUTO_INCREMENT primary key NOT NULL, `taskType` TEXT NOT NULL, `taskValue` TEXT NULL);";
 
             try {
                 PreparedStatement state = conn.prepareStatement(query);
@@ -58,20 +55,18 @@ public class Tasks {
         }
     }
 
-    public void insertTask(String taskType, String taskValue, int persistent) {
-        String query = "INSERT INTO " + database + "(taskType, taskValue, persistent) VALUES (?, ?, ?)";
+    public void insertTask(String taskType, String taskValue) {
+        String query = "INSERT INTO " + database + "(taskType, taskValue) VALUES (?, ?)";
 
         try {
             PreparedStatement state = conn.prepareStatement(query);
             state.setString(1, taskType);
             state.setString(2, taskValue);
-            state.setInt(3, persistent);
             state.executeUpdate();
         } catch (SQLException e) {
             log.severe("Impossibile inserire una task: " +
                     "\n TaskType: " + taskType +
                     "\n TaskValue: " + taskValue +
-                    "\n Persistent: " + persistent +
                     "...!");
             e.printStackTrace();
         }
@@ -85,77 +80,6 @@ public class Tasks {
             state.executeUpdate();
         } catch (SQLException e) {
             log.severe("Impossibile portare a termine una task. (" + taskId + ")");
-            e.printStackTrace();
-        }
-    }
-
-    public void executeTask() {
-        String query = "SELECT * FROM " + database;
-        int taskId = 0;
-
-        try {
-            PreparedStatement state = conn.prepareStatement(query);
-            ResultSet rs = state.executeQuery();
-            while (rs.next()) {
-                String taskType = rs.getString("taskType");
-                String taskValue = rs.getString("taskValue");
-                taskId = rs.getInt("taskId");
-                int persistent = rs.getInt("persistent");
-                if (taskType.equalsIgnoreCase("expelGuildMember")) {
-                    Player target = Bukkit.getPlayerExact(taskValue);
-                    if (Bukkit.getOnlinePlayers().contains(target)) {
-                        mods.removeMember(target);
-                        updatePersistent(taskId, 0);
-                    }
-                } else if (taskType.equalsIgnoreCase("sendGuildersBroadcast")) {
-                    String[] splitter = taskValue.split("£");
-                    String username = splitter[0];
-                    String message = splitter[1];
-                    Player target = Bukkit.getPlayerExact(username);
-                    if (Bukkit.getOnlinePlayers().contains(target)) {
-                        target.sendMessage(Colors.text(message));
-                        updatePersistent(taskId, 0);
-                    }
-                } else if (taskType.equalsIgnoreCase("sendUserMessage")) {
-                    String[] splitter = taskValue.split("£");
-                    String username = splitter[0];
-                    String message = splitter[1];
-                    Player target = Bukkit.getPlayerExact(username);
-                    if (Bukkit.getOnlinePlayers().contains(target)) {
-                        target.sendMessage(Colors.text(message));
-                        updatePersistent(taskId, 0);
-                    }
-                } else if (taskType.equalsIgnoreCase("setOfficer")) {
-                    Player target = Bukkit.getPlayerExact(taskValue);
-                    if (Bukkit.getOnlinePlayers().contains(target)) {
-                        mods.setOfficer(target);
-                        updatePersistent(taskId, 0);
-                    }
-                } else if (taskType.equalsIgnoreCase("removeOfficer")) {
-                    Player target = Bukkit.getPlayerExact(taskValue);
-                    if (Bukkit.getOnlinePlayers().contains(target)) {
-                        mods.removeOfficer(target);
-                        updatePersistent(taskId, 0);
-                    }
-                }
-                if (persistent == 0) {
-                    deleteTask(taskId);
-                }
-            }
-        } catch (SQLException e) {
-            log.severe("Impossibile eseguire la task " + taskId + "!");
-            e.printStackTrace();
-        }
-    }
-
-    public void updatePersistent(int taskId, int persistent) {
-        String query = "UPDATE " + database + " SET persistent='" + persistent + "' WHERE taskId='" + taskId + "'";
-
-        try {
-            PreparedStatement state = conn.prepareStatement(query);
-            state.executeUpdate();
-        } catch (SQLException e) {
-            log.severe("Impossibile aggiornare lo stato di persistenza di della task: " + taskId + "!");
             e.printStackTrace();
         }
     }

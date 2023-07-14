@@ -12,7 +12,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -123,15 +122,15 @@ public class GuildsCommand implements CommandExecutor {
                                 return true;
                             } else {
                                 Player p = (Player) s;
-                                Player t = Bukkit.getPlayerExact(a[1]);
-                                if (t == null || !Bukkit.getOnlinePlayers().contains(t)) {
+                                Player t = Bukkit.getPlayer(a[1]);
+                                if (t == null) {
                                     p.sendMessage(Config.getTransl("settings", "messages.errors.players.not-found"));
                                 } else {
                                     String playerName = p.getName();
                                     HashMap<String, List<String>> guildsData = mods.getGuildsData();
                                     if (guildsData.containsKey(playerName)) {
                                         String targetName = t.getName();
-                                        if (!guildsData.containsKey(targetName)) {
+                                        if (!guildsData.containsKey(a[1])) {
                                             List<String> guildSettings = guildsData.get(playerName);
                                             String guildId = guildSettings.get(0);
                                             int membersCount = data.getGuildMembers().getMembersCount(guildId);
@@ -139,20 +138,7 @@ public class GuildsCommand implements CommandExecutor {
                                             int membersLimit = conf.getGuilds().getInt("guilds." + guildName + ".membersLimit");
 
                                             if (membersCount < membersLimit) {
-                                                mods.getInvites().put(targetName, data.getGuilds().getGuildName(guildId));
-                                                mods.sendGuildersBroadcast(guildId, Config.getTransl("settings", "messages.info.guild.members.invited.members")
-                                                        .replace("$playerName", targetName));
-                                                t.sendMessage(Config.getTransl("settings", "messages.info.guild.members.invited.you")
-                                                        .replace("$guildName", guildName));
-                                                new BukkitRunnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        if (mods.getInvites().containsKey(targetName)) {
-                                                            t.sendMessage(Config.getTransl("settings", "messages.info.general.time.expired"));
-                                                            mods.getInvites().remove(targetName);
-                                                        }
-                                                    }
-                                                }.runTaskLater(plugin, 15 * 20);
+                                                mods.inviteMember(t, guildName);
                                             } else {
                                                 p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.members.limit-reached")
                                                         .replace("$membersLimit", String.valueOf(membersLimit)));
@@ -185,7 +171,7 @@ public class GuildsCommand implements CommandExecutor {
                                         String targetGuildId = targetGuildAndRole.get(0);
                                         String targetGuildName = data.getGuilds().getGuildName(targetGuildId);
                                         if (targetGuildName.equalsIgnoreCase(playerGuildName)) {
-                                            data.getTasks().insertTask("expelGuildMember", a[1], 1);
+                                            data.getTasks().insertTask("expelGuildMember", a[1]);
                                         } else {
                                             p.sendMessage(Config.getTransl("settings", "messages.errors.members.target.isnt-a-guild-member"));
                                         }
@@ -225,12 +211,12 @@ public class GuildsCommand implements CommandExecutor {
                                                 if (playerGuildName.equalsIgnoreCase(targetGuildName)) {
                                                     String targetGuildRole = guildsData.get(targetName).get(1);
                                                     if (!targetGuildRole.equalsIgnoreCase("officer")) {
-                                                        data.getTasks().insertTask("setOfficer", targetGuildName, 1);
-                                                        data.getTasks().insertTask("sendUserMessage", targetName + "£" + conf.getSettings().getString("messages.info.guild.officer.set")
+                                                        data.getTasks().insertTask("setOfficer", targetName);
+                                                        data.getTasks().insertTask("sendUserMessage", targetName + "£" + conf.getSettings().getString("messages.info.guild.members.officer.set")
                                                                 .replace("%sp", plugin.getSuccessPrefix())
                                                                 .replace("%ip", plugin.getInfoPrefix())
-                                                                .replace("%fp", plugin.getFailPrefix()),
-                                                                1);
+                                                                .replace("%fp", plugin.getFailPrefix())
+                                                        );
                                                         mods.sendGuildersBroadcast(targetGuildId, conf.getSettings().getString("messages.info.guild.members.broadcast.officer.set")
                                                                 .replace("%sp", plugin.getSuccessPrefix())
                                                                 .replace("%ip", plugin.getInfoPrefix())
@@ -267,12 +253,12 @@ public class GuildsCommand implements CommandExecutor {
                                                 if (playerGuildName.equalsIgnoreCase(targetGuildName)) {
                                                     String targetGuildRole = guildsData.get(targetName).get(1);
                                                     if (targetGuildRole.equalsIgnoreCase("officer")) {
-                                                        data.getTasks().insertTask("removeOfficer", targetGuildName, 1);
-                                                        data.getTasks().insertTask("sendUserMessage", targetName + "£" + conf.getSettings().getString("messages.info.guild.officer.remove")
+                                                        data.getTasks().insertTask("removeOfficer", targetName);
+                                                        data.getTasks().insertTask("sendUserMessage", targetName + "£" + conf.getSettings().getString("messages.info.guild.members.officer.remove")
                                                                         .replace("%sp", plugin.getSuccessPrefix())
                                                                         .replace("%ip", plugin.getInfoPrefix())
-                                                                        .replace("%fp", plugin.getFailPrefix()),
-                                                                1);
+                                                                        .replace("%fp", plugin.getFailPrefix())
+                                                        );
                                                         mods.sendGuildersBroadcast(targetGuildId, conf.getSettings().getString("messages.info.guild.members.broadcast.officer.remove")
                                                                 .replace("%sp", plugin.getSuccessPrefix())
                                                                 .replace("%ip", plugin.getInfoPrefix())

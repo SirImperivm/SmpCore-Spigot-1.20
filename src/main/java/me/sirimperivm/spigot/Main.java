@@ -12,19 +12,21 @@ import me.sirimperivm.spigot.modules.commands.users.guilds.GuildsCommand;
 import me.sirimperivm.spigot.modules.listeners.ClickListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.logging.Logger;
+
 import static org.bukkit.Bukkit.getConsoleSender;
 import static org.bukkit.Bukkit.getPluginManager;
 
 @SuppressWarnings("all")
 public final class Main extends JavaPlugin {
 
+    Logger log = Logger.getLogger("SMPCore");
     private static Main plugin;
     private static Config conf;
     private static Db data;
-    private static Vault vault;
     private static Modules mods;
+    private static Vault vault;
     private static PapiExpansions papi;
-
     private static String successPrefix;
     private static String infoPrefix;
     private static String failPrefix;
@@ -48,9 +50,9 @@ public final class Main extends JavaPlugin {
         infoPrefix = Colors.text(conf.getSettings().getString("messages.prefixes.info"));
         failPrefix = Colors.text(conf.getSettings().getString("messages.prefixes.fail"));
         data = new Db();
+        mods = new Modules();
         papi = new PapiExpansions(plugin);
         registerExpansions();
-        mods = new Modules();
     }
 
     void closeup() {

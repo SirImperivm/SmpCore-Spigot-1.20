@@ -87,7 +87,7 @@ public class AdminGuildsCommand implements CommandExecutor {
                             if (Errors.noPermCommand(p, conf.getSettings().getString("permissions.admin-commands.guilds.addmember"))) {
                                 return true;
                             } else {
-                                Player t = Bukkit.getPlayerExact(a[1]);
+                                Player t = Bukkit.getPlayer(a[1]);
                                 if (t == null || !Bukkit.getOnlinePlayers().contains(t)) {
                                     p.sendMessage(Config.getTransl("settings", "messages.errors.players.not-found"));
                                 } else {
@@ -130,7 +130,7 @@ public class AdminGuildsCommand implements CommandExecutor {
                                 if (guildsData.containsKey(targetName)) {
                                     String guildId = guildsData.get(targetName).get(0);
                                     String guildName = data.getGuilds().getGuildName(guildId);
-                                    data.getTasks().insertTask("expelGuildMember", targetName, 1);
+                                    data.getTasks().insertTask("expelGuildMember", targetName);
                                     p.sendMessage(Config.getTransl("settings", "messages.success.guilds.remove-member")
                                             .replace("$guildName", guildName));
                                 } else {
@@ -152,12 +152,12 @@ public class AdminGuildsCommand implements CommandExecutor {
                                     switch (newRole) {
                                         case "officer":
                                             if (!guildRole.toLowerCase().equalsIgnoreCase(newRole)) {
-                                                data.getTasks().insertTask("setOfficer", guildName, 1);
+                                                data.getTasks().insertTask("setOfficer", guildName);
                                                 data.getTasks().insertTask("sendUserMessage", targetName + "£" + conf.getSettings().getString("messages.info.guild.officer.set")
                                                                 .replace("%sp", plugin.getSuccessPrefix())
                                                                 .replace("%ip", plugin.getInfoPrefix())
-                                                                .replace("%fp", plugin.getFailPrefix()),
-                                                        1);
+                                                                .replace("%fp", plugin.getFailPrefix())
+                                                );
                                                 mods.sendGuildersBroadcast(guildId, conf.getSettings().getString("messages.info.guild.members.broadcast.officer.set")
                                                         .replace("%sp", plugin.getSuccessPrefix())
                                                         .replace("%ip", plugin.getInfoPrefix())
@@ -170,12 +170,12 @@ public class AdminGuildsCommand implements CommandExecutor {
                                             break;
                                         case "member":
                                             if (!guildRole.toLowerCase().equalsIgnoreCase(newRole)) {
-                                                data.getTasks().insertTask("removeOfficer", guildName, 1);
+                                                data.getTasks().insertTask("removeOfficer", guildName);
                                                 data.getTasks().insertTask("sendUserMessage", targetName + "£" + conf.getSettings().getString("messages.info.guild.officer.remove")
                                                                 .replace("%sp", plugin.getSuccessPrefix())
                                                                 .replace("%ip", plugin.getInfoPrefix())
-                                                                .replace("%fp", plugin.getFailPrefix()),
-                                                        1);
+                                                                .replace("%fp", plugin.getFailPrefix())
+                                                );
                                                 mods.sendGuildersBroadcast(guildId, conf.getSettings().getString("messages.info.guild.members.broadcast.officer.remove")
                                                         .replace("%sp", plugin.getSuccessPrefix())
                                                         .replace("%ip", plugin.getInfoPrefix())
