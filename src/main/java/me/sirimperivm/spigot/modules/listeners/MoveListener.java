@@ -1,6 +1,6 @@
 package me.sirimperivm.spigot.modules.listeners;
 
-import com.sk89q.worldedit.world.World;
+import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.flags.StringFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
@@ -31,9 +31,11 @@ public class MoveListener implements Listener {
     public void onMove(PlayerMoveEvent e) {
         Player p = e.getPlayer();
         String playerName = p.getName();
+        LocalPlayer player = (LocalPlayer) p;
 
         RegionContainer container = worldGuard.getWg().getPlatform().getRegionContainer();
-        RegionManager regions = container.get((World) p.getWorld());
+        RegionManager regions = container.get(player.getWorld());
+
         for (String regionId : regions.getRegions().keySet()) {
             ProtectedRegion region = regions.getRegion(regionId);
             if (region != null) {
