@@ -24,6 +24,7 @@ public class Wg {
             StateFlag flag = new StateFlag("smpc-guilds", true);
             register.register(flag);
             smpcGuilds = flag;
+            log.info("E' stata registrata con successo la flag \"smpc-guilds\"!");
         } catch (FlagConflictException e) {
             Flag<?> existing = register.get("smpc-guilds");
             if (existing instanceof StateFlag) {
@@ -37,6 +38,7 @@ public class Wg {
             Flag<String> flag = new StringFlag("smpc-guild-id");
             register.register(flag);
             smpcGuildId = (StringFlag) flag;
+            log.info("E' stata registrata con successo la flag \"smpc-guilds-id\"!");
         } catch (FlagConflictException e) {
             Flag<?> existing = register.get("smpc-guild-id");
             if (existing instanceof StateFlag) {
