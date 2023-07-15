@@ -2,8 +2,11 @@ name: SmpCore
 version: '${project.version}'
 main: me.sirimperivm.spigot.Main
 api-version: 1.19
+loadbefore:
+  - WorldGuard
 depend:
   - Vault
+  - WorldGuard
 softdepend:
   - PlaceholderAPI
 authors:

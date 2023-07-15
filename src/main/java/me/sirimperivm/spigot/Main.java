@@ -5,27 +5,26 @@ import me.sirimperivm.spigot.assets.managers.Db;
 import me.sirimperivm.spigot.assets.managers.Modules;
 import me.sirimperivm.spigot.assets.managers.placeholderapi.PapiExpansions;
 import me.sirimperivm.spigot.assets.managers.values.Vault;
+import me.sirimperivm.spigot.assets.managers.worldguard.Wg;
 import me.sirimperivm.spigot.assets.utils.Colors;
 import me.sirimperivm.spigot.modules.commands.admin.core.AdminSmpcCommand;
 import me.sirimperivm.spigot.modules.commands.admin.guilds.AdminGuildsCommand;
 import me.sirimperivm.spigot.modules.commands.users.guilds.GuildsCommand;
 import me.sirimperivm.spigot.modules.listeners.ClickListener;
+import me.sirimperivm.spigot.modules.listeners.MoveListener;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.logging.Logger;
 
 import static org.bukkit.Bukkit.getConsoleSender;
 import static org.bukkit.Bukkit.getPluginManager;
 
 @SuppressWarnings("all")
 public final class Main extends JavaPlugin {
-
-    Logger log = Logger.getLogger("SMPCore");
     private static Main plugin;
     private static Config conf;
     private static Db data;
     private static Modules mods;
     private static Vault vault;
+    private static Wg regionManager;
     private static PapiExpansions papi;
     private static String successPrefix;
     private static String infoPrefix;
@@ -60,6 +59,11 @@ public final class Main extends JavaPlugin {
     }
 
     @Override
+    public void onLoad() {
+        regionManager = new Wg();
+    }
+
+    @Override
     public void onEnable() {
         setup();
         getServer().getPluginCommand("ga").setExecutor(new AdminGuildsCommand());
@@ -67,6 +71,7 @@ public final class Main extends JavaPlugin {
         getServer().getPluginCommand("g").setExecutor(new GuildsCommand());
 
         getServer().getPluginManager().registerEvents(new ClickListener(), this);
+        getServer().getPluginManager().registerEvents(new MoveListener(), this);
         getConsoleSender().sendMessage(Colors.text("&a[SMPCore] Plugin attivato correttamente!"));
         getConsoleSender().sendMessage(Colors.text("<RAINBOW1>Plugin ideato e sviluppato da SirImperivm_</RAINBOW>"));
     }
@@ -91,6 +96,10 @@ public final class Main extends JavaPlugin {
 
     public static Vault getVault() {
         return vault;
+    }
+
+    public static Wg getRegionManager() {
+        return regionManager;
     }
 
     public static String getSuccessPrefix() {

@@ -97,6 +97,8 @@ messages:
       dont-have: "%fpNon sei membro di nessuna gilda."
       invites:
         not-received: "%fpNon hai ricevuto nessun invito."
+      region:
+        entering: "%fpNon sei membro di questa gilda, non puoi entrare."
     members:
       alreadyHaveGuild: "%fpHai già una gilda."
       target:
@@ -151,3 +153,7 @@ permissions:
     guilds:
       shop:
         use: smpc.user.guilds.shop.use
+  admin-actions:
+    guilds:
+      entering:
+        bypass: smpc.user.guilds.bypass
