@@ -74,6 +74,51 @@ public class GuildsCommand implements CommandExecutor {
                                 }
                             }
                         }
+                    } else if (a[0].equalsIgnoreCase("chat")) {
+                        if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.user-commands.guilds.chat"))) {
+                            return true;
+                        } else {
+                            if (Errors.noConsole(s)) {
+                                return true;
+                            } else {
+                                Player p = (Player) s;
+                                String playerName = p.getName();
+                                HashMap<String, List<String>> guildsData = mods.getGuildsData();
+                                if (guildsData.containsKey(playerName)) {
+                                    String guildId = guildsData.get(playerName).get(0);
+                                    HashMap<String, String> guildsChat = mods.getGuildsChat();
+                                    if (!guildsChat.containsKey(playerName)) {
+                                        guildsChat.put(playerName, guildId);
+                                        p.sendMessage(Config.getTransl("settings", "messages.info.guild.chat.changed")
+                                                .replace("$chatType", "Gilda"));
+                                    } else {
+                                        guildsChat.remove(playerName);
+                                        p.sendMessage(Config.getTransl("settings", "messages.info.guild.chat.changed")
+                                                .replace("$chatType", "Pubblica"));
+                                    }
+                                } else {
+                                    p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.dont-have"));
+                                }
+                            }
+                        }
+                    } else if (a[0].equalsIgnoreCase("bank")) {
+                        if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.user-commands.guilds.bank"))) {
+                            return true;
+                        } else {
+                            if (Errors.noConsole(s)) {
+                                return true;
+                            } else {
+                                Player p = (Player) s;
+                                String playerName = p.getName();
+                                if (mods.getGuildsData().containsKey(playerName)) {
+                                    String guildId = mods.getGuildsData().get(playerName).get(0);
+                                    Gui gm = new Gui();
+                                    p.openInventory(gm.bankGui(guildId));
+                                } else {
+                                    p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.dont-have"));
+                                }
+                            }
+                        }
                     } else if (a[0].equalsIgnoreCase("home")) {
                         if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.user-commands.guilds.home"))) {
                             return true;

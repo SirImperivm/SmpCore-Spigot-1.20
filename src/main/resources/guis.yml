@@ -93,3 +93,111 @@ guis:
         settings:
           guildName: "null" # Qui si dovrà inserire il nome della gilda di riferimento.
           price: 1000.0
+  bankGui:
+    title: "&8Banca Gilda ${guildTitle}"
+    rows: 5
+    items:
+      filler_nero:
+        material: BLACK_STAINED_GLASS_PANE
+        displayName: "&0*"
+        lore: []
+        model: 0
+        glowing: false
+        itemFlags: []
+        slots:
+          - 0
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+          - 6
+          - 7
+          - 8
+          - 9
+          - 17
+          - 18
+          - 26
+          - 27
+          - 35
+          - 36
+          - 37
+          - 38
+          - 39
+          - 40
+          - 41
+          - 42
+          - 43
+          - 44
+        action: NOTHING
+      filler_bianco:
+        material: WHITE_STAINED_GLASS_PANE
+        displayName: "&f*"
+        lore: []
+        model: 0
+        glowing: false
+        itemFlags: []
+        slots:
+          - 10
+          - 11
+          - 12
+          - 13
+          - 14
+          - 15
+          - 16
+          - 19
+          - 25
+          - 28
+          - 29
+          - 30
+          - 31
+          - 32
+          - 33
+          - 34
+        action: NOTHING
+      withdraw:
+        material: RAW_GOLD
+        displayName: "&eRitira."
+        lore:
+          - "&8&m                              "
+          - "&aTasto sinistro ritiri 100."
+          - "&aTasto destro ritiri 1000."
+          - "&aTasto centrale scegli quanto ritirare."
+          - "&8&m                              "
+        model: 0
+        glowing: true
+        itemFlags:
+          - HIDE_ATTRIBUTES
+        slots:
+          - 20
+        action: WITHDRAW
+      guildBalance:
+        material: OAK_BUTTON
+        displayName: "&9Bilancio."
+        lore:
+          - "&8&m                              "
+          - "&aBilancio attuale &8» &a€ ${guildBalance}"
+          - "&8&m                              "
+        model: 256
+        glowing: true
+        itemFlags:
+          - HIDE_ATTRIBUTES
+        slots:
+          - 22
+        action: NOTHING
+      deposit:
+        material: RAW_IRON
+        displayName: "&7Deposita."
+        lore:
+          - "&8&m                              "
+          - "&aTasto sinistro depositi 100."
+          - "&aTasto destro depositi 1000."
+          - "&aTasto centrale scegli quanto depositare."
+          - "&8&m                              "
+        model: 0
+        glowing: true
+        itemFlags:
+          - HIDE_ATTRIBUTES
+        slots:
+          - 24
+        action: DEPOSIT

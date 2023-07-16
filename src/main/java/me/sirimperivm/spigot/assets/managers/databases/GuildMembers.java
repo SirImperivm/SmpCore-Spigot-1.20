@@ -79,7 +79,7 @@ public class GuildMembers {
     }
 
     public void removeMemberData(String username) {
-        String query = "DELETE FROM " + database + " WHERE username=" + username + ";";
+        String query = "DELETE FROM " + database + " WHERE username='" + username + "';";
 
         try {
             PreparedStatement state = conn.prepareStatement(query);
@@ -91,7 +91,7 @@ public class GuildMembers {
     }
 
     public void updateMemberData(String username, String key, String value) {
-        String query = "UPDATE " + database + " SET " + key + "=" + value + " WHERE username=" + username;
+        String query = "UPDATE " + database + " SET " + key + "='" + value + "' WHERE username=" + username;
 
         try {
             PreparedStatement state = conn.prepareStatement(query);

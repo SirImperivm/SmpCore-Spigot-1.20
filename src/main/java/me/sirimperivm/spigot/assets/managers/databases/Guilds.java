@@ -163,6 +163,26 @@ public class Guilds {
         }
     }
 
+    public double getGuildBalance(String guildId) {
+        double balance = 0.0;
+        String query = "SELECT * FROM " + database;
+
+        try {
+            PreparedStatement state = conn.prepareStatement(query);
+            ResultSet rs = state.executeQuery();
+            while (rs.next()) {
+                if (rs.getString("guildId").equals(guildId)) {
+                    balance = Double.parseDouble(rs.getString("bankBalance"));
+                    break;
+                }
+            }
+        } catch (SQLException e) {
+            log.severe("Impossibile ottenere la banca attuale della gilda " + getGuildName(guildId) + "!");
+            e.printStackTrace();
+        }
+        return balance;
+    }
+
     public boolean boughtStatus(String type, String key) {
         boolean value = false;
         String query = "SELECT * FROM " + database;

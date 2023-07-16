@@ -1,6 +1,7 @@
 package me.sirimperivm.spigot.modules.listeners;
 
 import com.sk89q.worldguard.LocalPlayer;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.flags.StringFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
@@ -31,7 +32,7 @@ public class MoveListener implements Listener {
     public void onMove(PlayerMoveEvent e) {
         Player p = e.getPlayer();
         String playerName = p.getName();
-        LocalPlayer player = (LocalPlayer) p;
+        LocalPlayer player = WorldGuardPlugin.inst().wrapPlayer(p);
 
         RegionContainer container = worldGuard.getWg().getPlatform().getRegionContainer();
         RegionManager regions = container.get(player.getWorld());
@@ -43,7 +44,7 @@ public class MoveListener implements Listener {
                 if (region.getFlag(smpcGuilds) != null) {
                     if (region.getFlag(smpcGuilds).equals(StateFlag.State.ALLOW)) {
                         StringFlag smpcGuildId = worldGuard.smpcGuildId;
-                        if (region.getFlag(smpcGuildId) == null) {
+                        if (region.getFlag(smpcGuildId) != null) {
                             HashMap<String, List<String>> guildsData = mods.getGuildsData();
                             if (guildsData.containsKey(playerName)) {
                                 List<String> guildAndRole = guildsData.get(playerName);

@@ -33,6 +33,9 @@ public class Modules {
     private static List<String> guildMembers;
     private static HashMap<String, String> invites;
     private static HashMap<String, List<String>> guildsData;
+    private static HashMap<String, String> guildsChat;
+    private static List<String> depositCooldown;
+    private static List<String> withdrawCooldown;
     private static Main plugin = Main.getPlugin();
     private static Logger log = Logger.getLogger("SMPCore");
     private static Config conf = Main.getConf();
@@ -41,7 +44,10 @@ public class Modules {
 
     public Modules() {
         invites = new HashMap<String, String>();
+        guildsChat = new HashMap<String, String>();
         guildMembers = new ArrayList<>();
+        depositCooldown = new ArrayList<String>();
+        withdrawCooldown = new ArrayList<String>();
         refreshSettings();
         executeTasksLoop();
     }
@@ -115,14 +121,6 @@ public class Modules {
                 e.printStackTrace();
             }
         }, 20L, 20L);
-
-       /* List<Integer> taskList = data.getTasks().returnAllTasks();
-        BukkitScheduler scheduler = Bukkit.getScheduler();
-
-        scheduler.runTaskTimer(plugin, () -> {
-            data.getTasks().executeTasks();
-            refreshSettings();
-        }, 20L, 20L); */
     }
 
     public void createGuild(Player p, String guildName, String guildTitle, int membersLimit) {
@@ -545,6 +543,11 @@ public class Modules {
         vault.getEcon().depositPlayer(p, value);
     }
 
+    public String getGuildTitle(String guildName) {
+        String guildTitle = conf.getGuilds().getString("guilds." + guildName + ".guildTitle");
+        return guildTitle;
+    }
+
     public static List<String> getGeneratedGuilds() {
         return generatedGuilds;
     }
@@ -563,6 +566,18 @@ public class Modules {
 
     public static HashMap<String, List<String>> getGuildsData() {
         return guildsData;
+    }
+
+    public static HashMap<String, String> getGuildsChat() {
+        return guildsChat;
+    }
+
+    public static List<String> getDepositCooldown() {
+        return depositCooldown;
+    }
+
+    public static List<String> getWithdrawCooldown() {
+        return withdrawCooldown;
     }
 
     public static Db getData() {

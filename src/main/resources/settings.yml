@@ -19,6 +19,14 @@ settings:
       posZ: 0.0
       rotYaw: 0.00
       rotPitch: 0.00
+  strings:
+    valueFormatting:
+      - '1000.0-k'
+      - '1000000.0-m'
+      - '1000000000.0-M'
+      - '1000000000000.0-b'
+      - '1000000000000000.0-B'
+    valueFormatSize: 4
 messages:
   prefixes:
     success: "&8[&a!&8] &7"
@@ -54,6 +62,7 @@ messages:
   info:
     money:
       withdrawn: "%ip &e-&7$value."
+      deposit: "%ip &e+&7$value."
     guild:
       deleted:
         sendToPlayer: "%ipLa tua gilda è stata rimossa dalla configurazione."
@@ -75,6 +84,16 @@ messages:
           role:
             officer-set: "%ipUtente promosso con successo."
             member-set: "%ipUtente degradato con successo."
+      bank:
+        money:
+          taken: "%ipL'utente &e$username&7 ha ritirato &e€ $value&7."
+          deposit: "%ipL'utente &e$username&7 ha depositato &e€ $value&7."
+        depositCooldown:
+          startMessage: "%ipHai 15 secondi per scrivere in chat quanti soldi vuoi depositare."
+        withdrawCooldown:
+          startMessage: "%ipHai 15 secondi per scrivere in chat quanti soldi vuoi ritirare."
+      chat:
+        changed: "%fpChat impostata su &a$chatType&7."
     general:
       time:
         expired: "%ipTempo scaduto."
@@ -99,6 +118,15 @@ messages:
         not-received: "%fpNon hai ricevuto nessun invito."
       region:
         entering: "%fpNon sei membro di questa gilda, non puoi entrare."
+      bank:
+        deposit:
+          already-withdrawing: "%fpSe stai ritirando dei soldi nello stesso momento non puoi depositarne alcuni."
+          limit-reached: "%fpIl limite di deposito in questa gilda e &c€ $depositLimit&7."
+          not-enough-money: "%fpNon hai abbastanza soldi da depositare."
+        withdraw:
+          already-depositing: "%fpSe stai depositando dei soldi nello stesso momento non puoi ritirarne alcuni."
+          bank-not-enough: "%fpLa banca della gilda non dispone di tale quantità."
+        chars-not-allowed: "%fpIn questa sezione sono validi solamente i numeri."
     members:
       alreadyHaveGuild: "%fpHai già una gilda."
       target:
@@ -123,6 +151,9 @@ messages:
       not-located: "%fpNon hai mai impostato lo spawn principale. &c(/ga setlobby)"
     players:
       not-found: "%fpUtente con questo nome non trovato."
+  others:
+    guilds:
+      chat: "%a[GC] &f$playerName &8» &f$message"
 permissions:
   admin-commands:
     core:
@@ -145,6 +176,8 @@ permissions:
       home: smpc.usercommands.guilds.home
       kick: smpc.usercommands.guilds.kick
       leave: smpc.usercommands.guilds.leave
+      chat: smpc.usercommands.guilds.chat
+      bank: smpc.usercommands.guilds.bank
       officer:
         main: smpc.usercommands.guilds.officers.use
         set: smpc.usercommands.guilds.officers.use
@@ -153,6 +186,10 @@ permissions:
     guilds:
       shop:
         use: smpc.user.guilds.shop.use
+      bank:
+        use: smpc.user.guilds.bank.use
+        deposit: smpc.user.guilds.bank.deposit
+        withdraw: smpc.user.guilds.bank.withdraw
   admin-actions:
     guilds:
       entering:
