@@ -93,7 +93,7 @@ messages:
         withdrawCooldown:
           startMessage: "%ipHai 15 secondi per scrivere in chat quanti soldi vuoi ritirare."
       chat:
-        changed: "%fpChat impostata su &a$chatType&7."
+        changed: "%ipChat impostata su &a$chatType&7."
     general:
       time:
         expired: "%ipTempo scaduto."
@@ -121,7 +121,7 @@ messages:
       bank:
         deposit:
           already-withdrawing: "%fpSe stai ritirando dei soldi nello stesso momento non puoi depositarne alcuni."
-          limit-reached: "%fpIl limite di deposito in questa gilda e &c€ $depositLimit&7."
+          limit-reached: "%fpIl limite di deposito in questa gilda è &c€ $depositLimit&7."
           not-enough-money: "%fpNon hai abbastanza soldi da depositare."
         withdraw:
           already-depositing: "%fpSe stai depositando dei soldi nello stesso momento non puoi ritirarne alcuni."
@@ -153,7 +153,7 @@ messages:
       not-found: "%fpUtente con questo nome non trovato."
   others:
     guilds:
-      chat: "%a[GC] &f$playerName &8» &f$message"
+      chat: "&a[GC] &f$playerName &8» &f$message"
 permissions:
   admin-commands:
     core:

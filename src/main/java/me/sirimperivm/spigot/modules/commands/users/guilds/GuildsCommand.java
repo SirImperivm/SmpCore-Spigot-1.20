@@ -113,7 +113,7 @@ public class GuildsCommand implements CommandExecutor {
                                 if (mods.getGuildsData().containsKey(playerName)) {
                                     String guildId = mods.getGuildsData().get(playerName).get(0);
                                     Gui gm = new Gui();
-                                    p.openInventory(gm.bankGui(guildId));
+                                    p.openInventory(gm.bankGui(p, guildId));
                                 } else {
                                     p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.dont-have"));
                                 }

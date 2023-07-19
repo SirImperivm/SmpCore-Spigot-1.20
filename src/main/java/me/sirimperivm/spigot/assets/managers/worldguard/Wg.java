@@ -21,7 +21,7 @@ public class Wg {
         wg = WorldGuard.getInstance();
         FlagRegistry register = wg.getFlagRegistry();
         try {
-            StateFlag flag = new StateFlag("smpc-guilds", true);
+            StateFlag flag = new StateFlag("smpc-guilds", false);
             register.register(flag);
             smpcGuilds = flag;
             log.info("E' stata registrata con successo la flag \"smpc-guilds\"!");
@@ -41,7 +41,7 @@ public class Wg {
             log.info("E' stata registrata con successo la flag \"smpc-guild-id\"!");
         } catch (FlagConflictException e) {
             Flag<?> existing = register.get("smpc-guild-id");
-            if (existing instanceof StateFlag) {
+            if (existing instanceof StringFlag) {
                 smpcGuildId = (StringFlag) existing;
             } else {
                 log.severe("Non è stato possibile creare la flag \"smpc-guild-id\", magari un altro plugin usa questo nome.");

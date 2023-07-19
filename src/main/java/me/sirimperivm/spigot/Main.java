@@ -1,5 +1,7 @@
 package me.sirimperivm.spigot;
 
+import com.sk89q.worldguard.protection.flags.Flag;
+import com.sk89q.worldguard.protection.flags.StateFlag;
 import me.sirimperivm.spigot.assets.managers.Config;
 import me.sirimperivm.spigot.assets.managers.Db;
 import me.sirimperivm.spigot.assets.managers.Modules;
@@ -15,11 +17,18 @@ import me.sirimperivm.spigot.modules.listeners.ClickListener;
 import me.sirimperivm.spigot.modules.listeners.MoveListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.logging.Logger;
+
 import static org.bukkit.Bukkit.getConsoleSender;
 import static org.bukkit.Bukkit.getPluginManager;
 
 @SuppressWarnings("all")
 public final class Main extends JavaPlugin {
+    private static Logger log = Logger.getLogger("SMPCore");
+
+    private static StateFlag smpcGuilds;
+    private static Flag<String> smpcGuildId;
+
     private static Main plugin;
     private static Config conf;
     private static Db data;
@@ -118,5 +127,13 @@ public final class Main extends JavaPlugin {
 
     public static Main getPlugin() {
         return plugin;
+    }
+
+    public static StateFlag getSmpcGuilds() {
+        return smpcGuilds;
+    }
+
+    public static Flag<String> getSmpcGuildId() {
+        return smpcGuildId;
     }
 }

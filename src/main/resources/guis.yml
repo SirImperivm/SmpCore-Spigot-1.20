@@ -146,6 +146,8 @@ guis:
           - 15
           - 16
           - 19
+          - 21
+          - 23
           - 25
           - 28
           - 29
@@ -176,7 +178,8 @@ guis:
         displayName: "&9Bilancio."
         lore:
           - "&8&m                              "
-          - "&aBilancio attuale &8» &a€ ${guildBalance}"
+          - "&aBilancio Gilda &8» &a€ ${guildBalance}"
+          - "&aBilancio Utente &8» &a€ ${userBalance}"
           - "&8&m                              "
         model: 256
         glowing: true

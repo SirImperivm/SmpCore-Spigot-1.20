@@ -1,12 +1,14 @@
 package me.sirimperivm.spigot.assets.managers;
 
 import me.sirimperivm.spigot.Main;
+import me.sirimperivm.spigot.assets.managers.values.Vault;
 import me.sirimperivm.spigot.assets.other.General;
 import me.sirimperivm.spigot.assets.other.Strings;
 import me.sirimperivm.spigot.assets.utils.Colors;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -75,10 +77,11 @@ public class Gui {
         return inv;
     }
 
-    public Inventory bankGui(String guildId) {
+    public Inventory bankGui(Player p, String guildId) {
         String guildName = data.getGuilds().getGuildName(guildId);
         String guildTitle = Config.getTransl("guilds", "guilds." + guildName + ".guildTitle");
-        String guiTitle = Config.getTransl("guis", "guis.bankGui.title");
+        String guiTitle = Config.getTransl("guis", "guis.bankGui.title")
+                .replace("${guildTitle}", Config.getTransl("guilds", "guilds." + guildName + ".guildTitle"));
         int size = conf.getGuis().getInt("guis.bankGui.rows") * 9;
 
         Inventory inv = Bukkit.createInventory(null, size, guiTitle);
@@ -96,8 +99,9 @@ public class Gui {
             List<String> lore = new ArrayList<String>();
             for (String line : conf.getGuis().getStringList(itemsPath + ".lore")) {
                 lore.add(line
-                        .replace("${guildBalance}", Strings.formatNumber(data.getGuilds().getGuildBalance(guildId))))
-                ;
+                        .replace("${guildBalance}", Strings.formatNumber(data.getGuilds().getGuildBalance(guildId)))
+                        .replace("${userBalance}", Strings.formatNumber(Vault.getEcon().getBalance(p)))
+                );
             }
             meta.setLore(General.lore(lore));
             meta.setCustomModelData(conf.getGuis().getInt(itemsPath + ".model"));

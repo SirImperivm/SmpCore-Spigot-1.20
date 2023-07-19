@@ -1,5 +1,7 @@
 package me.sirimperivm.spigot.modules.listeners;
 
+import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.util.Location;
 import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.flags.StateFlag;
@@ -33,36 +35,42 @@ public class MoveListener implements Listener {
         Player p = e.getPlayer();
         String playerName = p.getName();
         LocalPlayer player = WorldGuardPlugin.inst().wrapPlayer(p);
+        Location loc = player.getLocation();
+        BlockVector3 vector3 = loc.toVector().toBlockPoint();
 
         RegionContainer container = worldGuard.getWg().getPlatform().getRegionContainer();
         RegionManager regions = container.get(player.getWorld());
 
-        for (String regionId : regions.getRegions().keySet()) {
-            ProtectedRegion region = regions.getRegion(regionId);
+        for (ProtectedRegion region : regions.getApplicableRegions(vector3)) {
+            String regionId = region.getId();
             if (region != null) {
                 StateFlag smpcGuilds = worldGuard.smpcGuilds;
                 if (region.getFlag(smpcGuilds) != null) {
-                    if (region.getFlag(smpcGuilds).equals(StateFlag.State.ALLOW)) {
+                    if (region.getFlag(smpcGuilds) == StateFlag.State.ALLOW) {
                         StringFlag smpcGuildId = worldGuard.smpcGuildId;
-                        if (region.getFlag(smpcGuildId) != null) {
+                        if (!region.getFlag(smpcGuildId).equals(null)) {
                             HashMap<String, List<String>> guildsData = mods.getGuildsData();
+                            String regionGuildId = region.getFlag(smpcGuildId);
                             if (guildsData.containsKey(playerName)) {
                                 List<String> guildAndRole = guildsData.get(playerName);
                                 String guildId = guildAndRole.get(0);
-                                if (!region.getFlag(smpcGuildId).equals(guildId)) {
+                                if (!regionGuildId.equals(guildId)) {
                                     if (!p.hasPermission(conf.getSettings().getString("permissions.admin-actions.guilds.entering.bypass"))) {
+                                        if (e.getFrom().getBlock().equals(e.getTo().getBlock())) return;
                                         e.setCancelled(true);
                                         p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.region.entering"));
                                     }
                                 }
                             } else {
                                 if (!p.hasPermission(conf.getSettings().getString("permissions.admin-actions.guilds.entering.bypass"))) {
+                                    if (e.getFrom().getBlock().equals(e.getTo().getBlock())) return;
                                     e.setCancelled(true);
                                     p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.region.entering"));
                                 }
                             }
                         } else {
                             if (!p.hasPermission(conf.getSettings().getString("permissions.admin-actions.guilds.entering.bypass"))) {
+                                if (e.getFrom().getBlock().equals(e.getTo().getBlock())) return;
                                 e.setCancelled(true);
                                 p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.region.entering"));
                             }

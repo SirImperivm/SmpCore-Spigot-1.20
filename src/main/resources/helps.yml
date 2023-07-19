@@ -30,7 +30,7 @@ helps:
       - "&a/guilds(g) accept &7- &fAccetta un invito in corso relativo ad una gilda."
       - "&a/guilds(g) leave &7- &fEsci da una gilda."
       - "&a/guilds(g) chat &7- &fApre la chat della gilda."
-      - "&a/guilds(g) updates &7- &fApre i potenziamenti della gilda."
+      - "&a/guilds(g) upgrades &7- &fApre i potenziamenti della gilda."
       - "&a/guilds(g) bank &7- &fApre la banca della gilda."
       - "&a/guilds(g) invite &e<player> &7- &fInvita un utente in gilda (lui deve accettare)."
       - "&a/guilds(g) kick &e<guildMember> &7- &fEspelle un membro dalla gilda."

@@ -91,7 +91,7 @@ public class GuildMembers {
     }
 
     public void updateMemberData(String username, String key, String value) {
-        String query = "UPDATE " + database + " SET " + key + "='" + value + "' WHERE username=" + username;
+        String query = "UPDATE " + database + " SET " + key + "='" + value + "' WHERE username='" + username + "'";
 
         try {
             PreparedStatement state = conn.prepareStatement(query);

@@ -53,9 +53,14 @@ public class Modules {
     }
 
     void refreshSettings() {
-        generatedGuilds = data.getGuilds().getGeneratedGuildsID();
-        generatedMembers = data.getGuildMembers().getGeneratedMembersID();
-        guildsData = data.getGuildMembers().guildsData();
+        BukkitScheduler scheduler = Bukkit.getScheduler();
+
+        scheduler.runTaskTimer(plugin, () -> {
+            generatedGuilds = data.getGuilds().getGeneratedGuildsID();
+            generatedMembers = data.getGuildMembers().getGeneratedMembersID();
+            guildsData = data.getGuildMembers().guildsData();
+        }, 20, 5 * 20);
+
     }
 
     public void deleteTask(int taskId) {

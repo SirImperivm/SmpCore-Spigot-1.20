@@ -5,6 +5,7 @@ import me.sirimperivm.spigot.assets.managers.Config;
 import me.sirimperivm.spigot.assets.managers.Db;
 import me.sirimperivm.spigot.assets.managers.Modules;
 import me.sirimperivm.spigot.assets.managers.values.Vault;
+import me.sirimperivm.spigot.assets.other.Strings;
 import me.sirimperivm.spigot.assets.utils.Errors;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -130,46 +131,47 @@ public class ClickListener implements Listener {
                             double depositLimit = conf.getGuilds().getDouble("guilds." + guildName + ".bank.limit");
 
                             if (actionType.equalsIgnoreCase("DEPOSIT")) {
-                                if (Errors.noPermAction(p, conf.getSettings().getString("permissions.user-commands.guilds.bank.deposit"))) {
+                                if (Errors.noPermAction(p, conf.getSettings().getString("permissions.user-actions.guilds.bank.deposit"))) {
                                     return;
                                 } else {
                                     if (cType == ClickType.LEFT) {
                                         double toDeposit = 100.0;
-                                        if (depositLimit != -1.0 && (toDeposit + bankBalance) <= depositLimit) {
+                                        if (depositLimit == -1.0 || (toDeposit + bankBalance) <= depositLimit) {
                                             if (userBalance >= toDeposit) {
                                                 Vault.getEcon().withdrawPlayer(p, toDeposit);
                                                 data.getGuilds().updateGuildBalance(guildId, String.valueOf(toDeposit + bankBalance));
                                                 p.sendMessage(Config.getTransl("settings", "messages.info.money.withdrawn")
-                                                        .replace("$value", String.valueOf(toDeposit)));
-                                                mods.sendGuildersBroadcast(guildId, Config.getTransl("settings", "messages.info.bank.money.deposit")
+                                                        .replace("$value", Strings.formatNumber(toDeposit)));
+                                                mods.sendGuildersBroadcast(guildId, Config.getTransl("settings", "messages.info.guild.bank.money.deposit")
                                                         .replace("$username", playerName)
-                                                        .replace("$value", String.valueOf(toDeposit)));
+                                                        .replace("$value", Strings.formatNumber(toDeposit)));
                                             } else {
                                                 p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.bank.deposit.not-enough-money"));
                                             }
                                         } else {
                                             p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.bank.deposit.limit-reached")
-                                                    .replace("$depositLimit", String.valueOf(depositLimit)));
+                                                    .replace("$depositLimit", Strings.formatNumber(depositLimit)));
                                         }
                                     } else if (cType == ClickType.RIGHT) {
                                         double toDeposit = 1000.0;
-                                        if (depositLimit != -1.0 && (toDeposit + bankBalance) <= depositLimit) {
+                                        if (depositLimit == -1.0 || (toDeposit + bankBalance) <= depositLimit) {
                                             if (userBalance >= toDeposit) {
                                                 Vault.getEcon().withdrawPlayer(p, toDeposit);
                                                 data.getGuilds().updateGuildBalance(guildId, String.valueOf(toDeposit + bankBalance));
                                                 p.sendMessage(Config.getTransl("settings", "messages.info.money.withdrawn")
-                                                        .replace("$value", String.valueOf(toDeposit)));
-                                                mods.sendGuildersBroadcast(guildId, Config.getTransl("settings", "messages.info.bank.money.deposit")
+                                                        .replace("$value", Strings.formatNumber(toDeposit)));
+                                                mods.sendGuildersBroadcast(guildId, Config.getTransl("settings", "messages.info.guild.bank.money.deposit")
                                                         .replace("$username", playerName)
-                                                        .replace("$value", String.valueOf(toDeposit)));
+                                                        .replace("$value", Strings.formatNumber(toDeposit)));
                                             } else {
                                                 p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.bank.deposit.not-enough-money"));
                                             }
                                         } else {
                                             p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.bank.deposit.limit-reached")
-                                                    .replace("$depositLimit", String.valueOf(depositLimit)));
+                                                    .replace("$depositLimit", Strings.formatNumber(depositLimit)));
                                         }
                                     } else if (cType == ClickType.MIDDLE) {
+                                        p.closeInventory();
                                         if (mods.getWithdrawCooldown().contains(playerName)) {
                                             p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.bank.deposit.already-withdrawing"));
                                             return;
@@ -194,7 +196,7 @@ public class ClickListener implements Listener {
                             }
 
                             if (actionType.equalsIgnoreCase("WITHDRAW")) {
-                                if (Errors.noPermAction(p, conf.getSettings().getString("permissions.user-commands.guilds.bank.withdraw"))) {
+                                if (Errors.noPermAction(p, conf.getSettings().getString("permissions.user-actions.guilds.bank.withdraw"))) {
                                     return;
                                 } else {
                                     if (cType == ClickType.LEFT) {
@@ -203,10 +205,10 @@ public class ClickListener implements Listener {
                                             Vault.getEcon().depositPlayer(p, toWithdraw);
                                             data.getGuilds().updateGuildBalance(guildId, String.valueOf(bankBalance - toWithdraw));
                                             p.sendMessage(Config.getTransl("settings", "messages.info.money.deposit")
-                                                    .replace("$value", String.valueOf(toWithdraw)));
-                                            mods.sendGuildersBroadcast(guildId, Config.getTransl("settings", "messages.info.bank.money.taken")
+                                                    .replace("$value", Strings.formatNumber(toWithdraw)));
+                                            mods.sendGuildersBroadcast(guildId, Config.getTransl("settings", "messages.info.guild.bank.money.taken")
                                                     .replace("$username", playerName)
-                                                    .replace("$value", String.valueOf(toWithdraw)));
+                                                    .replace("$value", Strings.formatNumber(toWithdraw)));
                                         } else {
                                             p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.bank.withdraw.bank-not-enough"));
                                         }
@@ -216,14 +218,15 @@ public class ClickListener implements Listener {
                                             Vault.getEcon().depositPlayer(p, toWithdraw);
                                             data.getGuilds().updateGuildBalance(guildId, String.valueOf(bankBalance - toWithdraw));
                                             p.sendMessage(Config.getTransl("settings", "messages.info.money.deposit")
-                                                    .replace("$value", String.valueOf(toWithdraw)));
-                                            mods.sendGuildersBroadcast(guildId, Config.getTransl("settings", "messages.info.bank.money.taken")
+                                                    .replace("$value", Strings.formatNumber(toWithdraw)));
+                                            mods.sendGuildersBroadcast(guildId, Config.getTransl("settings", "messages.info.guild.bank.money.taken")
                                                     .replace("$username", playerName)
-                                                    .replace("$value", String.valueOf(toWithdraw)));
+                                                    .replace("$value", Strings.formatNumber(toWithdraw)));
                                         } else {
                                             p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.bank.withdraw.bank-not-enough"));
                                         }
                                     } else if (cType == ClickType.MIDDLE) {
+                                        p.closeInventory();
                                         if (mods.getDepositCooldown().contains(playerName)) {
                                             p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.bank.withdraw.already-depositing"));
                                             return;
