@@ -7,6 +7,7 @@ import me.sirimperivm.spigot.assets.managers.Modules;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -218,5 +219,23 @@ public class Guilds {
             e.printStackTrace();
         }
         return generated;
+    }
+    public HashMap<String, String> getBoughtGuildList() {
+        HashMap<String, String> keySet = new HashMap<String, String>();
+        String query = "SELECT * FROM " + database;
+
+        try {
+            PreparedStatement state = conn.prepareStatement(query);
+            ResultSet rs = state.executeQuery();
+            while (rs.next()) {
+                if (rs.getInt("bought") == 1) {
+                    keySet.put(rs.getString("guildName"), rs.getString("guildId"));
+                }
+            }
+        } catch (SQLException e) {
+            log.severe("Impossibile ottenere una serie di dati relativi alle gilde.");
+            e.printStackTrace();
+        }
+        return keySet;
     }
 }

@@ -78,15 +78,37 @@ public class GuildMembers {
         }
     }
 
-    public void removeMemberData(String username) {
-        String query = "DELETE FROM " + database + " WHERE username='" + username + "';";
+    private boolean existMemberData(String username) {
+        boolean value = false;
+        String query = "SELECT * FROM " + database;
 
         try {
             PreparedStatement state = conn.prepareStatement(query);
-            state.executeUpdate();
+            ResultSet rs = state.executeQuery();
+            while (rs.next()) {
+                if (rs.getString("username").equalsIgnoreCase(username)) {
+                    value = true;
+                    break;
+                }
+            }
         } catch (SQLException e) {
-            log.severe("Impossibile cancellare il dato del membro " + username + "!");
+            log.severe("Impossibile capire se esistono dati sul membro " + username + "!");
             e.printStackTrace();
+        }
+        return value;
+    }
+
+    public void removeMemberData(String username) {
+        if (existMemberData(username)) {
+            String query = "DELETE FROM " + database + " WHERE username='" + username + "';";
+
+            try {
+                PreparedStatement state = conn.prepareStatement(query);
+                state.executeUpdate();
+            } catch (SQLException e) {
+                log.severe("Impossibile cancellare il dato del membro " + username + "!");
+                e.printStackTrace();
+            }
         }
     }
 

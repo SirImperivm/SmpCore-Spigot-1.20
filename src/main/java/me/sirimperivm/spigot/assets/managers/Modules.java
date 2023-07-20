@@ -7,6 +7,10 @@ import me.sirimperivm.spigot.assets.other.General;
 import me.sirimperivm.spigot.assets.other.Strings;
 import me.sirimperivm.spigot.assets.utils.Colors;
 import me.sirimperivm.spigot.other.Enchants;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -34,6 +38,7 @@ public class Modules {
     private static HashMap<String, String> invites;
     private static HashMap<String, List<String>> guildsData;
     private static HashMap<String, String> guildsChat;
+    private static HashMap<String, String> guildsList;
     private static List<String> depositCooldown;
     private static List<String> withdrawCooldown;
     private static Main plugin = Main.getPlugin();
@@ -45,6 +50,7 @@ public class Modules {
     public Modules() {
         invites = new HashMap<String, String>();
         guildsChat = new HashMap<String, String>();
+        guildsList = new HashMap<String, String>();
         guildMembers = new ArrayList<>();
         depositCooldown = new ArrayList<String>();
         withdrawCooldown = new ArrayList<String>();
@@ -128,6 +134,52 @@ public class Modules {
         }, 20L, 20L);
     }
 
+    public void sendGuildList(Player p, String type) {
+        guildsList = data.getGuilds().getBoughtGuildList();
+
+        switch (type) {
+            case "admin":
+                p.sendMessage(Config.getTransl("settings", "messages.others.guilds.list.admin.header"));
+                p.sendMessage(Config.getTransl("settings", "messages.others.guilds.list.admin.title"));
+                p.sendMessage(Config.getTransl("settings", "messages.others.guilds.list.admin.spacer"));
+                p.sendMessage(Config.getTransl("settings", "messages.others.guilds.list.admin.lines.header"));
+                for (String key : guildsList.keySet()) {
+                    String guildId = guildsList.get(key);
+                    TextComponent component = new TextComponent(Colors.text("&a[Copia]"));
+                    component.setClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, guildId));
+                    component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Copia L'ID").create()));
+                    p.spigot().sendMessage(new TextComponent(Colors.text(key + "&7 - &f" + guildId + "&7 - &f") + component + Colors.text("&7 - &f" + getMembersCount(guildId))));
+                }
+                p.sendMessage(Config.getTransl("settings", "messages.others.guilds.list.admin.footer"));
+                break;
+            default:
+                p.sendMessage(Config.getTransl("settings", "messages.others.list.user.header"));
+                p.sendMessage(Config.getTransl("settings", "messages.others.list.user.title"));
+                p.sendMessage(Config.getTransl("settings", "messages.others.list.user.spacer"));
+                p.sendMessage(Config.getTransl("settings", "messages.others.list.user.lines.header"));
+                for (String key : guildsList.keySet()) {
+                    String guildId = guildsList.get(key);
+                    p.sendMessage(Config.getTransl("settings", "messages.others.list.user.lines.header")
+                            .replace("$guildName", data.getGuilds().getGuildName(guildId))
+                            .replace("$guildMembers", Strings.formatNumber(getMembersCount(guildId)))
+                    );
+                }
+                p.sendMessage(Config.getTransl("settings", "messages.others.list.user.footer"));
+                break;
+        }
+    }
+
+    public int getMembersCount(String guildId) {
+        int members = 0;
+        for (String key : guildsData.keySet()) {
+            String gId = guildsData.get(key).get(0);
+            if (gId.equalsIgnoreCase(guildId)) {
+                members++;
+            }
+        }
+        return members;
+    }
+
     public void createGuild(Player p, String guildName, String guildTitle, int membersLimit) {
         String guildId = Strings.generateUuid();
         for (String generated : generatedGuilds) {
@@ -176,6 +228,10 @@ public class Modules {
         conf.getGuilds().set(confPath + guildName + ".bank.limit", conf.getSettings().getDouble("settings.guilds.bank.defaultBankLimit"));
         conf.save(conf.getGuilds(), conf.getGuildsFile());
 
+        TextComponent copyGID = new TextComponent(Colors.text("&a[Copia l'ID]"));
+        copyGID.setClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, guildId));
+        copyGID.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Clicca per copiare").create()));
+
         for (String send : conf.getSettings().getStringList("messages.success.guilds.created")) {
             p.sendMessage(Colors.text(send
                     .replace("$guildId", guildId)
@@ -191,6 +247,7 @@ public class Modules {
                     .replace("$bankLimit", String.valueOf(conf.getSettings().getDouble("settings.guilds.bank.defaultBankLimit")))
             ));
         }
+        p.spigot().sendMessage(copyGID);
     }
 
     public void deleteGuild(Player p, String guildName) {
@@ -245,7 +302,7 @@ public class Modules {
         target.sendMessage(Config.getTransl("settings", "messages.info.guild.members.invited.you")
                 .replace("$guildName", guildName));
         sendGuildersBroadcast(data.getGuilds().getGuildId(guildName), Config.getTransl("settings", "messages.info.guild.members.invited.members")
-                .replace("$playerName", username));
+                .replace("$playerName", username), "null");
         invites.put(username, guildName);
         new BukkitRunnable() {
             @Override
@@ -313,7 +370,7 @@ public class Modules {
                     .replace("%ip", plugin.getInfoPrefix())
                     .replace("%fp", plugin.getFailPrefix())
                     .replace("$player", playerName)
-            );
+                    , "null");
             p.sendMessage(Config.getTransl("settings", "messages.info.guild.members.kicked"));
         }
     }
@@ -370,7 +427,7 @@ public class Modules {
                             .replace("%ip", plugin.getInfoPrefix())
                             .replace("%fp", plugin.getFailPrefix())
                             .replace("$player", playerName)
-                    );
+                            , "null");
                     sendPlayerToLobby(p);
                     break;
                 default:
@@ -386,7 +443,7 @@ public class Modules {
                             .replace("%ip", plugin.getInfoPrefix())
                             .replace("%fp", plugin.getFailPrefix())
                             .replace("$player", playerName)
-                    );
+                            , "null");
                     sendPlayerToLobby(p);
                     break;
             }
@@ -523,13 +580,15 @@ public class Modules {
         p.teleport(home);
     }
 
-    public void sendGuildersBroadcast(String guildId, String message) {
+    public void sendGuildersBroadcast(String guildId, String message, String exceptedUsername) {
         for (String key : guildsData.keySet()) {
             List<String> guildsAndRole = guildsData.get(key);
             String gId = guildsAndRole.get(0);
             String gRole = guildsAndRole.get(1);
             if (gId.equalsIgnoreCase(guildId)) {
-                data.getTasks().insertTask("sendGuildersBroadcast", key + "£" + message);
+                if (!exceptedUsername.equalsIgnoreCase(key) || exceptedUsername.equals("null")) {
+                    data.getTasks().insertTask("sendGuildersBroadcast", key + "£" + message);
+                }
             }
         }
     }
@@ -553,6 +612,15 @@ public class Modules {
         return guildTitle;
     }
 
+    public double returnCost (String type) {
+        switch (type) {
+            case "per-invite":
+                return conf.getSettings().getDouble("settings.guilds.costs.per-invite");
+            default:
+                return 0;
+        }
+    }
+
     public static List<String> getGeneratedGuilds() {
         return generatedGuilds;
     }
@@ -571,6 +639,10 @@ public class Modules {
 
     public static HashMap<String, List<String>> getGuildsData() {
         return guildsData;
+    }
+
+    public static HashMap<String, String> getGuildsList() {
+        return guildsList;
     }
 
     public static HashMap<String, String> getGuildsChat() {

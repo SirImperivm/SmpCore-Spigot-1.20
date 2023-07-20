@@ -5,6 +5,7 @@ import me.sirimperivm.spigot.assets.managers.Config;
 import me.sirimperivm.spigot.assets.managers.Db;
 import me.sirimperivm.spigot.assets.managers.Gui;
 import me.sirimperivm.spigot.assets.managers.Modules;
+import me.sirimperivm.spigot.assets.other.Strings;
 import me.sirimperivm.spigot.assets.utils.Colors;
 import me.sirimperivm.spigot.assets.utils.Errors;
 import org.bukkit.Bukkit;
@@ -67,11 +68,39 @@ public class GuildsCommand implements CommandExecutor {
 
                                 HashMap<String, String> invites = mods.getInvites();
                                 if (invites.containsKey(playerName)) {
-                                    mods.insertMember(p, invites.get(playerName), "member");
-                                    invites.remove(playerName);
+                                    String guildId = data.getGuilds().getGuildId(invites.get(playerName));
+                                    if (data.getGuilds().getGuildBalance(guildId) >= mods.returnCost("per-invite")) {
+                                        data.getGuilds().updateGuildBalance(guildId, String.valueOf(data.getGuilds().getGuildBalance(guildId) - mods.returnCost("per-invite")));
+                                        mods.insertMember(p, invites.get(playerName), "member");
+                                        mods.sendGuildersBroadcast(guildId, Config.getTransl("settings", "messages.info.guild.money.taken")
+                                                        .replace("$cost", Strings.formatNumber(mods.returnCost("per-invite")))
+                                                , "null");
+                                        invites.remove(playerName);
+                                    } else {
+                                        mods.sendGuildersBroadcast(data.getGuilds().getGuildId(invites.get(playerName)), Config.getTransl("settings", "messages.errors.guilds.money.guild.invites.not-enough-after")
+                                                        .replace("$cost", Strings.formatNumber(mods.returnCost("per-invite")))
+                                                        .replace("$username", playerName)
+                                                , "null");
+                                        p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.money.guild.invites.not-enough-after")
+                                                .replace("$cost", Strings.formatNumber(mods.returnCost("per-invite")))
+                                                .replace("$username", playerName)
+                                        );
+                                        invites.remove(playerName);
+                                    }
                                 } else {
                                     p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.invites.not-received"));
                                 }
+                            }
+                        }
+                    } else if (a[0].equalsIgnoreCase("list")) {
+                        if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.user-commands.guilds.list"))) {
+                            return true;
+                        } else {
+                            if (Errors.noConsole(s)) {
+                                return true;
+                            } else {
+                                Player p = (Player) s;
+                                mods.sendGuildList(p, "user");
                             }
                         }
                     } else if (a[0].equalsIgnoreCase("chat")) {
@@ -182,11 +211,16 @@ public class GuildsCommand implements CommandExecutor {
                                             String guildName = data.getGuilds().getGuildName(guildId);
                                             int membersLimit = conf.getGuilds().getInt("guilds." + guildName + ".membersLimit");
 
-                                            if (membersCount < membersLimit) {
-                                                mods.inviteMember(t, guildName);
+                                            if (data.getGuilds().getGuildBalance(guildId) >= mods.returnCost("per-invite")) {
+                                                if (membersCount < membersLimit) {
+                                                    mods.inviteMember(t, guildName);
+                                                } else {
+                                                    p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.members.limit-reached")
+                                                            .replace("$membersLimit", String.valueOf(membersLimit)));
+                                                }
                                             } else {
-                                                p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.members.limit-reached")
-                                                        .replace("$membersLimit", String.valueOf(membersLimit)));
+                                                p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.money.guild.invites.not-enough-money")
+                                                        .replace("$cost", Strings.formatNumber(mods.returnCost("per-invite"))));
                                             }
                                         } else {
                                             p.sendMessage(Config.getTransl("settings", "messages.errors.members.target.is-on-a-guild"));
@@ -267,7 +301,7 @@ public class GuildsCommand implements CommandExecutor {
                                                                 .replace("%ip", plugin.getInfoPrefix())
                                                                 .replace("%fp", plugin.getFailPrefix())
                                                                 .replace("$username", targetName)
-                                                        );
+                                                                , "null");
                                                     } else {
                                                         p.sendMessage(Config.getTransl("settings", "messages.errors.members.officer.already")
                                                                 .replace("$username", targetName));
@@ -309,7 +343,7 @@ public class GuildsCommand implements CommandExecutor {
                                                                 .replace("%ip", plugin.getInfoPrefix())
                                                                 .replace("%fp", plugin.getFailPrefix())
                                                                 .replace("$username", targetName)
-                                                        );
+                                                                , "null"  );
                                                     } else {
                                                         p.sendMessage(Config.getTransl("settings", "messages.errors.members.officer.isnt")
                                                                 .replace("$username", targetName));

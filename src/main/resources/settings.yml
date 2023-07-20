@@ -11,6 +11,8 @@ settings:
     bank:
       startingBalance: 0.0
       defaultBankLimit: -1.0
+    costs:
+      per-invite: 15000.0
   lobby:
     location:
       world: "null"
@@ -26,7 +28,7 @@ settings:
       - '1000000000.0-M'
       - '1000000000000.0-b'
       - '1000000000000000.0-B'
-    valueFormatSize: 4
+    valueFormatSize: 5
 messages:
   prefixes:
     success: "&8[&a!&8] &7"
@@ -37,7 +39,7 @@ messages:
       reloaded: "%spPlugin ricaricato con successo."
     guilds:
       created:
-        - "&7✦»&m               &7¦✦¦&m               &7«✦"
+        - "&9✦»&m               &9¦✦¦&m               &9«✦"
         - "<GRADIENT:00AA00>&lGilda creata con successo</GRADIENT:00FF00>"
         - ""
         - "<SOLID:33DAFF>&lDati gilda:"
@@ -47,7 +49,7 @@ messages:
         - " &e✦ &6Posizione &8» &6$position"
         - " &e✦ &6Limite Membri &8» &6$membersLimit"
         - " &e✦ &6Limite Banca &8» &6$bankLimit"
-        - "&7✦»&m               &7¦✦¦&m               &7«✦"
+        - "&9✦»&m               &9¦✦¦&m               &9«✦"
       positionFormat: "$worldName&8,&6$posX&8,&6$posY&8,&6$posZ&8."
       deleted: "%spHai cancellato la gilda &a$guildName&7."
       add-member: "%spMembro aggiunto alla gilda &a$guildName&7."
@@ -84,6 +86,9 @@ messages:
           role:
             officer-set: "%ipUtente promosso con successo."
             member-set: "%ipUtente degradato con successo."
+      money:
+        taken: "%ip- &e€ $cost &7dalla banca della gilda."
+        gave: "%ip+ &e€ $cost &7alla banca della gilda."
       bank:
         money:
           taken: "%ipL'utente &e$username&7 ha ritirato &e€ $value&7."
@@ -109,6 +114,10 @@ messages:
         greaterThanZero: "%fpIl limite di membri dev'essere superiore a 0."
       money:
         not-enough: "%fpNecessiti di &c$price&7 per acquistare la gilda $guildTitle&7."
+        guild:
+          invites:
+            not-enough-money: "%fpLa gilda deve possedere &c$cost &7per poter invitare nuovi membri."
+            not-enough-after: "%fpLa gilda attuale non possiede più &c$cost &7perciò l'utente &c$username&7 non può accettare l'invito."
       guildId:
         isNull: "%fpNon è stato impostato l'id della gilda relativo a questo slot."
         notExists: "%fpNon è stato trovato l'id della gilda relativo a questo slot."
@@ -127,6 +136,8 @@ messages:
           already-depositing: "%fpSe stai depositando dei soldi nello stesso momento non puoi ritirarne alcuni."
           bank-not-enough: "%fpLa banca della gilda non dispone di tale quantità."
         chars-not-allowed: "%fpIn questa sezione sono validi solamente i numeri."
+      chat:
+        no-member-reached: "%fpNon è stato possibile recapitare il messaggio."
     members:
       alreadyHaveGuild: "%fpHai già una gilda."
       target:
@@ -154,6 +165,22 @@ messages:
   others:
     guilds:
       chat: "&a[GC] &f$playerName &8» &f$message"
+      list:
+        admin:
+          header: "&9✦»&m               &9¦✦¦&m               &9«✦"
+          title: "&eLista Gilde:"
+          spacer: "&r"
+          lines:
+            header: "<SOLID:007FFF>GuildName   GuildId   Membri"
+          footer: "&9✦»&m               &9¦✦¦&m               &9«✦"
+        user:
+          header: "&9✦»&m               &9¦✦¦&m               &9«✦"
+          title: "&eLista Gilde:"
+          spacer: "&r"
+          lines:
+            header: "<SOLID:007FFF>GuildName   Membri"
+            line: "$guildName   $guildMembers"
+          footer: "&9✦»&m               &9¦✦¦&m               &9«✦"
 permissions:
   admin-commands:
     core:
@@ -167,6 +194,7 @@ permissions:
       addmember: smpc.admincommands.guilds.addmember
       deletemember: smpc.admincommands.guilds.deletemember
       changerole: smpc.admincommands.guilds.changerole
+      list: smpc.admincommands.guilds.list
   user-commands:
     guilds:
       main: smpc.usercommands.guilds.main
@@ -178,6 +206,7 @@ permissions:
       leave: smpc.usercommands.guilds.leave
       chat: smpc.usercommands.guilds.chat
       bank: smpc.usercommands.guilds.bank
+      list: smpc.usercommands.guilds.list
       officer:
         main: smpc.usercommands.guilds.officers.use
         set: smpc.usercommands.guilds.officers.use

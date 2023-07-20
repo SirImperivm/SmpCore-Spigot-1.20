@@ -106,8 +106,10 @@ public class ClickListener implements Listener {
                 }
             }
         }
+        String guildTitle = Config.getTransl("guilds", "guilds." + data.getGuilds().getGuildName(mods.getGuildsData().get(p.getName()).get(0)) + ".guildTitle");
 
-        if (title.equalsIgnoreCase(Config.getTransl("guis", "guis.bankGui.title"))) {
+        if (title.equalsIgnoreCase(Config.getTransl("guis", "guis.bankGui.title")
+                .replace("${guildTitle}", guildTitle))) {
             e.setCancelled(true);
             e.setResult(Event.Result.DENY);
 
@@ -144,7 +146,7 @@ public class ClickListener implements Listener {
                                                         .replace("$value", Strings.formatNumber(toDeposit)));
                                                 mods.sendGuildersBroadcast(guildId, Config.getTransl("settings", "messages.info.guild.bank.money.deposit")
                                                         .replace("$username", playerName)
-                                                        .replace("$value", Strings.formatNumber(toDeposit)));
+                                                        .replace("$value", Strings.formatNumber(toDeposit)), "null");
                                             } else {
                                                 p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.bank.deposit.not-enough-money"));
                                             }
@@ -162,7 +164,7 @@ public class ClickListener implements Listener {
                                                         .replace("$value", Strings.formatNumber(toDeposit)));
                                                 mods.sendGuildersBroadcast(guildId, Config.getTransl("settings", "messages.info.guild.bank.money.deposit")
                                                         .replace("$username", playerName)
-                                                        .replace("$value", Strings.formatNumber(toDeposit)));
+                                                        .replace("$value", Strings.formatNumber(toDeposit)), "null");
                                             } else {
                                                 p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.bank.deposit.not-enough-money"));
                                             }
@@ -208,7 +210,7 @@ public class ClickListener implements Listener {
                                                     .replace("$value", Strings.formatNumber(toWithdraw)));
                                             mods.sendGuildersBroadcast(guildId, Config.getTransl("settings", "messages.info.guild.bank.money.taken")
                                                     .replace("$username", playerName)
-                                                    .replace("$value", Strings.formatNumber(toWithdraw)));
+                                                    .replace("$value", Strings.formatNumber(toWithdraw)), "null");
                                         } else {
                                             p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.bank.withdraw.bank-not-enough"));
                                         }
@@ -221,7 +223,7 @@ public class ClickListener implements Listener {
                                                     .replace("$value", Strings.formatNumber(toWithdraw)));
                                             mods.sendGuildersBroadcast(guildId, Config.getTransl("settings", "messages.info.guild.bank.money.taken")
                                                     .replace("$username", playerName)
-                                                    .replace("$value", Strings.formatNumber(toWithdraw)));
+                                                    .replace("$value", Strings.formatNumber(toWithdraw)), "null");
                                         } else {
                                             p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.bank.withdraw.bank-not-enough"));
                                         }

@@ -58,7 +58,7 @@ public class ChatListener implements Listener {
                                 .replace("$value", Strings.formatNumber(toDeposit)));
                         mods.sendGuildersBroadcast(guildId, Config.getTransl("settings", "messages.info.guild.bank.money.deposit")
                                 .replace("$username", playerName)
-                                .replace("$value", Strings.formatNumber(toDeposit)));
+                                .replace("$value", Strings.formatNumber(toDeposit)), "null");
                     } else {
                         p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.bank.deposit.not-enough-money"));
                     }
@@ -94,7 +94,7 @@ public class ChatListener implements Listener {
                             .replace("$value", String.valueOf(toWithdraw)));
                     mods.sendGuildersBroadcast(guildId, Config.getTransl("settings", "messages.info.guild.bank.money.taken")
                             .replace("$username", playerName)
-                            .replace("$value", Strings.formatNumber(toWithdraw)));
+                            .replace("$value", Strings.formatNumber(toWithdraw)), "null");
                 } else {
                     p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.bank.withdraw.bank-not-enough"));
                 }
@@ -108,15 +108,17 @@ public class ChatListener implements Listener {
 
         if (mods.getGuildsChat().containsKey(playerName)) {
             e.setCancelled(true);
-            guildId = mods.getGuildsChat().get(playerName);
-            for (Player all : Bukkit.getOnlinePlayers()) {
-                String allName = all.getName();
-                String allGuildId = mods.getGuildsChat().get(allName);
+
+            for (String allName : guildsData.keySet()) {
+                String allGuildId = guildsData.get(allName).get(0);
                 if (allGuildId.equals(guildId)) {
-                    all.sendMessage(Config.getTransl("settings", "messages.others.guilds.chat")
-                            .replace("$playerName", playerName)
-                            .replace("$message", message)
-                    );
+                    Player targets = Bukkit.getPlayerExact(allName);
+                    if (targets != null) {
+                        targets.sendMessage(Config.getTransl("settings", "messages.others.guilds.chat")
+                                .replace("$playerName", playerName)
+                                .replace("$message", message)
+                        );
+                    }
                 }
             }
         }

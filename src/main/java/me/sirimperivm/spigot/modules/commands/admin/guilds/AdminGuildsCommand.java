@@ -49,6 +49,12 @@ public class AdminGuildsCommand implements CommandExecutor {
                             } else {
                                 mods.setLobby(p);
                             }
+                        } else if (a[0].equalsIgnoreCase("list")) {
+                            if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.admin-commands.guilds.list"))) {
+                                return true;
+                            } else {
+                                mods.sendGuildList(p, "admin");
+                            }
                         } else {
                             getUsage(p);
                         }
@@ -163,7 +169,7 @@ public class AdminGuildsCommand implements CommandExecutor {
                                                         .replace("%ip", plugin.getInfoPrefix())
                                                         .replace("%fp", plugin.getFailPrefix())
                                                         .replace("$username", targetName)
-                                                );
+                                                        , "null");
                                             } else {
                                                 p.sendMessage(Config.getTransl("settings", "messages.errors.admin.members.target.is-already-officer"));
                                             }
@@ -181,7 +187,7 @@ public class AdminGuildsCommand implements CommandExecutor {
                                                         .replace("%ip", plugin.getInfoPrefix())
                                                         .replace("%fp", plugin.getFailPrefix())
                                                         .replace("$username", targetName)
-                                                );
+                                                        , "null");
                                             } else {
                                                 p.sendMessage(Config.getTransl("settings", "messages.errors.admin.members.target.is-already-member"));
                                             }

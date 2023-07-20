@@ -16,7 +16,7 @@ helps:
       - "&a/guildsadmin(ga) deletemember &e<player> &7- &fRimuove un utente da una tra tutte le gilde esistenti."
       - "&a/guildsadmin(ga) changerole &e<player> <role> &7- &fModifica il ruolo ad un membro di una gilda (funziona solo con member e officer)."
       - "&a/guildsadmin(ga) changeleader &e<player> <guildName> &7- &fCambi il leader di una gilda."
-      - "&a/guildsadmin(ga) list &7- &fMostra tutte le gilde per nome."
+      - "&a/guildsadmin(ga) list &7- &fMostra tutte le gilde create e il loro id."
       - "&a/guildsadmin(ga) info &e<guildName> &7- &fMostra info relative ad una gilda."
       - ""
       - "&8&m                              "
