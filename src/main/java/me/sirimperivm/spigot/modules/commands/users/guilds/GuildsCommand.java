@@ -231,7 +231,7 @@ public class GuildsCommand implements CommandExecutor {
                                             int membersLimit = conf.getGuilds().getInt("guilds." + guildName + ".membersLimit");
 
                                             if (data.getGuilds().getGuildBalance(guildId) >= mods.returnCost("per-invite")) {
-                                                if (membersCount < membersLimit) {
+                                                if (membersCount < membersLimit || membersLimit == -1) {
                                                     mods.inviteMember(t, guildName);
                                                 } else {
                                                     p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.members.limit-reached")
@@ -247,6 +247,48 @@ public class GuildsCommand implements CommandExecutor {
                                     } else {
                                         p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.dont-have"));
                                     }
+                                }
+                            }
+                        }
+                    } else if (a[0].equalsIgnoreCase("newleadership")) {
+                        if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.user-commands.guilds.newleadership"))) {
+                            return true;
+                        } else {
+                            if (Errors.noConsole(s)) {
+                                return true;
+                            } else {
+                                Player p = (Player) s;
+                                String playerName = p.getName();
+                                HashMap<String, List<String>> guildsData = mods.getGuildsData();
+
+                                if (guildsData.containsKey(playerName)) {
+                                    List<String> playerGuildData = guildsData.get(playerName);
+                                    String playerGuildId = playerGuildData.get(0);
+                                    String playerGuildRole = playerGuildData.get(1);
+                                    if (playerGuildRole.equalsIgnoreCase("leader")) {
+                                        Player t = Bukkit.getPlayerExact(a[1]);
+                                        if (t == null) {
+                                            p.sendMessage(Config.getTransl("settings", "messages.errors.players.not-found"));
+                                        } else {
+                                            String targetName = t.getName();
+                                            if (guildsData.containsKey(targetName)) {
+                                                List<String> targetGuildData = guildsData.get(targetName);
+                                                String targetGuildId = targetGuildData.get(0);
+                                                String targetGuildRole = targetGuildData.get(1);
+                                                if (targetGuildId.equalsIgnoreCase(playerGuildId)) {
+                                                    mods.newLeadership(p, t, playerGuildId);
+                                                } else {
+                                                    p.sendMessage(Config.getTransl("settings", "messages.errors.members.target.isnt-a-guild-member"));
+                                                }
+                                            } else {
+                                                p.sendMessage(Config.getTransl("settings", "messages.errors.members.target.isnt-on-a-guild"));
+                                            }
+                                        }
+                                    } else {
+                                        p.sendMessage(Config.getTransl("settings", "messages.errors.members.target.isnt-leader"));
+                                    }
+                                } else {
+                                    p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.dont-have"));
                                 }
                             }
                         }

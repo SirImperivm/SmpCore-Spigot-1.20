@@ -84,6 +84,8 @@ messages:
           officer:
             set: "%ipL'utente &e$username&7 è stato impostato come ufficiale della tua gilda."
             remove: "%ipL'utente &e$username&7 è stato degradato da ufficiale a membro nella tua gilda."
+        leader:
+          changed: "%ipPassaggio leader avvenuto nella tua gilda: &e$oldLeader &7-> &e$newLeader&7."
         admin:
           role:
             officer-set: "%ipUtente promosso con successo."
@@ -147,6 +149,7 @@ messages:
         is-on-a-guild: "%fpL'utente è già membro di una gilda."
         isnt-on-a-guild: "%fpL'utente non è membro di alcuna gilda."
         is-leader: "%fpL'utente è il leader di una gilda, non può essere espulso."
+        isnt-leader: "%fpNon sei leader della tua gilda."
         isnt-a-guild-member: "%fpL'utente non è membro della tua gilda."
       limit-reached: "%fpHai raggiunto il limite massimo di utenti per la tua gilda &8(&c$membersLimit&8)&7."
       leader:
@@ -234,6 +237,7 @@ permissions:
       bank: smpc.usercommands.guilds.bank
       list: smpc.usercommands.guilds.list
       info: smpc.usercommands.guilds.info
+      newleadership: smpc.usercommands.guilds.newleadership
       officer:
         main: smpc.usercommands.guilds.officers.use
         set: smpc.usercommands.guilds.officers.use

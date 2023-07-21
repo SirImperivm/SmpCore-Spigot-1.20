@@ -438,6 +438,27 @@ public class Modules {
         }
     }
 
+    public void newLeadership(Player p, Player t, String guildId) {
+        String playerName = p.getName();
+        String targetName = t.getName();
+
+        data.getGuildMembers().updateMemberData(playerName, "guildRole", "officer");
+        data.getGuildMembers().updateMemberData(targetName, "guildRole", "leader");
+        guildsData = data.getGuildMembers().guildsData();
+        setters(p, guildId, "remLeader");
+        setters(p, guildId, "addOfficer");
+        setters(t, guildId, "addLeader");
+        if (guildsData.get(targetName).get(1).equalsIgnoreCase("member")) {
+            setters(t, guildId, "remMember");
+        } else if (guildsData.get(targetName).get(1).equalsIgnoreCase("officer")) {
+            setters(t, guildId, "remOfficer");
+        }
+        sendGuildersBroadcast(guildId, Config.getTransl("settings", "messages.info.guild.members.leader.changed")
+                .replace("$oldLeader", playerName)
+                .replace("$newLeader", targetName)
+        , "null");
+    }
+
     public void setOfficer(Player p) {
         String playerName = p.getName();
         List<String> guildAndRole = guildsData.get(playerName);
@@ -460,9 +481,6 @@ public class Modules {
         setters(p, guildId, "remOfficer");
         setters(p, guildId, "addMember");
         p.sendMessage(Config.getTransl("settings", "messages.info.guild.members.officer.remove"));
-    }
-    public void setLeadership(String guildId, Player p) {
-
     }
 
     public void leaveMember(Player p) {

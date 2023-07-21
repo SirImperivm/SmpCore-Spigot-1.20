@@ -205,3 +205,381 @@ guis:
         slots:
           - 24
         action: DEPOSIT
+  upgradesGui:
+    title: "<GRADIENT:1B5583>Upgrades Gilda ${guildTitle}</GRADIENT:2A52BE>"
+    rows: 6
+    items:
+      filler_nero:
+        material: BLACK_STAINED_GLASS_PANE
+        displayName: "&0*"
+        lore: []
+        model: 0
+        amount: 1
+        glowing: false
+        itemFlags: []
+        slots:
+          - 0
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+          - 6
+          - 7
+          - 8
+          - 9
+          - 17
+          - 18
+          - 26
+          - 27
+          - 35
+          - 36
+          - 44
+          - 45
+          - 46
+          - 47
+          - 48
+          - 49
+          - 50
+          - 51
+          - 52
+          - 53
+          - 54
+        action: NOTHING
+      filler_bianco:
+        material: WHITE_STAINED_GLASS_PANE
+        displayName: "&f*"
+        lore: []
+        model: 0
+        amount: 1
+        glowing: false
+        itemFlags: []
+        slots:
+          - 10
+          - 11
+          - 12
+          - 13
+          - 14
+          - 15
+          - 16
+          - 19
+          - 25
+          - 28
+          - 34
+          - 37
+          - 38
+          - 39
+          - 40
+          - 41
+          - 42
+          - 43
+        action: NOTHING
+      level2:
+        material: IRON_BARS
+        displayName: "&9Acquista il livello 2"
+        lore:
+          - "&7✦»&m               &7¦✦¦&m               &7«✦"
+          - "&3Requisiti:"
+          - " &b✦ &3Prezzo &8» &3$levelCost"
+          - ""
+          - "&3Vantaggi:"
+          - " &b✦ &3+4 Membri, Totale 8 membri massimi in gilda."
+          - "&7✦»&m               &7¦✦¦&m               &7«✦"
+        model: 51
+        amount: 2
+        glowing: true
+        itemFlags:
+          - HIDE_ATTRIBUTES
+        slots:
+          - 20
+        action: BUY_LEVEL
+        settings:
+          requirements:
+            1:
+              type: money
+              value: 115000.0
+          results:
+            1:
+              type: change_member_quantity
+              quantity: 8
+      level3:
+        material: IRON_BARS
+        displayName: "&9Acquista il livello 3"
+        lore:
+          - "&7✦»&m               &7¦✦¦&m               &7«✦"
+          - "&3Requisiti:"
+          - " &b✦ &3Prezzo &8» &3$levelCost"
+          - ""
+          - "&3Vantaggi:"
+          - " &b✦ &3+4 Membri, Totale 12 membri massimi in gilda."
+          - "&7✦»&m               &7¦✦¦&m               &7«✦"
+        model: 51
+        amount: 3
+        glowing: true
+        itemFlags:
+          - HIDE_ATTRIBUTES
+        slots:
+          - 21
+        action: BUY_LEVEL
+        settings:
+          requirements:
+            1:
+              type: money
+              value: 256000.0
+            2:
+              type: level
+              value: 2
+          results:
+            1:
+              type: change_member_quantity
+              quantity: 12
+      level4:
+        material: IRON_BARS
+        displayName: "&9Acquista il livello 4"
+        lore:
+          - "&7✦»&m               &7¦✦¦&m               &7«✦"
+          - "&3Requisiti:"
+          - " &b✦ &3Prezzo &8» &3$levelCost"
+          - ""
+          - "&3Vantaggi:"
+          - " &b✦ &3+3 Membri, Totale 15 membri massimi in gilda."
+          - "&7✦»&m               &7¦✦¦&m               &7«✦"
+        model: 51
+        amount: 4
+        glowing: true
+        itemFlags:
+          - HIDE_ATTRIBUTES
+        slots:
+          - 22
+        action: BUY_LEVEL
+        settings:
+          requirements:
+            1:
+              type: money
+              value: 465000.0
+            2:
+              type: level
+              value: 3
+          results:
+            1:
+              type: change_member_quantity
+              quantity: 15
+      level5:
+        material: IRON_BARS
+        displayName: "&9Acquista il livello 5"
+        lore:
+          - "&7✦»&m               &7¦✦¦&m               &7«✦"
+          - "&3Requisiti:"
+          - " &b✦ &3Prezzo &8» &3$levelCost"
+          - ""
+          - "&3Vantaggi:"
+          - " &b✦ &3+5 Membri, Totale 20 membri massimi in gilda."
+          - "&7✦»&m               &7¦✦¦&m               &7«✦"
+        model: 51
+        amount: 5
+        glowing: true
+        itemFlags:
+          - HIDE_ATTRIBUTES
+        slots:
+          - 23
+        action: BUY_LEVEL
+        settings:
+          requirements:
+            1:
+              type: money
+              value: 720000.0
+            2:
+              type: level
+              value: 4
+          results:
+            1:
+              type: change_member_quantity
+              quantity: 20
+      level6:
+        material: IRON_BARS
+        displayName: "&9Acquista il livello 6"
+        lore:
+          - "&7✦»&m               &7¦✦¦&m               &7«✦"
+          - "&3Requisiti:"
+          - " &b✦ &3Prezzo &8» &3$levelCost"
+          - ""
+          - "&3Vantaggi:"
+          - " &b✦ &3+5 Membri, Totale 25 membri massimi in gilda."
+          - "&7✦»&m               &7¦✦¦&m               &7«✦"
+        model: 51
+        amount: 6
+        glowing: true
+        itemFlags:
+          - HIDE_ATTRIBUTES
+        slots:
+          - 24
+        action: BUY_LEVEL
+        settings:
+          requirements:
+            1:
+              type: money
+              value: 1000000.0
+            2:
+              type: level
+              value: 5
+          results:
+            1:
+              type: change_member_quantity
+              quantity: 25
+      level7:
+        material: IRON_BARS
+        displayName: "&9Acquista il livello 7"
+        lore:
+          - "&7✦»&m               &7¦✦¦&m               &7«✦"
+          - "&3Requisiti:"
+          - " &b✦ &3Prezzo &8» &3$levelCost"
+          - ""
+          - "&3Vantaggi:"
+          - " &b✦ &3+5 Membri, Totale 30 membri massimi in gilda."
+          - "&7✦»&m               &7¦✦¦&m               &7«✦"
+        model: 51
+        amount: 7
+        glowing: true
+        itemFlags:
+          - HIDE_ATTRIBUTES
+        slots:
+          - 29
+        action: BUY_LEVEL
+        settings:
+          requirements:
+            1:
+              type: money
+              value: 1400000.0
+            2:
+              type: level
+              value: 6
+          results:
+            1:
+              type: change_member_quantity
+              quantity: 30
+      level8:
+        material: IRON_BARS
+        displayName: "&9Acquista il livello 8"
+        lore:
+          - "&7✦»&m               &7¦✦¦&m               &7«✦"
+          - "&3Requisiti:"
+          - " &b✦ &3Prezzo &8» &3$levelCost"
+          - ""
+          - "&3Vantaggi:"
+          - " &b✦ &3+5 Membri, Totale 35 membri massimi in gilda."
+          - "&7✦»&m               &7¦✦¦&m               &7«✦"
+        model: 51
+        amount: 8
+        glowing: true
+        itemFlags:
+          - HIDE_ATTRIBUTES
+        slots:
+          - 30
+        action: BUY_LEVEL
+        settings:
+          requirements:
+            1:
+              type: money
+              value: 1850000.0
+            2:
+              type: level
+              value: 7
+          results:
+            1:
+              type: change_member_quantity
+              quantity: 35
+      level9:
+        material: IRON_BARS
+        displayName: "&9Acquista il livello 9"
+        lore:
+          - "&7✦»&m               &7¦✦¦&m               &7«✦"
+          - "&3Requisiti:"
+          - " &b✦ &3Prezzo &8» &3$levelCost"
+          - ""
+          - "&3Vantaggi:"
+          - " &b✦ &3+5 Membri, Totale 40 membri massimi in gilda."
+          - "&7✦»&m               &7¦✦¦&m               &7«✦"
+        model: 51
+        amount: 9
+        glowing: true
+        itemFlags:
+          - HIDE_ATTRIBUTES
+        slots:
+          - 31
+        action: BUY_LEVEL
+        settings:
+          requirements:
+            1:
+              type: money
+              value: 2350000.0
+            2:
+              type: level
+              value: 8
+          results:
+            1:
+              type: change_member_quantity
+              quantity: 40
+      level10:
+        material: IRON_BARS
+        displayName: "&9Acquista il livello 10"
+        lore:
+          - "&7✦»&m               &7¦✦¦&m               &7«✦"
+          - "&3Requisiti:"
+          - " &b✦ &3Prezzo &8» &3$levelCost"
+          - ""
+          - "&3Vantaggi:"
+          - " &b✦ &3+10 Membri, Totale 50 membri massimi in gilda."
+          - " &b✦ &3Accesso nel cambiare il titolo della gilda."
+          - "&7✦»&m               &7¦✦¦&m               &7«✦"
+        model: 51
+        amount: 10
+        glowing: true
+        itemFlags:
+          - HIDE_ATTRIBUTES
+        slots:
+          - 32
+        action: BUY_LEVEL
+        settings:
+          requirements:
+            1:
+              type: money
+              value: 3000000.0
+            2:
+              type: level
+              value: 9
+          results:
+            1:
+              type: change_member_quantity
+              quantity: 50
+      level11:
+        material: IRON_BARS
+        displayName: "&9Acquista il livello VIP"
+        lore:
+          - "&7✦»&m               &7¦✦¦&m               &7«✦"
+          - "&3Requisiti:"
+          - " &b✦ &3Prezzo &8» &3$levelCost"
+          - ""
+          - "&3Vantaggi:"
+          - " &b✦ &3Acquisizione membri illimitati."
+          - " &b✦ &3Accesso nel cambiare il titolo della gilda."
+          - "&7✦»&m               &7¦✦¦&m               &7«✦"
+        model: 51
+        amount: 1
+        glowing: true
+        itemFlags:
+          - HIDE_ATTRIBUTES
+        slots:
+          - 33
+        action: BUY_LEVEL
+        settings:
+          requirements:
+            1:
+              type: money
+              value: 5000000.0
+            2:
+              type: level
+              value: 10
+          results:
+            1:
+              type: change_member_quantity
+              quantity: -1
