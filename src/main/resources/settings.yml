@@ -57,6 +57,8 @@ messages:
       invites:
         accepted: "%spSei entrato nella gilda &a$guildName&7."
       left: "%spSei uscito dalla tua gilda."
+      spawn:
+        relocated: "%fpSpawn per la gilda &a$guildName &7impostato alla tua zona."
     lobby:
       located: "%spHai impostato correttamente la lobby."
     officer:
@@ -99,6 +101,7 @@ messages:
           startMessage: "%ipHai 15 secondi per scrivere in chat quanti soldi vuoi ritirare."
       chat:
         changed: "%ipChat impostata su &a$chatType&7."
+        spy: "%ipChatSpy &e$status&7."
     general:
       time:
         expired: "%ipTempo scaduto."
@@ -164,23 +167,44 @@ messages:
       not-found: "%fpUtente con questo nome non trovato."
   others:
     guilds:
-      chat: "&a[GC] &f$playerName &8» &f$message"
+      chat: "&a[GC] &f $guildRole $playerName &8» &f$message"
+      chat-spy: "&6[SpyChat] $guildTitle&r $guildRole $playerName &8» &f$message"
       list:
         admin:
-          header: "&9✦»&m               &9¦✦¦&m               &9«✦"
+          header: "&c✦»&m               &c¦✦¦&m               &c«✦"
           title: "&eLista Gilde:"
           spacer: "&r"
           lines:
-            header: "<SOLID:007FFF>GuildName   GuildId   Membri"
-          footer: "&9✦»&m               &9¦✦¦&m               &9«✦"
+            header: "<SOLID:007FFF>GuildName   Acquisto   Membri"
+            line: "$guildName   $boughtStats   $guildMembers"
+          footer: "&c✦»&m               &c¦✦¦&m               &c«✦"
         user:
           header: "&9✦»&m               &9¦✦¦&m               &9«✦"
           title: "&eLista Gilde:"
           spacer: "&r"
           lines:
-            header: "<SOLID:007FFF>GuildName   Membri"
-            line: "$guildName   $guildMembers"
+            header: "<SOLID:007FFF>GuildName   Acquisto   Membri"
+            line: "$guildName   $boughtStats   $guildMembers"
           footer: "&9✦»&m               &9¦✦¦&m               &9«✦"
+      guild-info:
+        user:
+          - "&5✦»&m               &5¦✦¦&m               &5«✦"
+          - "<SOLID:008080>Info Gilda $guildTitle"
+          - " &b✦ &fCapoGilda &8» &f$guildLeader"
+          - " &b✦ &fMembri &8» &f$membersCount&8/&f$membersLimit"
+          - " &b✦ &fSoldi &8» &f$bankBalance"
+          - " &b✦ &fLivello &8» &f$guildLevel"
+          - "&5✦»&m               &5¦✦¦&m               &5«✦"
+        admin:
+          - "&5✦»&m               &5¦✦¦&m               &5«✦"
+          - "<SOLID:008080>Info Gilda $guildTitle"
+          - " &b✦ &fCapoGilda &8» &f$guildLeader"
+          - " &b✦ &fMembri &8» &f$membersCount&8/&f$membersLimit"
+          - " &b✦ &fSoldi &8» &f$bankBalance"
+          - " &b✦ &fLivello &8» &f$guildLevel"
+          - " &b✦ &fGuildId &8» &f$guildId"
+          - "$guildCopyId"
+          - "&5✦»&m               &5¦✦¦&m               &5«✦"
 permissions:
   admin-commands:
     core:
@@ -195,6 +219,8 @@ permissions:
       deletemember: smpc.admincommands.guilds.deletemember
       changerole: smpc.admincommands.guilds.changerole
       list: smpc.admincommands.guilds.list
+      info: smpc.admincommands.guilds.info
+      changespawn: smpc.admincommands.guilds.changespawn
   user-commands:
     guilds:
       main: smpc.usercommands.guilds.main
@@ -207,6 +233,7 @@ permissions:
       chat: smpc.usercommands.guilds.chat
       bank: smpc.usercommands.guilds.bank
       list: smpc.usercommands.guilds.list
+      info: smpc.usercommands.guilds.info
       officer:
         main: smpc.usercommands.guilds.officers.use
         set: smpc.usercommands.guilds.officers.use
@@ -223,3 +250,5 @@ permissions:
     guilds:
       entering:
         bypass: smpc.user.guilds.bypass
+      chat:
+        spy: smpc.user.guilds.chat.spy

@@ -92,6 +92,25 @@ public class GuildsCommand implements CommandExecutor {
                                 }
                             }
                         }
+                    } else if (a[0].equalsIgnoreCase("info")) {
+                        if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.user-commands.guilds.info"))) {
+                            return true;
+                        } else {
+                            if (Errors.noConsole(s)) {
+                                return true;
+                            } else {
+                                Player p = (Player) s;
+                                String playerName = p.getName();
+
+                                if (mods.getGuildsData().containsKey(playerName)) {
+                                    String guildId = mods.getGuildsData().get(playerName).get(0);
+                                    String guildName = data.getGuilds().getGuildName(guildId);
+                                    mods.sendGuildInfo(p, "user", guildName);
+                                } else {
+                                    p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.dont-have"));
+                                }
+                            }
+                        }
                     } else if (a[0].equalsIgnoreCase("list")) {
                         if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.user-commands.guilds.list"))) {
                             return true;
@@ -259,6 +278,32 @@ public class GuildsCommand implements CommandExecutor {
                                     }
                                 } else {
                                     p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.dont-have"));
+                                }
+                            }
+                        }
+                    } else if (a[0].equalsIgnoreCase("info")) {
+                        if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.user-commands.guilds.info"))) {
+                            return true;
+                        } else {
+                            if (Errors.noConsole(s)) {
+                                return true;
+                            } else {
+                                Player p = (Player) s;
+                                String guildName = a[1];
+                                List<String> generatedGuilds = mods.getGeneratedGuilds();
+                                boolean guildExist = false;
+                                for (String generated : generatedGuilds) {
+                                    String[] splitter = generated.split(";");
+                                    if (splitter[1].equalsIgnoreCase(guildName)) {
+                                        guildExist = true;
+                                        break;
+                                    }
+                                }
+
+                                if (guildExist) {
+                                    mods.sendGuildInfo(p, "user", guildName);
+                                } else {
+                                    p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.not-exists"));
                                 }
                             }
                         }

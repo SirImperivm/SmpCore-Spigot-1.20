@@ -74,14 +74,15 @@ guis:
         lore:
           - "&7✦»&m               &7¦✦¦&m               &7«✦"
           - "&6Stato gilda: &aDisponibile"
-          - "&6Prezzo: &a€1000.0"
+          - "&6Prezzo: &a€ $guildCost"
           - ""
           - "&6Acquistando questo avrai accesso alla gilda rossa"
-          - "&6di cui ne sarai leader, potrai aggiornare il livello tramite soldi."
+          - "&6di cui ne sarai leader, e potrai invitare altri membri."
           - "&7✦»&m               &7¦✦¦&m               &7«✦"
         boughtLore:
           - "&7✦»&m               &7¦✦¦&m               &7«✦"
           - "&6Stato gilda: &cAcquistata"
+          - "&cSpiacenti, impossibile da ottenere."
           - "&7✦»&m               &7¦✦¦&m               &7«✦"
         model: 127
         glowing: true

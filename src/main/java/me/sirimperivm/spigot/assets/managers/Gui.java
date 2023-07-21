@@ -50,9 +50,23 @@ public class Gui {
                 if (!guildName.equals("null")) {
                     boolean boughtStatus = data.getGuilds().boughtStatus("guildName", guildName);
                     if (!boughtStatus) {
-                        meta.setLore(General.lore(conf.getGuis().getStringList(itemsPath + ".lore")));
+                        List<String> lore = new ArrayList<String>();
+                        for (String line : conf.getGuis().getStringList(itemsPath + ".lore")) {
+                            lore.add(line
+                                    .replace("$guildCost", Strings.formatNumber(conf.getGuilds().getDouble(itemsPath + ".settings.price")))
+                            );
+                        }
+
+                        meta.setLore(General.lore(lore));
                     } else {
-                        meta.setLore(General.lore(conf.getGuis().getStringList(itemsPath + ".boughtLore")));
+                        List<String> lore = new ArrayList<String>();
+                        for (String line : conf.getGuis().getStringList(itemsPath + ".boughtLore")) {
+                            lore.add(line
+                                    .replace("$guildCost", Strings.formatNumber(conf.getGuilds().getDouble(itemsPath + ".settings.price")))
+                            );
+                        }
+
+                        meta.setLore(General.lore(lore));
                     }
                 } else {
                     slots.clear();

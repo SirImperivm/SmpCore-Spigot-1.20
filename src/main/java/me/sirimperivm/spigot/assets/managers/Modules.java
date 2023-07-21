@@ -38,9 +38,10 @@ public class Modules {
     private static HashMap<String, String> invites;
     private static HashMap<String, List<String>> guildsData;
     private static HashMap<String, String> guildsChat;
-    private static HashMap<String, String> guildsList;
+    private static HashMap<String, List<String>> guildsList;
     private static List<String> depositCooldown;
     private static List<String> withdrawCooldown;
+    private static List<String> spyChat;
     private static Main plugin = Main.getPlugin();
     private static Logger log = Logger.getLogger("SMPCore");
     private static Config conf = Main.getConf();
@@ -50,8 +51,9 @@ public class Modules {
     public Modules() {
         invites = new HashMap<String, String>();
         guildsChat = new HashMap<String, String>();
-        guildsList = new HashMap<String, String>();
-        guildMembers = new ArrayList<>();
+        guildsList = new HashMap<String, List<String>>();
+        spyChat = new ArrayList<String>();
+        guildMembers = new ArrayList<String>();
         depositCooldown = new ArrayList<String>();
         withdrawCooldown = new ArrayList<String>();
         refreshSettings();
@@ -71,6 +73,49 @@ public class Modules {
 
     public void deleteTask(int taskId) {
         data.getTasks().deleteTask(taskId);
+    }
+
+    public void sendGuildInfo(Player p, String type, String guildName) {
+        switch (type) {
+            case "admin":
+                for (String line : conf.getSettings().getStringList("messages.others.guilds.guild-info.admin")) {
+                    String guildId = data.getGuilds().getGuildId(guildName);
+                    if (line.equalsIgnoreCase("$guildCopyId")) {
+                        TextComponent component = new TextComponent(Colors.text("&a[Copia ID]"));
+                        component.setClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, guildId));
+                        component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Copia l'ID").create()));
+                        p.spigot().sendMessage(component);
+                    } else {
+                        p.sendMessage(Colors.text(line
+                                .replace("$guildLeader", !data.getGuildMembers().guildLeader(guildId).equalsIgnoreCase("null") ? data.getGuildMembers().guildLeader(guildId) : "N/A")
+                                .replace("$membersCount", String.valueOf(getMembersCount(guildId)))
+                                .replace("$membersLimit", String.valueOf(getMembersLimit(guildId)))
+                                .replace("$guildLevel", String.valueOf(data.getGuilds().getGuildLevel(guildId)))
+                                .replace("$guildId", guildId)
+                        ));
+                    }
+                }
+                break;
+            default:
+                for (String line : conf.getSettings().getStringList("messages.others.guilds.guild-info.user")) {
+                    String guildId = data.getGuilds().getGuildId(guildName);
+                    if (line.equalsIgnoreCase("$guildCopyId")) {
+                        TextComponent component = new TextComponent(Colors.text("&a[Copia ID]"));
+                        component.setClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, guildId));
+                        component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Copia l'ID").create()));
+                        p.spigot().sendMessage(component);
+                    } else {
+                        p.sendMessage(Colors.text(line
+                                .replace("$guildLeader", !data.getGuildMembers().guildLeader(guildId).equalsIgnoreCase("null") ? data.getGuildMembers().guildLeader(guildId) : "N/A")
+                                .replace("$membersCount", String.valueOf(getMembersCount(guildId)))
+                                .replace("$membersLimit", String.valueOf(getMembersLimit(guildId)))
+                                .replace("$guildLevel", String.valueOf(data.getGuilds().getGuildLevel(guildId)))
+                                .replace("$guildId", guildId)
+                        ));
+                    }
+                }
+                break;
+        }
     }
 
     public void executeTasksLoop() {
@@ -144,27 +189,38 @@ public class Modules {
                 p.sendMessage(Config.getTransl("settings", "messages.others.guilds.list.admin.spacer"));
                 p.sendMessage(Config.getTransl("settings", "messages.others.guilds.list.admin.lines.header"));
                 for (String key : guildsList.keySet()) {
-                    String guildId = guildsList.get(key);
-                    TextComponent component = new TextComponent(Colors.text("&a[Copia]"));
+                    String guildId = guildsList.get(key).get(0);
+                    int boughtStatus = Integer.parseInt(guildsList.get(key).get(1));
+
+                    TextComponent component = new TextComponent(Colors.text("&a[Copia ID]"));
                     component.setClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, guildId));
-                    component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Copia L'ID").create()));
-                    p.spigot().sendMessage(new TextComponent(Colors.text(key + "&7 - &f" + guildId + "&7 - &f") + component + Colors.text("&7 - &f" + getMembersCount(guildId))));
+                    component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Copia l'ID").create()));
+                    p.sendMessage(Config.getTransl("settings", "messages.others.guilds.list.admin.lines.line")
+                            .replace("$guildName", data.getGuilds().getGuildName(guildId))
+                            .replace("$guildId", guildId)
+                            .replace("$boughtStats", boughtStatus == 1 ? "acquistata" : "non acquistata")
+                            .replace("$guildMembers", Strings.formatNumber(getMembersCount(guildId)))
+                    );
+                    p.spigot().sendMessage(component);
                 }
                 p.sendMessage(Config.getTransl("settings", "messages.others.guilds.list.admin.footer"));
                 break;
             default:
-                p.sendMessage(Config.getTransl("settings", "messages.others.list.user.header"));
-                p.sendMessage(Config.getTransl("settings", "messages.others.list.user.title"));
-                p.sendMessage(Config.getTransl("settings", "messages.others.list.user.spacer"));
-                p.sendMessage(Config.getTransl("settings", "messages.others.list.user.lines.header"));
+                p.sendMessage(Config.getTransl("settings", "messages.others.guilds.list.user.header"));
+                p.sendMessage(Config.getTransl("settings", "messages.others.guilds.list.user.title"));
+                p.sendMessage(Config.getTransl("settings", "messages.others.guilds.list.user.spacer"));
+                p.sendMessage(Config.getTransl("settings", "messages.others.guilds.list.user.lines.header"));
                 for (String key : guildsList.keySet()) {
-                    String guildId = guildsList.get(key);
-                    p.sendMessage(Config.getTransl("settings", "messages.others.list.user.lines.header")
+                    String guildId = guildsList.get(key).get(0);
+                    int boughtStatus = Integer.parseInt(guildsList.get(key).get(1));
+
+                    p.sendMessage(Config.getTransl("settings", "messages.others.guilds.list.user.lines.line")
                             .replace("$guildName", data.getGuilds().getGuildName(guildId))
+                            .replace("$boughtStats", boughtStatus == 1 ? "acquistata" : "non acquistata")
                             .replace("$guildMembers", Strings.formatNumber(getMembersCount(guildId)))
                     );
                 }
-                p.sendMessage(Config.getTransl("settings", "messages.others.list.user.footer"));
+                p.sendMessage(Config.getTransl("settings", "messages.others.guilds.list.user.footer"));
                 break;
         }
     }
@@ -178,6 +234,13 @@ public class Modules {
             }
         }
         return members;
+    }
+
+    public int getMembersLimit(String guildId) {
+        int limit = 0;
+        String guildName = data.getGuilds().getGuildName(guildId);
+        limit = conf.getGuilds().getInt("guilds." + guildName + ".membersLimit");
+        return limit;
     }
 
     public void createGuild(Player p, String guildName, String guildTitle, int membersLimit) {
@@ -555,6 +618,26 @@ public class Modules {
         sendPlayerToGhome(p, guildName);
     }
 
+    public void changeSpawn(Player p, String guildName) {
+        Location loc = p.getLocation();
+        String worldName = loc.getWorld().getName();
+        double posX = loc.getX();
+        double posY = loc.getY();
+        double posZ = loc.getZ();
+        float rotYaw = loc.getYaw();
+        float rotPitch = loc.getPitch();
+        conf.getGuilds().set("guilds." + guildName + ".mainHome.worldName", worldName);
+        conf.getGuilds().set("guilds." + guildName + ".mainHome.posX", posX);
+        conf.getGuilds().set("guilds." + guildName + ".mainHome.posY", posY);
+        conf.getGuilds().set("guilds." + guildName + ".mainHome.posZ", posZ);
+        conf.getGuilds().set("guilds." + guildName + ".mainHome.rotYaw", rotYaw);
+        conf.getGuilds().set("guilds." + guildName + ".mainHome.rotPitch", rotPitch);
+        conf.save(conf.getGuilds(), conf.getGuildsFile());
+
+        p.sendMessage(Config.getTransl("settings", "messages.success.guilds.spawn.relocated")
+                .replace("$guildName", guildName));
+    }
+
     public void sendPlayerToLobby(Player p) {
         World locWorld = Bukkit.getWorld(conf.getSettings().getString("settings.lobby.location.world"));
         double locX = conf.getSettings().getDouble("settings.lobby.location.posX");
@@ -641,7 +724,7 @@ public class Modules {
         return guildsData;
     }
 
-    public static HashMap<String, String> getGuildsList() {
+    public static HashMap<String, List<String>> getGuildsList() {
         return guildsList;
     }
 
@@ -651,6 +734,10 @@ public class Modules {
 
     public static List<String> getDepositCooldown() {
         return depositCooldown;
+    }
+
+    public static List<String> getSpyChat() {
+        return spyChat;
     }
 
     public static List<String> getWithdrawCooldown() {

@@ -55,6 +55,21 @@ public class AdminGuildsCommand implements CommandExecutor {
                             } else {
                                 mods.sendGuildList(p, "admin");
                             }
+                        } else if (a[0].equalsIgnoreCase("chatspy")) {
+                            if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.admin-actions.guilds.chat.spy"))) {
+                                return true;
+                            } else {
+                                String playerName = p.getName();
+                                if (mods.getSpyChat().contains(playerName)) {
+                                    p.sendMessage(Config.getTransl("settings", "messages.info.guild.chat.spy")
+                                            .replace("$status", "Disattivata"));
+                                    mods.getSpyChat().remove(playerName);
+                                } else {
+                                    p.sendMessage(Config.getTransl("settings", "messages.info.guild.chat.spy")
+                                            .replace("$status", "Attivata"));
+                                    mods.getSpyChat().add(playerName);
+                                }
+                            }
                         } else {
                             getUsage(p);
                         }
@@ -83,6 +98,48 @@ public class AdminGuildsCommand implements CommandExecutor {
                                     }
                                 } else {
                                     p.sendMessage(Config.getTransl("settings", "messages.errors.lobby.not-located"));
+                                }
+                            }
+                        } else if (a[0].equalsIgnoreCase("changespawn")) {
+                            if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.admin-commands.guilds.changespawn"))) {
+                                return true;
+                            } else {
+                                String guildName = a[1];
+                                List<String> generatedGuilds = mods.getGeneratedGuilds();
+                                boolean guildExist = false;
+                                for (String generated : generatedGuilds) {
+                                    String[] splitter = generated.split(";");
+                                    if (splitter[1].equalsIgnoreCase(guildName)) {
+                                        guildExist = true;
+                                        break;
+                                    }
+                                }
+
+                                if (guildExist) {
+                                    mods.changeSpawn(p, guildName);
+                                } else {
+                                    p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.not-exists"));
+                                }
+                            }
+                        } else if (a[0].equalsIgnoreCase("info")) {
+                            if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.admin-commands.guilds.info"))) {
+                                return true;
+                            } else {
+                                String guildName = a[1];
+                                List<String> generatedGuilds = mods.getGeneratedGuilds();
+                                boolean guildExist = false;
+                                for (String generated : generatedGuilds) {
+                                    String[] splitter = generated.split(";");
+                                    if (splitter[1].equalsIgnoreCase(guildName)) {
+                                        guildExist = true;
+                                        break;
+                                    }
+                                }
+
+                                if (guildExist) {
+                                    mods.sendGuildInfo(p, "admin", guildName);
+                                } else {
+                                    p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.not-exists"));
                                 }
                             }
                         } else {

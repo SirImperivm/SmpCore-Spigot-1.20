@@ -156,6 +156,25 @@ public class GuildMembers {
         return guildMembers;
     }
 
+    public String guildLeader(String guildId) {
+        String guildLeader = "null";
+        String query = "SELECT * FROM " + database;
+        try {
+            PreparedStatement state = conn.prepareStatement(query);
+            ResultSet rs = state.executeQuery();
+            while (rs.next()) {
+                if (rs.getString("guildId").equalsIgnoreCase(guildId) && rs.getString("guildRole").equalsIgnoreCase("leader")) {
+                    guildLeader = rs.getString("username");
+                    break;
+                }
+            }
+        } catch (SQLException e) {
+            log.severe("Impossibile ottenere il nome del proprietario di una gilda.");
+            e.printStackTrace();
+        }
+        return guildLeader;
+    }
+
     public HashMap<String, List<String>> guildsData() {
         HashMap<String, List<String>> guildsData = new HashMap<String, List<String>>();
         String query = "SELECT * FROM " + database;

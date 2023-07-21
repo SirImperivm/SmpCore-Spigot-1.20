@@ -90,7 +90,7 @@ public class ClickListener implements Listener {
                                             p.sendMessage(Config.getTransl("settings", "messages.errors.members.alreadyHaveGuild"));
                                         }
                                     } else {
-                                        p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.money.not-enought")
+                                        p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.money.not-enough")
                                                 .replace("$price", String.valueOf(price))
                                                 .replace("$guildTitle", guildTitle));
                                     }
@@ -105,6 +105,7 @@ public class ClickListener implements Listener {
                     }
                 }
             }
+            return;
         }
         String guildTitle = Config.getTransl("guilds", "guilds." + data.getGuilds().getGuildName(mods.getGuildsData().get(p.getName()).get(0)) + ".guildTitle");
 
@@ -257,6 +258,7 @@ public class ClickListener implements Listener {
                     }
                 }
             }
+            return;
         }
     }
 }
