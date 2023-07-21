@@ -143,6 +143,13 @@ messages:
         chars-not-allowed: "%fpIn questa sezione sono validi solamente i numeri."
       chat:
         no-member-reached: "%fpNon è stato possibile recapitare il messaggio."
+      upgrades:
+        requirements:
+          level:
+            too-low: "%fpLa gilda non soddisfa i requisiti relativi al livello."
+            too-high: "%fpLa gilda ha un livello superiore a quello richiesto."
+          money:
+            not-enough: "%fpPer ottenere questo livello la gilda necessita di &c€ $cost&7."
     members:
       alreadyHaveGuild: "%fpHai già una gilda."
       target:
@@ -238,6 +245,7 @@ permissions:
       list: smpc.usercommands.guilds.list
       info: smpc.usercommands.guilds.info
       newleadership: smpc.usercommands.guilds.newleadership
+      upgrades: smpc.usercommands.guilds.upgrades
       officer:
         main: smpc.usercommands.guilds.officers.use
         set: smpc.usercommands.guilds.officers.use
@@ -250,6 +258,8 @@ permissions:
         use: smpc.user.guilds.bank.use
         deposit: smpc.user.guilds.bank.deposit
         withdraw: smpc.user.guilds.bank.withdraw
+      upgrades:
+        use: smpc.user.guilds.upgrades.use
   admin-actions:
     guilds:
       entering:

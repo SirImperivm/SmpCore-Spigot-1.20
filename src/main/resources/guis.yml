@@ -166,6 +166,7 @@ guis:
           - "&aTasto sinistro ritiri 100."
           - "&aTasto destro ritiri 1000."
           - "&aTasto centrale scegli quanto ritirare."
+          - "&aShift Sinistro ritiri tutto."
           - "&8&m                              "
         model: 0
         glowing: true
@@ -197,6 +198,7 @@ guis:
           - "&aTasto sinistro depositi 100."
           - "&aTasto destro depositi 1000."
           - "&aTasto centrale scegli quanto depositare."
+          - "&aShift Sinistro depositi tutto."
           - "&8&m                              "
         model: 0
         glowing: true
@@ -302,6 +304,9 @@ guis:
             1:
               type: change_member_quantity
               quantity: 8
+            2:
+              type: change_level
+              value: 2
       level3:
         material: IRON_BARS
         displayName: "&9Acquista il livello 3"
@@ -309,6 +314,7 @@ guis:
           - "&7✦»&m               &7¦✦¦&m               &7«✦"
           - "&3Requisiti:"
           - " &b✦ &3Prezzo &8» &3$levelCost"
+          - " &b✦ &3Livello Richiesto &8» &3$levelRequired"
           - ""
           - "&3Vantaggi:"
           - " &b✦ &3+4 Membri, Totale 12 membri massimi in gilda."
@@ -333,6 +339,9 @@ guis:
             1:
               type: change_member_quantity
               quantity: 12
+            2:
+              type: change_level
+              value: 3
       level4:
         material: IRON_BARS
         displayName: "&9Acquista il livello 4"
@@ -340,6 +349,7 @@ guis:
           - "&7✦»&m               &7¦✦¦&m               &7«✦"
           - "&3Requisiti:"
           - " &b✦ &3Prezzo &8» &3$levelCost"
+          - " &b✦ &3Livello Richiesto &8» &3$levelRequired"
           - ""
           - "&3Vantaggi:"
           - " &b✦ &3+3 Membri, Totale 15 membri massimi in gilda."
@@ -364,6 +374,9 @@ guis:
             1:
               type: change_member_quantity
               quantity: 15
+            2:
+              type: change_level
+              value: 4
       level5:
         material: IRON_BARS
         displayName: "&9Acquista il livello 5"
@@ -371,6 +384,7 @@ guis:
           - "&7✦»&m               &7¦✦¦&m               &7«✦"
           - "&3Requisiti:"
           - " &b✦ &3Prezzo &8» &3$levelCost"
+          - " &b✦ &3Livello Richiesto &8» &3$levelRequired"
           - ""
           - "&3Vantaggi:"
           - " &b✦ &3+5 Membri, Totale 20 membri massimi in gilda."
@@ -395,6 +409,9 @@ guis:
             1:
               type: change_member_quantity
               quantity: 20
+            2:
+              type: change_level
+              value: 5
       level6:
         material: IRON_BARS
         displayName: "&9Acquista il livello 6"
@@ -402,6 +419,7 @@ guis:
           - "&7✦»&m               &7¦✦¦&m               &7«✦"
           - "&3Requisiti:"
           - " &b✦ &3Prezzo &8» &3$levelCost"
+          - " &b✦ &3Livello Richiesto &8» &3$levelRequired"
           - ""
           - "&3Vantaggi:"
           - " &b✦ &3+5 Membri, Totale 25 membri massimi in gilda."
@@ -426,6 +444,9 @@ guis:
             1:
               type: change_member_quantity
               quantity: 25
+            2:
+              type: change_level
+              value: 6
       level7:
         material: IRON_BARS
         displayName: "&9Acquista il livello 7"
@@ -433,6 +454,7 @@ guis:
           - "&7✦»&m               &7¦✦¦&m               &7«✦"
           - "&3Requisiti:"
           - " &b✦ &3Prezzo &8» &3$levelCost"
+          - " &b✦ &3Livello Richiesto &8» &3$levelRequired"
           - ""
           - "&3Vantaggi:"
           - " &b✦ &3+5 Membri, Totale 30 membri massimi in gilda."
@@ -457,6 +479,9 @@ guis:
             1:
               type: change_member_quantity
               quantity: 30
+            2:
+              type: change_level
+              value: 7
       level8:
         material: IRON_BARS
         displayName: "&9Acquista il livello 8"
@@ -464,6 +489,7 @@ guis:
           - "&7✦»&m               &7¦✦¦&m               &7«✦"
           - "&3Requisiti:"
           - " &b✦ &3Prezzo &8» &3$levelCost"
+          - " &b✦ &3Livello Richiesto &8» &3$levelRequired"
           - ""
           - "&3Vantaggi:"
           - " &b✦ &3+5 Membri, Totale 35 membri massimi in gilda."
@@ -488,6 +514,9 @@ guis:
             1:
               type: change_member_quantity
               quantity: 35
+            2:
+              type: change_level
+              value: 8
       level9:
         material: IRON_BARS
         displayName: "&9Acquista il livello 9"
@@ -495,6 +524,7 @@ guis:
           - "&7✦»&m               &7¦✦¦&m               &7«✦"
           - "&3Requisiti:"
           - " &b✦ &3Prezzo &8» &3$levelCost"
+          - " &b✦ &3Livello Richiesto &8» &3$levelRequired"
           - ""
           - "&3Vantaggi:"
           - " &b✦ &3+5 Membri, Totale 40 membri massimi in gilda."
@@ -519,6 +549,9 @@ guis:
             1:
               type: change_member_quantity
               quantity: 40
+            2:
+              type: change_level
+              value: 9
       level10:
         material: IRON_BARS
         displayName: "&9Acquista il livello 10"
@@ -526,6 +559,7 @@ guis:
           - "&7✦»&m               &7¦✦¦&m               &7«✦"
           - "&3Requisiti:"
           - " &b✦ &3Prezzo &8» &3$levelCost"
+          - " &b✦ &3Livello Richiesto &8» &3$levelRequired"
           - ""
           - "&3Vantaggi:"
           - " &b✦ &3+10 Membri, Totale 50 membri massimi in gilda."
@@ -551,6 +585,9 @@ guis:
             1:
               type: change_member_quantity
               quantity: 50
+            2:
+              type: change_level
+              value: 10
       level11:
         material: IRON_BARS
         displayName: "&9Acquista il livello VIP"
@@ -558,6 +595,7 @@ guis:
           - "&7✦»&m               &7¦✦¦&m               &7«✦"
           - "&3Requisiti:"
           - " &b✦ &3Prezzo &8» &3$levelCost"
+          - " &b✦ &3Livello Richiesto &8» &3$levelRequired"
           - ""
           - "&3Vantaggi:"
           - " &b✦ &3Acquisizione membri illimitati."
@@ -583,3 +621,6 @@ guis:
             1:
               type: change_member_quantity
               quantity: -1
+            2:
+              type: change_level
+              value: 11

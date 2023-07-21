@@ -194,6 +194,20 @@ public class ClickListener implements Listener {
                                                 }
                                             }.runTaskLater(plugin, 20 * 15);
                                         }
+                                    } else if (cType == ClickType.SHIFT_LEFT) {
+                                        double toDeposit = Vault.getEcon().getBalance(p);
+                                        if (depositLimit == -1.0 || (toDeposit + bankBalance) <= depositLimit) {
+                                            Vault.getEcon().withdrawPlayer(p, toDeposit);
+                                            data.getGuilds().updateGuildBalance(guildId, String.valueOf(toDeposit + bankBalance));
+                                            p.sendMessage(Config.getTransl("settings", "messages.info.money.withdrawn")
+                                                    .replace("$value", Strings.formatNumber(toDeposit)));
+                                            mods.sendGuildersBroadcast(guildId, Config.getTransl("settings", "messages.info.guild.bank.money.deposit")
+                                                    .replace("$username", playerName)
+                                                    .replace("$value", Strings.formatNumber(toDeposit)), "null");
+                                        } else {
+                                            p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.bank.deposit.limit-reached")
+                                                    .replace("$depositLimit", Strings.formatNumber(depositLimit)));
+                                        }
                                     }
                                 }
                             }
@@ -249,6 +263,15 @@ public class ClickListener implements Listener {
                                                 }
                                             }.runTaskLater(plugin, 20 * 15);
                                         }
+                                    } else if (cType == ClickType.SHIFT_LEFT) {
+                                        double toWithdraw = data.getGuilds().getGuildBalance(guildId);
+                                        Vault.getEcon().depositPlayer(p, toWithdraw);
+                                        data.getGuilds().updateGuildBalance(guildId, String.valueOf(bankBalance - toWithdraw));
+                                        p.sendMessage(Config.getTransl("settings", "messages.info.money.deposit")
+                                                .replace("$value", Strings.formatNumber(toWithdraw)));
+                                        mods.sendGuildersBroadcast(guildId, Config.getTransl("settings", "messages.info.guild.bank.money.taken")
+                                                .replace("$username", playerName)
+                                                .replace("$value", Strings.formatNumber(toWithdraw)), "null");
                                     }
                                 }
                             }
@@ -258,6 +281,66 @@ public class ClickListener implements Listener {
                     }
                 }
             }
+            return;
+        }
+
+        if (title.equalsIgnoreCase(Config.getTransl("guis", "guis.upgradesGui.title")
+                .replace("${guildTitle}", guildTitle))) {
+            e.setCancelled(true);
+            e.setResult(Event.Result.DENY);
+
+            if (Errors.noPermAction(p, conf.getSettings().getString("permissions.user-actions.guilds.upgrades.use"))) {
+                return;
+            } else {
+                for (String item : conf.getGuis().getConfigurationSection("guis.upgradesGui.items").getKeys(false)) {
+                    String guildId = mods.getGuildsData().get(p.getName()).get(0);
+                    String itemsPath = "guis.upgradesGui.items." + item;
+                    String actionType = conf.getGuis().getString(itemsPath + ".action");
+                    List<Integer> slots = conf.getGuis().getIntegerList(itemsPath + ".slots");
+                    if (slots.contains(slot)) {
+                        if (actionType.equalsIgnoreCase("BUY_LEVEL")) {
+                            double guildBalance = data.getGuilds().getGuildBalance(guildId);
+                            int guildLevel = data.getGuilds().getGuildLevel(guildId);
+
+                            double levelCost = 0.0;
+                            int levelRequired = 0;
+
+                            for (String requirement : conf.getGuis().getConfigurationSection(itemsPath + ".settings.requirements").getKeys(false)) {
+                                double oldLevelCost = levelCost;
+                                int oldLevelRequired = levelRequired;
+
+                                String requirementsPath = "guis.upgradesGui.items." + item + ".settings.requirements." + requirement;
+                                String requirementType = conf.getGuis().getString(requirementsPath + ".type");
+                                if (requirementType.equalsIgnoreCase("money")) {
+                                    double newLevelCost = conf.getGuis().getDouble(requirementsPath + ".value");
+                                    if (newLevelCost >= oldLevelCost) {
+                                        levelCost = newLevelCost;
+                                    }
+                                } else if (requirementType.equalsIgnoreCase("level")) {
+                                    int newLevelRequired = conf.getGuis().getInt(requirementsPath + ".value");
+                                    if (newLevelRequired >= oldLevelRequired) {
+                                        levelRequired = newLevelRequired;
+                                    }
+                                }
+                            }
+
+                            if (guildLevel < levelRequired) {
+                                p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.upgrades.requirements.level.too-low"));
+                            } else if (guildLevel > levelRequired) {
+                                p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.upgrades.requirements.level.too-high"));
+                            } else {
+                                if (guildBalance >= levelCost) {
+
+                                } else {
+                                    p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.upgrades.requirements.money.not-enough")
+                                            .replace("$cost", Strings.formatNumber(levelCost)));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             return;
         }
     }

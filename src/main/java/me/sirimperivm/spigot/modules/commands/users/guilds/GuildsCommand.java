@@ -203,6 +203,25 @@ public class GuildsCommand implements CommandExecutor {
                                 }
                             }
                         }
+                    } else if (a[0].equalsIgnoreCase("upgrades")) {
+                        if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.user-commands.guilds.upgrades"))) {
+                            return true;
+                        } else {
+                            if (Errors.noConsole(s)) {
+                                return true;
+                            } else {
+                                Player p = (Player) s;
+                                String playerName = p.getName();
+                                Gui g = new Gui();
+
+                                if (mods.getGuildsData().containsKey(playerName)) {
+                                    String guildId = mods.getGuildsData().get(playerName).get(0);
+                                    p.openInventory(g.upgradesGui(guildId));
+                                } else {
+                                    p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.dont-have"));
+                                }
+                            }
+                        }
                     } else {
                         getUsage(s);
                     }
