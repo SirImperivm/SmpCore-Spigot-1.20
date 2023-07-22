@@ -200,21 +200,71 @@ messages:
         user:
           - "&5✦»&m               &5¦✦¦&m               &5«✦"
           - "<SOLID:008080>Info Gilda $guildTitle"
+          - ""
+          - "<SOLID:960018>Info di base:"
           - " &b✦ &fCapoGilda &8» &f$guildLeader"
           - " &b✦ &fMembri &8» &f$membersCount&8/&f$membersLimit"
           - " &b✦ &fSoldi &8» &f$bankBalance"
           - " &b✦ &fLivello &8» &f$guildLevel"
+          - ""
+          - "<SOLID:960018>Membri per ruolo:"
+          - " &c✦ &fOfficers &8» &f$officersCount"
+          - " &c✦ &fGuilders &8» &f$guildersCount"
+          - ""
+          - "$officersOnline"
+          - "$guildersOnline"
           - "&5✦»&m               &5¦✦¦&m               &5«✦"
         admin:
           - "&5✦»&m               &5¦✦¦&m               &5«✦"
           - "<SOLID:008080>Info Gilda $guildTitle"
+          - ""
+          - "<SOLID:960018>Info di base:"
           - " &b✦ &fCapoGilda &8» &f$guildLeader"
           - " &b✦ &fMembri &8» &f$membersCount&8/&f$membersLimit"
           - " &b✦ &fSoldi &8» &f$bankBalance"
           - " &b✦ &fLivello &8» &f$guildLevel"
           - " &b✦ &fGuildId &8» &f$guildId"
-          - "$guildCopyId"
+          - ""
+          - "<SOLID:960018>Membri per ruolo:"
+          - " &c✦ &fOfficers &8» &f$officersCount"
+          - " &c✦ &fGuilders &8» &f$guildersCount"
+          - ""
+          - "$officersOnline"
+          - "$guildersOnline"
           - "&5✦»&m               &5¦✦¦&m               &5«✦"
+          - "$guildCopyId"
+        general:
+          online-officers:
+            format-prefix: "&6Officers Online: "
+            userformat: "&f$username"
+            commas: "&6, "
+          online-guilders:
+            format-prefix: "&5Gildani Online: "
+            userformat: "&f$username"
+            commas: "&5, "
+      top:
+        bank:
+          header: "&6✦»&m               &6¦✦¦&m               &6«✦"
+          title: "<SOLID:f39f18>Top Bilanci Gilde"
+          spacer: "&r"
+          lines:
+            header: "&cNome   Soldi"
+            line: "$guildTitle   &f$guildBalance"
+          footer: "&6✦»&m               &6¦✦¦&m               &6«✦"
+placeholders:
+  guilds:
+    name: guild_name # Il placeholder relativo è %smpc_guild_name%
+    id: guild_id # Il placeholder relativo è %smpc_guild_id%
+    title: guild_title # Il placeholder relativo è %smpc_guild_title%
+    bank:
+      still: guild_bank_balance # Il placeholder relativo è %smpc_guild_bank_balance%
+      formatted: guild_bank_balance-formatted # Il placeholder relativo è %smpc_guild_bank_balance-formatted%
+  top:
+    guild-bank:
+      guild_name: top_guild-bank_guild_name_# # Il placeholder relativo è %smpc_top_guild-bank_guild_name_#% Bisogna scambiare # con il numero relativo alla posizione
+      guild_title: top_guild-bank_guild_title_# # Il placeholder relativo è %smpc_top_guild-bank_guild_title_#% Bisogna scambiare # con il numero relativo alla posizione
+      guild_value: top_guild-bank_guild_value_# # Il placeholder relativo è %smpc_top_guild-bank_guild_value_#% Bisogna scambiare # con il numero relativo alla posizione
+      guild_value_formatted: top_guild-bank_guild_value-formatted_# # Il placeholder relativo è %smpc_top_guild-bank_guild_value-formatted_#% Bisogna scambiare # con il numero relativo alla posizione
 permissions:
   admin-commands:
     core:
@@ -244,6 +294,7 @@ permissions:
       bank: smpc.usercommands.guilds.bank
       list: smpc.usercommands.guilds.list
       info: smpc.usercommands.guilds.info
+      top-bank: smpc.usercommands.guilds.top-bank
       newleadership: smpc.usercommands.guilds.newleadership
       upgrades: smpc.usercommands.guilds.upgrades
       officer:

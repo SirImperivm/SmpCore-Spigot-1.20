@@ -56,6 +56,17 @@ public class GuildsCommand implements CommandExecutor {
                                 p.openInventory(gm.shopGui());
                             }
                         }
+                    } else if (a[0].equals("top-bank")) {
+                        if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.user-commands.guilds.top-bank"))) {
+                            return true;
+                        } else {
+                            if (Errors.noConsole(s)) {
+                                return true;
+                            } else {
+                                Player p = (Player) s;
+                                mods.sendGuildTop(p, "bank");
+                            }
+                        }
                     } else if (a[0].equalsIgnoreCase("accept")) {
                         if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.user-commands.guilds.accept"))) {
                             return true;

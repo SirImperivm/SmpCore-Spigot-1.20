@@ -53,7 +53,7 @@ public class Gui {
                         List<String> lore = new ArrayList<String>();
                         for (String line : conf.getGuis().getStringList(itemsPath + ".lore")) {
                             lore.add(line
-                                    .replace("$guildCost", Strings.formatNumber(conf.getGuilds().getDouble(itemsPath + ".settings.price")))
+                                    .replace("$guildCost", Strings.formatNumber(conf.getGuis().getDouble(itemsPath + ".settings.price")))
                             );
                         }
 
@@ -62,7 +62,7 @@ public class Gui {
                         List<String> lore = new ArrayList<String>();
                         for (String line : conf.getGuis().getStringList(itemsPath + ".boughtLore")) {
                             lore.add(line
-                                    .replace("$guildCost", Strings.formatNumber(conf.getGuilds().getDouble(itemsPath + ".settings.price")))
+                                    .replace("$guildCost", Strings.formatNumber(conf.getGuis().getDouble(itemsPath + ".settings.price")))
                             );
                         }
 

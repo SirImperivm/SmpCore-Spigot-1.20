@@ -4,6 +4,8 @@ import me.sirimperivm.spigot.Main;
 import me.sirimperivm.spigot.assets.managers.Config;
 import me.sirimperivm.spigot.assets.managers.Db;
 import me.sirimperivm.spigot.assets.managers.Modules;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -173,6 +175,102 @@ public class GuildMembers {
             e.printStackTrace();
         }
         return guildLeader;
+    }
+
+    public String getOnlineOfficers(String guildId) {
+        StringBuilder sb = new StringBuilder(conf.getSettings().getString("messages.others.guilds.guild-info.general.online-officers.format-prefix"));
+        String query = "SELECT * FROM " + database;
+
+        try {
+            PreparedStatement state = conn.prepareStatement(query);
+            ResultSet rs = state.executeQuery();
+            while (rs.next()) {
+                if (rs.getString("guildId").equalsIgnoreCase(guildId)) {
+                    if (rs.getString("guildRole").equalsIgnoreCase("officer")) {
+                        String username = rs.getString("username");
+                        Player p = Bukkit.getPlayerExact(username);
+                        if (p != null) {
+                            sb.append(conf.getSettings().getString("messages.others.guilds.guild-info.general.online-officers.userformat")
+                                    .replace("$username", username))
+                                    .append(conf.getSettings().getString("messages.others.guilds.guild-info.general.online-officers.commas"));
+                        }
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            log.severe("Impossibile ottenere gli officers online.");
+            e.printStackTrace();
+        }
+        return sb.toString();
+    }
+
+    public String getOnlineGuilders(String guildId) {
+        StringBuilder sb = new StringBuilder(conf.getSettings().getString("messages.others.guilds.guild-info.general.online-guilders.format-prefix"));
+        String query = "SELECT * FROM " + database;
+
+        try {
+            PreparedStatement state = conn.prepareStatement(query);
+            ResultSet rs = state.executeQuery();
+            while (rs.next()) {
+                if (rs.getString("guildId").equalsIgnoreCase(guildId)) {
+                    if (rs.getString("guildRole").equalsIgnoreCase("member")) {
+                        String username = rs.getString("username");
+                        Player p = Bukkit.getPlayerExact(username);
+                        if (p != null) {
+                            sb.append(conf.getSettings().getString("messages.others.guilds.guild-info.general.online-guilders.userformat")
+                                            .replace("$username", username))
+                                    .append(conf.getSettings().getString("messages.others.guilds.guild-info.general.online-guilders.commas"));
+                        }
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            log.severe("Impossibile ottenere i gildani online.");
+            e.printStackTrace();
+        }
+        return sb.toString();
+    }
+
+    public int getOfficersCount(String guildId) {
+        int count = 0;
+        String query = "SELECT * FROM " + database;
+
+        try {
+            PreparedStatement state = conn.prepareStatement(query);
+            ResultSet rs = state.executeQuery();
+            while (rs.next()) {
+                if (rs.getString("guildId").equalsIgnoreCase(guildId)) {
+                    if (rs.getString("guildRole").equalsIgnoreCase("officer")) {
+                        count++;
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            log.severe("Impossibile ottenere la quantità di officer presenti nella gilda " + data.getGuilds().getGuildName(guildId) + "!");
+            e.printStackTrace();
+        }
+        return count;
+    }
+
+    public int getGuildersCount(String guildId) {
+        int count = 0;
+        String query = "SELECT * FROM " + database;
+
+        try {
+            PreparedStatement state = conn.prepareStatement(query);
+            ResultSet rs = state.executeQuery();
+            while (rs.next()) {
+                if (rs.getString("guildId").equalsIgnoreCase(guildId)) {
+                    if (rs.getString("guildRole").equalsIgnoreCase("member")) {
+                        count++;
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            log.severe("Impossibile ottenere la quantità di gildani presenti nella gilda " + data.getGuilds().getGuildName(guildId) + "!");
+            e.printStackTrace();
+        }
+        return count;
     }
 
     public HashMap<String, List<String>> guildsData() {

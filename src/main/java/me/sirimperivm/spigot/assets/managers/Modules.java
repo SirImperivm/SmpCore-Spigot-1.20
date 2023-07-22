@@ -24,9 +24,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 @SuppressWarnings("all")
@@ -39,6 +37,7 @@ public class Modules {
     private static HashMap<String, List<String>> guildsData;
     private static HashMap<String, String> guildsChat;
     private static HashMap<String, List<String>> guildsList;
+    private static HashMap<String, Double> guildsBalanceTop;
     private static List<String> depositCooldown;
     private static List<String> withdrawCooldown;
     private static List<String> spyChat;
@@ -52,12 +51,15 @@ public class Modules {
         invites = new HashMap<String, String>();
         guildsChat = new HashMap<String, String>();
         guildsList = new HashMap<String, List<String>>();
+        guildsBalanceTop = new HashMap<String, Double>();
         spyChat = new ArrayList<String>();
         guildMembers = new ArrayList<String>();
         depositCooldown = new ArrayList<String>();
         withdrawCooldown = new ArrayList<String>();
+        executeTop();
         refreshSettings();
         executeTasksLoop();
+        refreshTop();
     }
 
     void refreshSettings() {
@@ -69,6 +71,26 @@ public class Modules {
             guildsData = data.getGuildMembers().guildsData();
         }, 20, 5 * 20);
 
+    }
+
+    void executeTop() {
+        HashMap<String, Double> keySet = data.getGuilds().getGuildBalanceList();
+
+        LinkedHashMap<String, Double> sortedHashMap = new LinkedHashMap<>();
+        keySet.entrySet().stream()
+                .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
+                .forEachOrdered(entry -> sortedHashMap.put(entry.getKey(), entry.getValue()));
+
+        for (String key : sortedHashMap.keySet()) {
+            guildsBalanceTop.put(key, sortedHashMap.get(key));
+        }
+    }
+
+    void refreshTop() {
+        BukkitScheduler scheduler = Bukkit.getScheduler();
+        scheduler.runTaskTimer(plugin, () -> {
+            executeTop();
+        }, 20, 20 * 20);
     }
 
     public void deleteTask(int taskId) {
@@ -87,11 +109,17 @@ public class Modules {
                         p.spigot().sendMessage(component);
                     } else {
                         p.sendMessage(Colors.text(line
+                                .replace("$guildTitle", Config.getTransl("guilds", "guilds." + guildName + ".guildTitle"))
                                 .replace("$guildLeader", !data.getGuildMembers().guildLeader(guildId).equalsIgnoreCase("null") ? data.getGuildMembers().guildLeader(guildId) : "N/A")
                                 .replace("$membersCount", String.valueOf(getMembersCount(guildId)))
                                 .replace("$membersLimit", String.valueOf(getMembersLimit(guildId)))
                                 .replace("$guildLevel", String.valueOf(data.getGuilds().getGuildLevel(guildId)))
                                 .replace("$guildId", guildId)
+                                .replace("$officersOnline", data.getGuildMembers().getOnlineOfficers(guildId))
+                                .replace("$guildersOnline", data.getGuildMembers().getOnlineGuilders(guildId))
+                                .replace("$bankBalance", Strings.formatNumber(data.getGuilds().getGuildBalance(guildId)))
+                                .replace("$officersCount", String.valueOf(data.getGuildMembers().getOfficersCount(guildId)))
+                                .replace("$guildersCount", String.valueOf(data.getGuildMembers().getGuildersCount(guildId)))
                         ));
                     }
                 }
@@ -106,11 +134,17 @@ public class Modules {
                         p.spigot().sendMessage(component);
                     } else {
                         p.sendMessage(Colors.text(line
+                                .replace("$guildTitle", Config.getTransl("guilds", "guilds." + guildName + ".guildTitle"))
                                 .replace("$guildLeader", !data.getGuildMembers().guildLeader(guildId).equalsIgnoreCase("null") ? data.getGuildMembers().guildLeader(guildId) : "N/A")
                                 .replace("$membersCount", String.valueOf(getMembersCount(guildId)))
                                 .replace("$membersLimit", String.valueOf(getMembersLimit(guildId)))
                                 .replace("$guildLevel", String.valueOf(data.getGuilds().getGuildLevel(guildId)))
                                 .replace("$guildId", guildId)
+                                .replace("$officersOnline", data.getGuildMembers().getOnlineOfficers(guildId))
+                                .replace("$guildersOnline", data.getGuildMembers().getOnlineGuilders(guildId))
+                                .replace("$bankBalance", Strings.formatNumber(data.getGuilds().getGuildBalance(guildId)))
+                                .replace("$officersCount", String.valueOf(data.getGuildMembers().getOfficersCount(guildId)))
+                                .replace("$guildersCount", String.valueOf(data.getGuildMembers().getGuildersCount(guildId)))
                         ));
                     }
                 }
@@ -177,6 +211,36 @@ public class Modules {
                 e.printStackTrace();
             }
         }, 20L, 20L);
+    }
+
+    public void sendGuildTop(Player p, String type) {
+        if (type.equals("bank")) {
+            p.sendMessage(Config.getTransl("settings", "messages.others.guilds.top.bank.header"));
+            p.sendMessage(Config.getTransl("settings", "messages.others.guilds.top.bank.title"));
+            p.sendMessage(Config.getTransl("settings", "messages.others.guilds.top.bank.spacer"));
+            p.sendMessage(Config.getTransl("settings", "messages.others.guilds.top.bank.lines.header"));
+
+            int loop = 0;
+            for (String guildId : guildsBalanceTop.keySet()) {
+                String guildName = data.getGuilds().getGuildName(guildId);
+                double guildBalance = guildsBalanceTop.get(guildId);
+
+                p.sendMessage(Config.getTransl("settings", "messages.others.guilds.top.bank.lines.line")
+                        .replace("$guildName", guildName)
+                        .replace("$guildTitle", Colors.text(getGuildTitle(guildName)))
+                        .replace("$guildBalance", Strings.formatNumber(guildBalance))
+                );
+
+                if (loop == 10) {
+                    break;
+                }
+                loop++;
+            }
+
+            p.sendMessage(Config.getTransl("settings", "messages.others.guilds.top.bank.footer"));
+        } else if (type.equals("members")) {
+
+        }
     }
 
     public void sendGuildList(Player p, String type) {
@@ -748,6 +812,10 @@ public class Modules {
 
     public static HashMap<String, String> getGuildsChat() {
         return guildsChat;
+    }
+
+    public static HashMap<String, Double> getGuildsBalanceTop() {
+        return guildsBalanceTop;
     }
 
     public static List<String> getDepositCooldown() {

@@ -6,6 +6,7 @@ import me.sirimperivm.spigot.assets.managers.Db;
 import me.sirimperivm.spigot.assets.managers.Modules;
 import me.sirimperivm.spigot.assets.managers.values.Vault;
 import me.sirimperivm.spigot.assets.other.Strings;
+import me.sirimperivm.spigot.assets.utils.Colors;
 import me.sirimperivm.spigot.assets.utils.Errors;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -330,7 +331,31 @@ public class ClickListener implements Listener {
                                 p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.upgrades.requirements.level.too-high"));
                             } else {
                                 if (guildBalance >= levelCost) {
+                                    data.getGuilds().updateGuildBalance(guildId, String.valueOf(data.getGuilds().getGuildBalance(guildId) - levelCost));
+                                    mods.sendGuildersBroadcast(guildId, Config.getTransl("settings", "messages.info.guild.money.taken")
+                                            .replace("$cost", Strings.formatNumber(levelCost))
+                                    , "null");
+                                    for (String result : conf.getGuis().getConfigurationSection(itemsPath + ".settings.results").getKeys(false)) {
+                                        String resultsPath = "guis.upgradesGui.items." + item + ".settings.results." + result;
+                                        String resultType = conf.getGuis().getString(resultsPath + ".type");
+                                        String guildName = data.getGuilds().getGuildName(guildId);
 
+                                        if (resultType.equalsIgnoreCase("change_member_limit")) {
+                                            int newLimit = conf.getGuis().getInt(resultsPath + ".quantity");
+                                            conf.getGuilds().set("guilds." + guildName + ".membersLimit", newLimit);
+                                            conf.save(conf.getGuilds(), conf.getGuildsFile());
+                                        }
+                                        if (resultType.equalsIgnoreCase("change_level")) {
+                                            int newLevel = conf.getGuis().getInt(resultsPath + ".value");
+                                            data.getGuilds().updateGuildLevel(guildId, newLevel);
+                                        }
+                                        if (resultType.equalsIgnoreCase("send_guild_message")) {
+                                            List<String> messages = conf.getGuis().getStringList(resultsPath + ".values");
+                                            for (String message : messages) {
+                                                mods.sendGuildersBroadcast(guildId, Colors.text(message), "null");
+                                            }
+                                        }
+                                    }
                                 } else {
                                     p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.upgrades.requirements.money.not-enough")
                                             .replace("$cost", Strings.formatNumber(levelCost)));

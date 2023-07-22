@@ -246,7 +246,6 @@ guis:
           - 51
           - 52
           - 53
-          - 54
         action: NOTHING
       filler_bianco:
         material: WHITE_STAINED_GLASS_PANE
@@ -300,13 +299,20 @@ guis:
             1:
               type: money
               value: 115000.0
+            2:
+              type: level
+              value: 1
           results:
             1:
-              type: change_member_quantity
+              type: change_member_limit
               quantity: 8
             2:
               type: change_level
               value: 2
+            3:
+              type: send_guild_message
+              values:
+                - "&aE' stato acquistato il livello 2 negli upgrades della gilda."
       level3:
         material: IRON_BARS
         displayName: "&9Acquista il livello 3"
@@ -337,11 +343,15 @@ guis:
               value: 2
           results:
             1:
-              type: change_member_quantity
+              type: change_member_limit
               quantity: 12
             2:
               type: change_level
               value: 3
+            3:
+              type: send_guild_message
+              values:
+                - "&aE' stato acquistato il livello 3 negli upgrades della gilda."
       level4:
         material: IRON_BARS
         displayName: "&9Acquista il livello 4"
@@ -372,11 +382,15 @@ guis:
               value: 3
           results:
             1:
-              type: change_member_quantity
+              type: change_member_limit
               quantity: 15
             2:
               type: change_level
               value: 4
+            3:
+              type: send_guild_message
+              values:
+                - "&aE' stato acquistato il livello 4 negli upgrades della gilda."
       level5:
         material: IRON_BARS
         displayName: "&9Acquista il livello 5"
@@ -407,11 +421,15 @@ guis:
               value: 4
           results:
             1:
-              type: change_member_quantity
+              type: change_member_limit
               quantity: 20
             2:
               type: change_level
               value: 5
+            3:
+              type: send_guild_message
+              values:
+                - "&aE' stato acquistato il livello 5 negli upgrades della gilda."
       level6:
         material: IRON_BARS
         displayName: "&9Acquista il livello 6"
@@ -442,11 +460,15 @@ guis:
               value: 5
           results:
             1:
-              type: change_member_quantity
+              type: change_member_limit
               quantity: 25
             2:
               type: change_level
               value: 6
+            3:
+              type: send_guild_message
+              values:
+                - "&aE' stato acquistato il livello 6 negli upgrades della gilda."
       level7:
         material: IRON_BARS
         displayName: "&9Acquista il livello 7"
@@ -477,11 +499,15 @@ guis:
               value: 6
           results:
             1:
-              type: change_member_quantity
+              type: change_member_limit
               quantity: 30
             2:
               type: change_level
               value: 7
+            3:
+              type: send_guild_message
+              values:
+                - "&aE' stato acquistato il livello 7 negli upgrades della gilda."
       level8:
         material: IRON_BARS
         displayName: "&9Acquista il livello 8"
@@ -512,11 +538,15 @@ guis:
               value: 7
           results:
             1:
-              type: change_member_quantity
+              type: change_member_limit
               quantity: 35
             2:
               type: change_level
               value: 8
+            3:
+              type: send_guild_message
+              values:
+                - "&aE' stato acquistato il livello 8 negli upgrades della gilda."
       level9:
         material: IRON_BARS
         displayName: "&9Acquista il livello 9"
@@ -547,11 +577,15 @@ guis:
               value: 8
           results:
             1:
-              type: change_member_quantity
+              type: change_member_limit
               quantity: 40
             2:
               type: change_level
               value: 9
+            3:
+              type: send_guild_message
+              values:
+                - "&aE' stato acquistato il livello 9 negli upgrades della gilda."
       level10:
         material: IRON_BARS
         displayName: "&9Acquista il livello 10"
@@ -583,11 +617,15 @@ guis:
               value: 9
           results:
             1:
-              type: change_member_quantity
+              type: change_member_limit
               quantity: 50
             2:
               type: change_level
               value: 10
+            3:
+              type: send_guild_message
+              values:
+                - "&aE' stato acquistato il livello 10 negli upgrades della gilda."
       level11:
         material: IRON_BARS
         displayName: "&9Acquista il livello VIP"
@@ -619,8 +657,12 @@ guis:
               value: 10
           results:
             1:
-              type: change_member_quantity
+              type: change_member_limit
               quantity: -1
             2:
               type: change_level
               value: 11
+            3:
+              type: send_guild_message
+              values:
+                - "&aE' stato acquistato il livello VIP negli upgrades della gilda."

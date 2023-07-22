@@ -40,5 +40,7 @@ helps:
       - "&a/guilds(g) newleadership &e<guildMember> &7- &fIl leader della gilda viene degradato ad ufficiale, e l'ufficiale scelto diventerà il nuovo leader."
       - "&a/guilds(g) info &e<[guildName]> &7- &fMostra info relative ad una gilda."
       - "&a/guilds(g) list &7- &fMostra tutte le gilde e il loro stato di acquisto."
+      - "&a/guilds(g) top-bank &7- &fMostra le prime 10 gilde per filtro bilanci in ordine decrescente."
+      - "&a/guilds(g) top-members &7- &fMostra le prime 10 gilde per filtro membri in ordine decrescente."
       - ""
       - "&8&m                              "
