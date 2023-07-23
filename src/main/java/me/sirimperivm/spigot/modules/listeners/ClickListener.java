@@ -113,8 +113,7 @@ public class ClickListener implements Listener {
             return;
         }
 
-        if (title.equalsIgnoreCase(Config.getTransl("guis", "guis.bankGui.title")
-                .replace("${guildTitle}", Config.getTransl("guilds", "guilds." + data.getGuilds().getGuildName(mods.getGuildsData().get(p.getName()).get(0)) + ".guildTitle")))) {
+        if (title.equalsIgnoreCase(Config.getTransl("guis", "guis.bankGui.title"))) {
             e.setCancelled(true);
             e.setResult(Event.Result.DENY);
 
@@ -296,8 +295,7 @@ public class ClickListener implements Listener {
             return;
         }
 
-        if (title.equalsIgnoreCase(Config.getTransl("guis", "guis.upgradesGui.title")
-                .replace("${guildTitle}", Config.getTransl("guilds", "guilds." + data.getGuilds().getGuildName(mods.getGuildsData().get(p.getName()).get(0)) + ".guildTitle")))) {
+        if (title.equalsIgnoreCase(Config.getTransl("guis", "guis.upgradesGui.title"))) {
             e.setCancelled(true);
             e.setResult(Event.Result.DENY);
 

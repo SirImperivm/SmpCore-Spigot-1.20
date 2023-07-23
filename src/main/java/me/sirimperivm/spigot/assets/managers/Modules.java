@@ -103,7 +103,7 @@ public class Modules {
     void refreshMembersTop() {
         BukkitScheduler scheduler = Bukkit.getScheduler();
         scheduler.runTaskTimer(plugin, () -> {
-            String query = "SELECT * FROM " + data.getGuildMembers().database;
+            String query = "SELECT * FROM " + data.getGuilds().database;
             Map<String, Integer> map = new HashMap<>();
             topMembersList = new ArrayList<String>();
 
@@ -111,7 +111,9 @@ public class Modules {
                 PreparedStatement state = data.conn.prepareStatement(query);
                 ResultSet rs = state.executeQuery();
                 while (rs.next()) {
-                    map.put(data.getGuilds().getGuildName(rs.getString("guildId")), getMembersCount(rs.getString("guildId")));
+                    String guildName = rs.getString("guildName");
+                    int membersCount = getMembersCount(rs.getString("guildId"));
+                    map.put(guildName, membersCount);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -272,10 +274,10 @@ public class Modules {
                 Double value = Double.parseDouble(splitter[1]);
 
                 p.sendMessage(Config.getTransl("settings", "messages.others.guilds.top.bank.lines.line")
-                        .replace("$guildTitle", getGuildTitle(guildName))
+                        .replace("$guildTitle", Colors.text(getGuildTitle(guildName)))
                         .replace("$guildBalance", Strings.formatNumber(value))
                 );
-                if (loop == 7) {
+                if (loop == 8) {
                     break;
                 }
                 loop++;
@@ -294,10 +296,10 @@ public class Modules {
                 String guildName = splitter[0];
 
                 p.sendMessage(Config.getTransl("settings", "messages.others.guilds.top.members.lines.line")
-                        .replace("$guildTitle", getGuildTitle(guildName))
+                        .replace("$guildTitle", Colors.text(getGuildTitle(guildName)))
                         .replace("$membersCount", splitter[1])
                 );
-                if (loop == 7) {
+                if (loop == 8) {
                     break;
                 }
                 loop++;

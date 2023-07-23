@@ -56,7 +56,7 @@ public class GuildsCommand implements CommandExecutor {
                                 p.openInventory(gm.shopGui());
                             }
                         }
-                    } else if (a[0].equals("top-bank")) {
+                    } else if (a[0].equalsIgnoreCase("top-bank")) {
                         if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.user-commands.guilds.top-bank"))) {
                             return true;
                         } else {
@@ -65,6 +65,17 @@ public class GuildsCommand implements CommandExecutor {
                             } else {
                                 Player p = (Player) s;
                                 mods.sendGuildTop(p, "bank");
+                            }
+                        }
+                    } else if (a[0].equalsIgnoreCase("top-members")) {
+                        if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.user-commands.guilds.top-members"))) {
+                            return true;
+                        } else {
+                            if (Errors.noConsole(s)) {
+                                return true;
+                            } else {
+                                Player p = (Player) s;
+                                mods.sendGuildTop(p, "members");
                             }
                         }
                     } else if (a[0].equalsIgnoreCase("accept")) {

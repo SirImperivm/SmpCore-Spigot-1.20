@@ -264,7 +264,7 @@ public class PapiExpansions extends PlaceholderExpansion {
             List<String> list = mods.getTopMembersList();
             String[] splitter = list.get(topPosition).split("£");
             String guildId = splitter[0];
-            double value = Double.parseDouble(splitter[1]);
+            int value = Integer.parseInt(splitter[1]);
 
             toReturn = String.valueOf(value);
         }

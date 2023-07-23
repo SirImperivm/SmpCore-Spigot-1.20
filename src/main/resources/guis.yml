@@ -95,7 +95,7 @@ guis:
           guildName: "null" # Qui si dovrà inserire il nome della gilda di riferimento.
           price: 1000.0
   bankGui:
-    title: "&8Banca Gilda ${guildTitle}"
+    title: "&8Banca Gilda"
     rows: 5
     items:
       filler_nero:
@@ -208,7 +208,7 @@ guis:
           - 24
         action: DEPOSIT
   upgradesGui:
-    title: "<GRADIENT:1B5583>Upgrades Gilda ${guildTitle}</GRADIENT:2A52BE>"
+    title: "<GRADIENT:1B5583>Upgrades Gilda</GRADIENT:2A52BE>"
     rows: 6
     items:
       filler_nero:

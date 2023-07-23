@@ -304,6 +304,7 @@ permissions:
       list: smpc.usercommands.guilds.list
       info: smpc.usercommands.guilds.info
       top-bank: smpc.usercommands.guilds.top-bank
+      top-members: smpc.usercommands.guilds.top-members
       newleadership: smpc.usercommands.guilds.newleadership
       upgrades: smpc.usercommands.guilds.upgrades
       officer:
