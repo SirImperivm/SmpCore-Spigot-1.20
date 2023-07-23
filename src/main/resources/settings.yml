@@ -13,14 +13,6 @@ settings:
       defaultBankLimit: -1.0
     costs:
       per-invite: 15000.0
-  lobby:
-    location:
-      world: "null"
-      posX: 0.0
-      posY: 0.0
-      posZ: 0.0
-      rotYaw: 0.00
-      rotPitch: 0.00
   strings:
     valueFormatting:
       - '1000.0-k'

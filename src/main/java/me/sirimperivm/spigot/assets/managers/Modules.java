@@ -492,7 +492,7 @@ public class Modules {
     }
 
     public void setLobby(Player p) {
-        String settingsPath = "settings.lobby.location";
+        String settingsPath = "lobby";
 
         String worldName = p.getLocation().getWorld().getName();
         double posX = p.getLocation().getX();
@@ -501,13 +501,13 @@ public class Modules {
         float rotYaw = p.getLocation().getYaw();
         float rotPitch = p.getLocation().getPitch();
 
-        conf.getSettings().set(settingsPath + ".world", worldName);
-        conf.getSettings().set(settingsPath + ".posX", posX);
-        conf.getSettings().set(settingsPath + ".posY", posY);
-        conf.getSettings().set(settingsPath + ".posZ", posZ);
-        conf.getSettings().set(settingsPath + ".rotYaw", rotYaw);
-        conf.getSettings().set(settingsPath + ".rotPitch", rotPitch);
-        conf.save(conf.getSettings(), conf.getSettingsFile());
+        conf.getLobby().set(settingsPath + ".world", worldName);
+        conf.getLobby().set(settingsPath + ".posX", posX);
+        conf.getLobby().set(settingsPath + ".posY", posY);
+        conf.getLobby().set(settingsPath + ".posZ", posZ);
+        conf.getLobby().set(settingsPath + ".rotYaw", rotYaw);
+        conf.getLobby().set(settingsPath + ".rotPitch", rotPitch);
+        conf.save(conf.getLobby(), conf.getLobbyFile());
         p.sendMessage(Config.getTransl("settings", "messages.success.lobby.located"));
     }
 
@@ -808,12 +808,12 @@ public class Modules {
     }
 
     public void sendPlayerToLobby(Player p) {
-        World locWorld = Bukkit.getWorld(conf.getSettings().getString("settings.lobby.location.world"));
-        double locX = conf.getSettings().getDouble("settings.lobby.location.posX");
-        double locY = conf.getSettings().getDouble("settings.lobby.location.posY");
-        double locZ = conf.getSettings().getDouble("settings.lobby.location.posZ");
-        float rotYaw = conf.getSettings().getInt("settings.lobby.locations.rotYaw");
-        float rotPitch = conf.getSettings().getInt("settings.lobby.locations.rotPitch");
+        World locWorld = Bukkit.getWorld(conf.getLobby().getString("lobby.world"));
+        double locX = conf.getLobby().getDouble("lobby.posX");
+        double locY = conf.getLobby().getDouble("lobby.posY");
+        double locZ = conf.getLobby().getDouble("lobby.posZ");
+        float rotYaw = conf.getLobby().getInt("lobby.rotYaw");
+        float rotPitch = conf.getLobby().getInt("lobby.rotPitch");
 
         Location spawn = new Location(locWorld, locX, locY, locZ, rotYaw, rotPitch);
         p.teleport(spawn);

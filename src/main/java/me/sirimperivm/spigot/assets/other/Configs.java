@@ -10,7 +10,8 @@ public enum Configs {
     settings(Main.getConf().getSettings(), Main.getConf().getSettingsFile()),
     guilds(Main.getConf().getGuilds(), Main.getConf().getGuildsFile()),
     helps(Main.getConf().getHelps(), Main.getConf().getHelpsFile()),
-    guis(Main.getConf().getGuis(), Main.getConf().getGuisFile());
+    guis(Main.getConf().getGuis(), Main.getConf().getGuisFile()),
+    lobby(Main.getConf().getLobby(), Main.getConf().getLobbyFile());
 
     private FileConfiguration c;
     private File f;

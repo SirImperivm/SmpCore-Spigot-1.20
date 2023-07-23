@@ -18,8 +18,8 @@ public class Config {
     private static Main plugin = Main.getPlugin();
     private static Logger log = Logger.getLogger("SMPCore");
     private File folder = plugin.getDataFolder();
-    private File settingsFile, guildsFile, helpsFile, guisFile;
-    private FileConfiguration settings, guilds, helps, guis;
+    private File settingsFile, guildsFile, helpsFile, guisFile, lobbyFile;
+    private FileConfiguration settings, guilds, helps, guis, lobby;
 
     public Config() {
         settingsFile = new File(folder, "settings.yml");
@@ -30,6 +30,8 @@ public class Config {
         helps = new YamlConfiguration();
         guisFile = new File(folder, "guis.yml");
         guis = new YamlConfiguration();
+        lobbyFile = new File(folder, "lobby.yml");
+        lobby = new YamlConfiguration();
 
         if (!folder.exists()) {
             folder.mkdir();
@@ -49,6 +51,10 @@ public class Config {
 
         if (!guisFile.exists()) {
             create(guis, guisFile);
+        }
+
+        if (!lobbyFile.exists()) {
+            create(lobby, lobbyFile);
         }
     }
 
@@ -88,6 +94,7 @@ public class Config {
         save(guilds, guildsFile);
         save(helps, helpsFile);
         save(guis, guisFile);
+        save(lobby, lobbyFile);
     }
 
     public void loadAll() {
@@ -95,6 +102,7 @@ public class Config {
         load(guilds, guildsFile);
         load(helps, helpsFile);
         load(guis, guisFile);
+        load(lobby, lobbyFile);
     }
 
     public File getSettingsFile() {
@@ -113,6 +121,10 @@ public class Config {
         return guisFile;
     }
 
+    public File getLobbyFile() {
+        return lobbyFile;
+    }
+
     public FileConfiguration getSettings() {
         return settings;
     }
@@ -127,6 +139,10 @@ public class Config {
 
     public FileConfiguration getGuis() {
         return guis;
+    }
+
+    public FileConfiguration getLobby() {
+        return lobby;
     }
 
     public static String getTransl(String type, String key) {
@@ -145,6 +161,12 @@ public class Config {
                 );
             case "guis":
                 return Colors.text(Main.getConf().getGuis().getString(key)
+                        .replace("%sp", Main.getSuccessPrefix())
+                        .replace("%ip", Main.getInfoPrefix())
+                        .replace("%fp", Main.getFailPrefix())
+                );
+            case "lobby":
+                return Colors.text(Main.getConf().getLobby().getString(key)
                         .replace("%sp", Main.getSuccessPrefix())
                         .replace("%ip", Main.getInfoPrefix())
                         .replace("%fp", Main.getFailPrefix())
