@@ -843,6 +843,50 @@ public class Modules {
         }
     }
 
+    public void addGuildBalance(Player p, String guildId, double newBalance) {
+        double bankBalance = data.getGuilds().getGuildBalance(guildId);
+        double newValue = bankBalance + newBalance;
+        data.getGuilds().updateGuildBalance(guildId, String.valueOf(newValue));
+        p.sendMessage(Config.getTransl("settings", "messages.info.guild.money.admin.added-admin")
+                .replace("$cost", Strings.formatNumber(newValue))
+                .replace("$guildName", data.getGuilds().getGuildName(guildId))
+                .replace("$guildBalance", Strings.formatNumber(bankBalance)
+        ));
+        String playerName = p.getName();
+        sendGuildersBroadcast(guildId, Config.getTransl("settings", "messages.info.guild.money.admin.added.users")
+                        .replace("$cost", Strings.formatNumber(newValue))
+                        .replace("$guildBalance", Strings.formatNumber(bankBalance))
+                , playerName);
+    }
+
+    public void takeGuildBalance(Player p, String guildId, double newBalance) {
+        double bankBalance = data.getGuilds().getGuildBalance(guildId);
+        double newValue = bankBalance - newBalance;
+        data.getGuilds().updateGuildBalance(guildId, String.valueOf(newValue));
+        p.sendMessage(Config.getTransl("settings", "messages.info.guild.money.admin.taken-admin")
+                .replace("$cost", Strings.formatNumber(newValue))
+                .replace("$guildName", data.getGuilds().getGuildName(guildId))
+                .replace("$guildBalance", Strings.formatNumber(bankBalance)
+                ));
+        String playerName = p.getName();
+        sendGuildersBroadcast(guildId, Config.getTransl("settings", "messages.info.guild.money.admin.taken.users")
+                        .replace("$cost", Strings.formatNumber(newValue))
+                        .replace("$guildBalance", Strings.formatNumber(bankBalance))
+                , playerName);
+    }
+
+    public void setGuildBalance(Player p, String guildId, double newBalance) {
+        data.getGuilds().updateGuildBalance(guildId, String.valueOf(newBalance));
+        p.sendMessage(Config.getTransl("settings", "messages.info.guild.money.admin.setted-admin")
+                .replace("$guildName", data.getGuilds().getGuildName(guildId))
+                .replace("$guildBalance", Strings.formatNumber(data.getGuilds().getGuildBalance(guildId))
+                ));
+        String playerName = p.getName();
+        sendGuildersBroadcast(guildId, Config.getTransl("settings", "messages.info.guild.money.admin.setted.users")
+                        .replace("$guildBalance", Strings.formatNumber(data.getGuilds().getGuildBalance(guildId)))
+                , playerName);
+    }
+
     public boolean isLobbyLocated() {
         return !conf.getSettings().getString("settings.lobby.location.world").equalsIgnoreCase("null");
     }

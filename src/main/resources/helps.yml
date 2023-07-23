@@ -19,6 +19,9 @@ helps:
       - "&a/guildsadmin(ga) list &7- &fMostra tutte le gilde create e il loro id."
       - "&a/guildsadmin(ga) changespawn &e<guildName> &7- &fSposta lo spawn attuale di una gilda."
       - "&a/guildsadmin(ga) info &e<guildName> &7- &fMostra info relative ad una gilda."
+      - "&a/guildsadmin(ga) money take &e<guildName> <value> &7- &fRimuove dei soldi dalla banca di una gilda."
+      - "&a/guildsadmin(ga) money give &e<guildName> <value> &7- &fAggiunge dei soldi alla banca di una gilda."
+      - "&a/guildsadmin(ga) money set &e<guildName> <value> &7- &fImposta un valore preciso di soldi nella banca di una gilda."
       - ""
       - "&8&m                              "
   user-commands:

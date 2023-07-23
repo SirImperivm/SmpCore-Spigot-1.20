@@ -93,6 +93,13 @@ messages:
       money:
         taken: "%ip- &e€ $cost &7dalla banca della gilda."
         gave: "%ip+ &e€ $cost &7alla banca della gilda."
+        admin:
+          added-users: "%ipSono stati aggiunti &e€ $cost&7 dalla banca della gilda da un amministratore. Nuovo valore &e€ $guildBalance&7."
+          added-admin: "%ipHai aggiunto &e€ $cost&7 dalla banca della gilda &e$guildName&7. Nuovo valore &e€ $guildBalance&7."
+          taken-users: "%ipSono stati rimossi &e€ $cost&7 dalla banca della gilda da un amministratore. Nuovo valore &e€ $guildBalance&7."
+          taken-admin: "%ipHai rimosso &e€ $cost&7 dalla banca della gilda &e$guildName&7. Nuovo valore &e€ $guildBalance&7."
+          setted-users: "%ipLa banca della gilda è stata modificata da un amministratore. Nuovo valore &e€ $guildBalance&7."
+          setted-admin: "%ipHai modificato la banca della gilda &e$guildName&7. Nuovo valore &e€ $guildBalance&7."
       bank:
         money:
           taken: "%ipL'utente &e$username&7 ha ritirato &e€ $value&7."
@@ -151,6 +158,8 @@ messages:
           money:
             not-enough: "%fpPer ottenere questo livello la gilda necessita di &c€ $cost&7."
       already-bought: "%fpLa gilda è già stata acquistata."
+      not-exist: "%fpLa gilda non esiste."
+      chars-not-allowed: "%fpDevi inserire un numero."
     members:
       alreadyHaveGuild: "%fpHai già una gilda."
       target:
@@ -290,6 +299,11 @@ permissions:
       list: smpc.admincommands.guilds.list
       info: smpc.admincommands.guilds.info
       changespawn: smpc.admincommands.guilds.changespawn
+      money:
+        use: smpc.admincommands.guilds.money.use
+        take: smpc.admincommands.guilds.money.take
+        give: smpc.admincommands.guilds.money.give
+        set: smpc.admincommands.guilds.money.set
   user-commands:
     guilds:
       main: smpc.usercommands.guilds.main

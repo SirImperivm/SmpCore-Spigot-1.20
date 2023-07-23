@@ -302,6 +302,122 @@ public class AdminGuildsCommand implements CommandExecutor {
                                     p.sendMessage(Config.getTransl("settings", "messages.errors.lobby.not-located"));
                                 }
                             }
+                        } else if (a[0].equalsIgnoreCase("money")) {
+                            if (Errors.noPermCommand(p, conf.getSettings().getString("permissions.admin-commands.guilds.money.use"))) {
+                                return true;
+                            } else {
+                                if (a[1].equalsIgnoreCase("take")) {
+                                    if (Errors.noPermCommand(p, conf.getSettings().getString("permissions.admin-commands.guilds.money.take"))) {
+                                        return true;
+                                    } else {
+                                        List<String> generatedGuilds = mods.getGeneratedGuilds();
+                                        boolean guildExist = false;
+                                        for (String generated : generatedGuilds) {
+                                            String[] partGenerated = generated.split(";");
+                                            String guildName = partGenerated[1];
+                                            if (guildName.equals(a[2])) {
+                                                guildExist = true;
+                                                break;
+                                            }
+                                        }
+
+                                        if (guildExist) {
+                                            String amount = a[3];
+                                            boolean containsChars = false;
+                                            for (char ch : amount.toCharArray()) {
+                                                if (!(ch >= '0' && ch <= '9')) {
+                                                    containsChars = true;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (!containsChars) {
+                                                double value = Double.parseDouble(amount);
+                                                String guildId = data.getGuilds().getGuildId(a[2]);
+                                                mods.takeGuildBalance(p, guildId, value);
+                                            } else {
+                                                p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.chars-not-allowed"));
+                                            }
+                                        } else {
+                                            p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.not-exist"));
+                                        }
+                                    }
+                                } else if (a[1].equalsIgnoreCase("give")) {
+                                    if (Errors.noPermCommand(p, conf.getSettings().getString("permissions.admin-commands.guilds.money.give"))) {
+                                        return true;
+                                    } else {
+                                        List<String> generatedGuilds = mods.getGeneratedGuilds();
+                                        boolean guildExist = false;
+                                        for (String generated : generatedGuilds) {
+                                            String[] partGenerated = generated.split(";");
+                                            String guildName = partGenerated[1];
+                                            if (guildName.equals(a[2])) {
+                                                guildExist = true;
+                                                break;
+                                            }
+                                        }
+
+                                        if (guildExist) {
+                                            String amount = a[3];
+                                            boolean containsChars = false;
+                                            for (char ch : amount.toCharArray()) {
+                                                if (!(ch >= '0' && ch <= '9')) {
+                                                    containsChars = true;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (!containsChars) {
+                                                double value = Double.parseDouble(amount);
+                                                String guildId = data.getGuilds().getGuildId(a[2]);
+                                                mods.addGuildBalance(p, guildId, value);
+                                            } else {
+                                                p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.chars-not-allowed"));
+                                            }
+                                        } else {
+                                            p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.not-exist"));
+                                        }
+                                    }
+                                } else if (a[1].equalsIgnoreCase("set")) {
+                                    if (Errors.noPermCommand(p, conf.getSettings().getString("permissions.admin-commands.guilds.money.set"))) {
+                                        return true;
+                                    } else {
+                                        List<String> generatedGuilds = mods.getGeneratedGuilds();
+                                        boolean guildExist = false;
+                                        for (String generated : generatedGuilds) {
+                                            String[] partGenerated = generated.split(";");
+                                            String guildName = partGenerated[1];
+                                            if (guildName.equals(a[2])) {
+                                                guildExist = true;
+                                                break;
+                                            }
+                                        }
+
+                                        if (guildExist) {
+                                            String amount = a[3];
+                                            boolean containsChars = false;
+                                            for (char ch : amount.toCharArray()) {
+                                                if (!(ch >= '0' && ch <= '9')) {
+                                                    containsChars = true;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (!containsChars) {
+                                                double value = Double.parseDouble(amount);
+                                                String guildId = data.getGuilds().getGuildId(a[2]);
+                                                mods.setGuildBalance(p, guildId, value);
+                                            } else {
+                                                p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.chars-not-allowed"));
+                                            }
+                                        } else {
+                                            p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.not-exist"));
+                                        }
+                                    }
+                                } else {
+                                    getUsage(p);
+                                }
+                            }
                         } else {
                             getUsage(p);
                         }
