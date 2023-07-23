@@ -11,7 +11,6 @@ public enum Configs {
     guilds(Main.getConf().getGuilds(), Main.getConf().getGuildsFile()),
     helps(Main.getConf().getHelps(), Main.getConf().getHelpsFile()),
     guis(Main.getConf().getGuis(), Main.getConf().getGuisFile()),
-    lobby(Main.getConf().getLobby(), Main.getConf().getLobbyFile()),
     zones(Main.getConf().getZones(), Main.getConf().getZonesFile());
 
     private FileConfiguration c;

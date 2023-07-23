@@ -492,7 +492,7 @@ public class Modules {
     }
 
     public void setLobby(Player p) {
-        String settingsPath = "lobby";
+        String settingsPath = "zones.lobby";
 
         String worldName = p.getLocation().getWorld().getName();
         double posX = p.getLocation().getX();
@@ -501,13 +501,13 @@ public class Modules {
         float rotYaw = p.getLocation().getYaw();
         float rotPitch = p.getLocation().getPitch();
 
-        conf.getLobby().set(settingsPath + ".world", worldName);
-        conf.getLobby().set(settingsPath + ".posX", posX);
-        conf.getLobby().set(settingsPath + ".posY", posY);
-        conf.getLobby().set(settingsPath + ".posZ", posZ);
-        conf.getLobby().set(settingsPath + ".rotYaw", rotYaw);
-        conf.getLobby().set(settingsPath + ".rotPitch", rotPitch);
-        conf.save(conf.getLobby(), conf.getLobbyFile());
+        conf.getZones().set(settingsPath + ".world", worldName);
+        conf.getZones().set(settingsPath + ".posX", posX);
+        conf.getZones().set(settingsPath + ".posY", posY);
+        conf.getZones().set(settingsPath + ".posZ", posZ);
+        conf.getZones().set(settingsPath + ".rotYaw", rotYaw);
+        conf.getZones().set(settingsPath + ".rotPitch", rotPitch);
+        conf.save(conf.getZones(), conf.getZonesFile());
         p.sendMessage(Config.getTransl("settings", "messages.success.lobby.located"));
     }
 
@@ -808,12 +808,12 @@ public class Modules {
     }
 
     public void sendPlayerToLobby(Player p) {
-        World locWorld = Bukkit.getWorld(conf.getLobby().getString("lobby.world"));
-        double locX = conf.getLobby().getDouble("lobby.posX");
-        double locY = conf.getLobby().getDouble("lobby.posY");
-        double locZ = conf.getLobby().getDouble("lobby.posZ");
-        float rotYaw = conf.getLobby().getInt("lobby.rotYaw");
-        float rotPitch = conf.getLobby().getInt("lobby.rotPitch");
+        World locWorld = Bukkit.getWorld(conf.getZones().getString("zones.lobby.world"));
+        double locX = conf.getZones().getDouble("zones.lobby.posX");
+        double locY = conf.getZones().getDouble("zones.lobby.posY");
+        double locZ = conf.getZones().getDouble("zones.lobby.posZ");
+        float rotYaw = conf.getZones().getInt("zones.lobby.rotYaw");
+        float rotPitch = conf.getZones().getInt("zones.lobby.rotPitch");
 
         Location spawn = new Location(locWorld, locX, locY, locZ, rotYaw, rotPitch);
         p.teleport(spawn);
@@ -890,7 +890,7 @@ public class Modules {
     }
 
     public boolean isLobbyLocated() {
-        return !conf.getSettings().getString("settings.lobby.location.world").equalsIgnoreCase("null");
+        return !conf.getZones().getString("zones.lobby.world").equalsIgnoreCase("null");
     }
 
     public double getUserBalance(Player p) {
