@@ -3,6 +3,7 @@ package me.sirimperivm.spigot.assets.managers;
 import me.sirimperivm.spigot.Main;
 import me.sirimperivm.spigot.assets.managers.databases.GuildMembers;
 import me.sirimperivm.spigot.assets.managers.databases.Guilds;
+import me.sirimperivm.spigot.assets.managers.databases.Lives;
 import me.sirimperivm.spigot.assets.managers.databases.Tasks;
 
 import java.sql.Connection;
@@ -20,6 +21,7 @@ public class Db {
     private static Guilds guilds;
     private static GuildMembers guildMembers;
     private static Tasks tasks;
+    private static Lives lives;
     public static Connection conn;
     public static String dbname = conf.getSettings().getString("settings.database.dbname");
     public static String tablePrefix = conf.getSettings().getString("settings.database.tablePrefix");
@@ -81,9 +83,11 @@ public class Db {
         guilds = new Guilds();
         guildMembers = new GuildMembers();
         tasks = new Tasks();
+        lives = new Lives();
         guilds.createTable();
         guildMembers.createTable();
         tasks.createTable();
+        lives.createTable();
     }
 
     public static Guilds getGuilds() {
@@ -96,5 +100,9 @@ public class Db {
 
     public static Tasks getTasks() {
         return tasks;
+    }
+
+    public static Lives getLives() {
+        return lives;
     }
 }
