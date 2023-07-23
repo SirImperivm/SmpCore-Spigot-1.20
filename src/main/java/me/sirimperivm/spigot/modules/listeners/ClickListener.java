@@ -83,6 +83,10 @@ public class ClickListener implements Listener {
                                         }
 
                                         if (!alreadyExists) {
+                                            if (data.getGuilds().boughtStatus("guildId", guildId)) {
+                                                p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.already-bought"));
+                                                return;
+                                            }
                                             mods.takeMoney(p, price);
                                             p.sendMessage(Config.getTransl("settings", "messages.info.money.withdrawn")
                                                     .replace("$value", String.valueOf(price)));
@@ -92,7 +96,7 @@ public class ClickListener implements Listener {
                                         }
                                     } else {
                                         p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.money.not-enough")
-                                                .replace("$price", String.valueOf(price))
+                                                .replace("$price", Strings.formatNumber(price))
                                                 .replace("$guildTitle", guildTitle));
                                     }
                                 } else {
@@ -108,10 +112,9 @@ public class ClickListener implements Listener {
             }
             return;
         }
-        String guildTitle = Config.getTransl("guilds", "guilds." + data.getGuilds().getGuildName(mods.getGuildsData().get(p.getName()).get(0)) + ".guildTitle");
 
         if (title.equalsIgnoreCase(Config.getTransl("guis", "guis.bankGui.title")
-                .replace("${guildTitle}", guildTitle))) {
+                .replace("${guildTitle}", Config.getTransl("guilds", "guilds." + data.getGuilds().getGuildName(mods.getGuildsData().get(p.getName()).get(0)) + ".guildTitle")))) {
             e.setCancelled(true);
             e.setResult(Event.Result.DENY);
 
@@ -198,6 +201,10 @@ public class ClickListener implements Listener {
                                     } else if (cType == ClickType.SHIFT_LEFT) {
                                         double toDeposit = Vault.getEcon().getBalance(p);
                                         if (depositLimit == -1.0 || (toDeposit + bankBalance) <= depositLimit) {
+                                            if (toDeposit == 0) {
+                                                p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.bank.deposit.not-enough-money"));
+                                                return;
+                                            }
                                             Vault.getEcon().withdrawPlayer(p, toDeposit);
                                             data.getGuilds().updateGuildBalance(guildId, String.valueOf(toDeposit + bankBalance));
                                             p.sendMessage(Config.getTransl("settings", "messages.info.money.withdrawn")
@@ -266,6 +273,10 @@ public class ClickListener implements Listener {
                                         }
                                     } else if (cType == ClickType.SHIFT_LEFT) {
                                         double toWithdraw = data.getGuilds().getGuildBalance(guildId);
+                                        if (toWithdraw == 0) {
+                                            p.sendMessage(Config.getTransl("settings", "messages.errors.guilds.bank.withdraw.bank-not-enough"));
+                                            return;
+                                        }
                                         Vault.getEcon().depositPlayer(p, toWithdraw);
                                         data.getGuilds().updateGuildBalance(guildId, String.valueOf(bankBalance - toWithdraw));
                                         p.sendMessage(Config.getTransl("settings", "messages.info.money.deposit")
@@ -286,7 +297,7 @@ public class ClickListener implements Listener {
         }
 
         if (title.equalsIgnoreCase(Config.getTransl("guis", "guis.upgradesGui.title")
-                .replace("${guildTitle}", guildTitle))) {
+                .replace("${guildTitle}", Config.getTransl("guilds", "guilds." + data.getGuilds().getGuildName(mods.getGuildsData().get(p.getName()).get(0)) + ".guildTitle")))) {
             e.setCancelled(true);
             e.setResult(Event.Result.DENY);
 

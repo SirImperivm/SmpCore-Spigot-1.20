@@ -150,6 +150,7 @@ messages:
             too-high: "%fpLa gilda ha un livello superiore a quello richiesto."
           money:
             not-enough: "%fpPer ottenere questo livello la gilda necessita di &c€ $cost&7."
+      already-bought: "%fpLa gilda è già stata acquistata."
     members:
       alreadyHaveGuild: "%fpHai già una gilda."
       target:
@@ -209,7 +210,7 @@ messages:
           - ""
           - "<SOLID:960018>Membri per ruolo:"
           - " &c✦ &fOfficers &8» &f$officersCount"
-          - " &c✦ &fGuilders &8» &f$guildersCount"
+          - " &c✦ &fGildani &8» &f$guildersCount"
           - ""
           - "$officersOnline"
           - "$guildersOnline"
@@ -227,7 +228,7 @@ messages:
           - ""
           - "<SOLID:960018>Membri per ruolo:"
           - " &c✦ &fOfficers &8» &f$officersCount"
-          - " &c✦ &fGuilders &8» &f$guildersCount"
+          - " &c✦ &fGildani &8» &f$guildersCount"
           - ""
           - "$officersOnline"
           - "$guildersOnline"
@@ -251,6 +252,14 @@ messages:
             header: "&cNome   Soldi"
             line: "$guildTitle   &f$guildBalance"
           footer: "&6✦»&m               &6¦✦¦&m               &6«✦"
+        members:
+          header: "&2✦»&m               &2¦✦¦&m               &2«✦"
+          title: "<SOLID:66ff66>Top Membri Gilde"
+          spacer: "&r"
+          lines:
+            header: "&cNome   Membri"
+            line: "$guildTitle   &f$membersCount"
+          footer: "&2✦»&m               &2¦✦¦&m               &2«✦"
 placeholders:
   guilds:
     name: guild_name # Il placeholder relativo è %smpc_guild_name%
@@ -259,12 +268,12 @@ placeholders:
     bank:
       still: guild_bank_balance # Il placeholder relativo è %smpc_guild_bank_balance%
       formatted: guild_bank_balance-formatted # Il placeholder relativo è %smpc_guild_bank_balance-formatted%
-  top:
-    guild-bank:
-      guild_name: top_guild-bank_guild_name_# # Il placeholder relativo è %smpc_top_guild-bank_guild_name_#% Bisogna scambiare # con il numero relativo alla posizione
-      guild_title: top_guild-bank_guild_title_# # Il placeholder relativo è %smpc_top_guild-bank_guild_title_#% Bisogna scambiare # con il numero relativo alla posizione
-      guild_value: top_guild-bank_guild_value_# # Il placeholder relativo è %smpc_top_guild-bank_guild_value_#% Bisogna scambiare # con il numero relativo alla posizione
-      guild_value_formatted: top_guild-bank_guild_value-formatted_# # Il placeholder relativo è %smpc_top_guild-bank_guild_value-formatted_#% Bisogna scambiare # con il numero relativo alla posizione
+    roles:
+      guilders-count: guild_guilders-count # Il placeholder rleativo è %smpc_guild_guilders-count%
+      officers-count: guild_officers-count # Il placeholder rleativo è %smpc_guild_officers-count%
+    members:
+      count: guild_members-count #  Il placeholder rleativo è %smpc_guild_members-count%
+      limit: guild_members-limit #  Il placeholder rleativo è %smpc_guild_members-limit%
 permissions:
   admin-commands:
     core:

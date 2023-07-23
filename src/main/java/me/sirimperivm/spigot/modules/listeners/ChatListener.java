@@ -30,7 +30,10 @@ public class ChatListener implements Listener {
         String playerName = p.getName();
         String message = e.getMessage();
         HashMap<String, List<String>> guildsData = mods.getGuildsData();
-        String guildId = guildsData.get(playerName).get(0);
+        String guildId = null;
+        if (guildsData.containsKey(playerName)) {
+            guildId = guildsData.get(playerName).get(0);
+        }
         Gui g = new Gui();
 
         boolean containsChars = false;

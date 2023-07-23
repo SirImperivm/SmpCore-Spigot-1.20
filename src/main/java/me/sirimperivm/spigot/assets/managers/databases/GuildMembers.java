@@ -26,7 +26,7 @@ public class GuildMembers {
     String dbName = data.dbname;
     String tablePrefix = data.tablePrefix;
     String tableName = "guild_members";
-    String database = dbName + "." + tablePrefix + tableName;
+    public String database = dbName + "." + tablePrefix + tableName;
 
     boolean tableExists() {
         boolean value = false;

@@ -37,7 +37,9 @@ public class Modules {
     private static HashMap<String, List<String>> guildsData;
     private static HashMap<String, String> guildsChat;
     private static HashMap<String, List<String>> guildsList;
-    private static HashMap<String, Double> guildsBalanceTop;
+    private static List<String> topBankList;
+    private static List<String> topMembersList;
+    private static List<String> guildBankList;
     private static List<String> depositCooldown;
     private static List<String> withdrawCooldown;
     private static List<String> spyChat;
@@ -51,15 +53,14 @@ public class Modules {
         invites = new HashMap<String, String>();
         guildsChat = new HashMap<String, String>();
         guildsList = new HashMap<String, List<String>>();
-        guildsBalanceTop = new HashMap<String, Double>();
         spyChat = new ArrayList<String>();
         guildMembers = new ArrayList<String>();
         depositCooldown = new ArrayList<String>();
         withdrawCooldown = new ArrayList<String>();
-        executeTop();
         refreshSettings();
         executeTasksLoop();
-        refreshTop();
+        refreshBankTop();
+        refreshMembersTop();
     }
 
     void refreshSettings() {
@@ -73,23 +74,55 @@ public class Modules {
 
     }
 
-    void executeTop() {
-        HashMap<String, Double> keySet = data.getGuilds().getGuildBalanceList();
-
-        LinkedHashMap<String, Double> sortedHashMap = new LinkedHashMap<>();
-        keySet.entrySet().stream()
-                .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
-                .forEachOrdered(entry -> sortedHashMap.put(entry.getKey(), entry.getValue()));
-
-        for (String key : sortedHashMap.keySet()) {
-            guildsBalanceTop.put(key, sortedHashMap.get(key));
-        }
-    }
-
-    void refreshTop() {
+    void refreshBankTop() {
         BukkitScheduler scheduler = Bukkit.getScheduler();
         scheduler.runTaskTimer(plugin, () -> {
-            executeTop();
+            String query = "SELECT * FROM " + data.getGuilds().database;
+            Map<String, Double> map = new HashMap<>();
+            topBankList = new ArrayList<String>();
+
+            try {
+                PreparedStatement state = data.conn.prepareStatement(query);
+                ResultSet rs = state.executeQuery();
+                while (rs.next()) {
+                    map.put(rs.getString("guildName"), Double.parseDouble(rs.getString("bankBalance")));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            List<Map.Entry<String, Double>> sortedList = new ArrayList<>(map.entrySet());
+            sortedList.sort((e1, e2) -> Double.compare(e2.getValue(), e1.getValue()));
+
+            for (Map.Entry<String, Double> entry : sortedList) {
+                topBankList.add(entry.getKey() + "£" + entry.getValue());
+            }
+        }, 20, 20 * 20);
+    }
+
+    void refreshMembersTop() {
+        BukkitScheduler scheduler = Bukkit.getScheduler();
+        scheduler.runTaskTimer(plugin, () -> {
+            String query = "SELECT * FROM " + data.getGuildMembers().database;
+            Map<String, Integer> map = new HashMap<>();
+            topMembersList = new ArrayList<String>();
+
+            try {
+                PreparedStatement state = data.conn.prepareStatement(query);
+                ResultSet rs = state.executeQuery();
+                while (rs.next()) {
+                    map.put(data.getGuilds().getGuildName(rs.getString("guildId")), getMembersCount(rs.getString("guildId")));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            List<Map.Entry<String, Integer>> sortedList = new ArrayList<>(map.entrySet());
+            sortedList.sort((e1, e2) -> Integer.compare(e2.getValue(), e1.getValue()));
+
+            for (Map.Entry<String, Integer> entry : sortedList) {
+                topMembersList.add(entry.getKey() + "£" + entry.getValue());
+            }
         }, 20, 20 * 20);
     }
 
@@ -112,7 +145,7 @@ public class Modules {
                                 .replace("$guildTitle", Config.getTransl("guilds", "guilds." + guildName + ".guildTitle"))
                                 .replace("$guildLeader", !data.getGuildMembers().guildLeader(guildId).equalsIgnoreCase("null") ? data.getGuildMembers().guildLeader(guildId) : "N/A")
                                 .replace("$membersCount", String.valueOf(getMembersCount(guildId)))
-                                .replace("$membersLimit", String.valueOf(getMembersLimit(guildId)))
+                                .replace("$membersLimit", getMembersLimit(guildId) == -1 ? "∞" : String.valueOf(getMembersLimit(guildId)))
                                 .replace("$guildLevel", String.valueOf(data.getGuilds().getGuildLevel(guildId)))
                                 .replace("$guildId", guildId)
                                 .replace("$officersOnline", data.getGuildMembers().getOnlineOfficers(guildId))
@@ -137,7 +170,7 @@ public class Modules {
                                 .replace("$guildTitle", Config.getTransl("guilds", "guilds." + guildName + ".guildTitle"))
                                 .replace("$guildLeader", !data.getGuildMembers().guildLeader(guildId).equalsIgnoreCase("null") ? data.getGuildMembers().guildLeader(guildId) : "N/A")
                                 .replace("$membersCount", String.valueOf(getMembersCount(guildId)))
-                                .replace("$membersLimit", String.valueOf(getMembersLimit(guildId)))
+                                .replace("$membersLimit", getMembersLimit(guildId) == -1 ? "∞" : String.valueOf(getMembersLimit(guildId)))
                                 .replace("$guildLevel", String.valueOf(data.getGuilds().getGuildLevel(guildId)))
                                 .replace("$guildId", guildId)
                                 .replace("$officersOnline", data.getGuildMembers().getOnlineOfficers(guildId))
@@ -205,6 +238,18 @@ public class Modules {
                             deleteTask(taskId);
                         }
                     }
+                    if (taskType.equalsIgnoreCase("setter")) {
+                        String[] splitter = taskValue.split("£");
+                        String username = splitter[0];
+                        String guildId = splitter[1];
+                        String setterType = splitter[2];
+                        Player p = Bukkit.getPlayerExact(username);
+
+                        if (p != null) {
+                            setters(p, guildId, setterType);
+                            deleteTask(taskId);
+                        }
+                    }
                 }
             } catch (SQLException e) {
                 log.severe("Impossibile eseguire una task!");
@@ -221,17 +266,16 @@ public class Modules {
             p.sendMessage(Config.getTransl("settings", "messages.others.guilds.top.bank.lines.header"));
 
             int loop = 0;
-            for (String guildId : guildsBalanceTop.keySet()) {
-                String guildName = data.getGuilds().getGuildName(guildId);
-                double guildBalance = guildsBalanceTop.get(guildId);
+            for (String line : topBankList) {
+                String[] splitter = line.split("£");
+                String guildName = splitter[0];
+                Double value = Double.parseDouble(splitter[1]);
 
                 p.sendMessage(Config.getTransl("settings", "messages.others.guilds.top.bank.lines.line")
-                        .replace("$guildName", guildName)
-                        .replace("$guildTitle", Colors.text(getGuildTitle(guildName)))
-                        .replace("$guildBalance", Strings.formatNumber(guildBalance))
+                        .replace("$guildTitle", getGuildTitle(guildName))
+                        .replace("$guildBalance", Strings.formatNumber(value))
                 );
-
-                if (loop == 10) {
+                if (loop == 7) {
                     break;
                 }
                 loop++;
@@ -239,7 +283,26 @@ public class Modules {
 
             p.sendMessage(Config.getTransl("settings", "messages.others.guilds.top.bank.footer"));
         } else if (type.equals("members")) {
+            p.sendMessage(Config.getTransl("settings", "messages.others.guilds.top.members.header"));
+            p.sendMessage(Config.getTransl("settings", "messages.others.guilds.top.members.title"));
+            p.sendMessage(Config.getTransl("settings", "messages.others.guilds.top.members.spacer"));
+            p.sendMessage(Config.getTransl("settings", "messages.others.guilds.top.members.lines.header"));
 
+            int loop = 0;
+            for (String line : topMembersList) {
+                String[] splitter = line.split("£");
+                String guildName = splitter[0];
+
+                p.sendMessage(Config.getTransl("settings", "messages.others.guilds.top.members.lines.line")
+                        .replace("$guildTitle", getGuildTitle(guildName))
+                        .replace("$membersCount", splitter[1])
+                );
+                if (loop == 7) {
+                    break;
+                }
+                loop++;
+            }
+            p.sendMessage(Config.getTransl("settings", "messages.others.guilds.top.members.footer"));
         }
     }
 
@@ -389,6 +452,26 @@ public class Modules {
             String username = splitter[0];
             if (gId.equalsIgnoreCase(guildId)) {
                 data.getTasks().insertTask("expelGuildMember", username);
+                Player guilders = Bukkit.getPlayerExact(username);
+                if (guilders != null) {
+                    String guildRole = getGuildsData().get(username).get(1);
+                    if (guildRole.equalsIgnoreCase("leader")) {
+                        setters(p, guildId, "remLeader");
+                    } else if (guildRole.equalsIgnoreCase("officer")) {
+                        setters(p, guildId, "remOfficer");
+                    } else if (guildRole.equalsIgnoreCase("member")) {
+                        setters(p, guildId, "remMember");
+                    }
+                } else {
+                    String guildRole = getGuildsData().get(username).get(1);
+                    if (guildRole.equalsIgnoreCase("leader")) {
+                        data.getTasks().insertTask("setter", username + "£" + guildId + "remLeader");
+                    } else if (guildRole.equalsIgnoreCase("officer")) {
+                        data.getTasks().insertTask("setter", username + "£" + guildId + "remOfficer");
+                    } else if (guildRole.equalsIgnoreCase("member")) {
+                        data.getTasks().insertTask("setter", username + "£" + guildId + "remMember");
+                    }
+                }
             }
         }
 
@@ -814,10 +897,6 @@ public class Modules {
         return guildsChat;
     }
 
-    public static HashMap<String, Double> getGuildsBalanceTop() {
-        return guildsBalanceTop;
-    }
-
     public static List<String> getDepositCooldown() {
         return depositCooldown;
     }
@@ -828,6 +907,14 @@ public class Modules {
 
     public static List<String> getWithdrawCooldown() {
         return withdrawCooldown;
+    }
+
+    public static List<String> getTopBankList() {
+        return topBankList;
+    }
+
+    public static List<String> getTopMembersList() {
+        return topMembersList;
     }
 
     public static Db getData() {

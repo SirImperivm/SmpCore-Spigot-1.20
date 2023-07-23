@@ -24,7 +24,7 @@ public class Guilds {
     String dbName = data.dbname;
     String tablePrefix = data.tablePrefix;
     String tableName = "guilds";
-    String database = dbName + "." + tablePrefix + tableName;
+    public String database = dbName + "." + tablePrefix + tableName;
 
     boolean tableExists() {
         boolean value = false;
@@ -254,23 +254,6 @@ public class Guilds {
             }
         } catch (SQLException e) {
             log.severe("Impossibile ottenere una serie di dati relativi alle gilde.");
-            e.printStackTrace();
-        }
-        return keySet;
-    }
-
-    public HashMap<String, Double> getGuildBalanceList() {
-        HashMap<String, Double> keySet = new HashMap<String, Double>();
-        String query = "SELECT * FROM " + database;
-
-        try {
-            PreparedStatement state = conn.prepareStatement(query);
-            ResultSet rs = state.executeQuery();
-            while (rs.next()) {
-                keySet.put(rs.getString("guildId"), Double.parseDouble(rs.getString("bankBalance")));
-            }
-        } catch (SQLException e) {
-            log.severe("Impossibile ottenere la lista di gilde per soldi.");
             e.printStackTrace();
         }
         return keySet;
