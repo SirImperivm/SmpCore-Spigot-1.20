@@ -18,8 +18,8 @@ public class Config {
     private static Main plugin = Main.getPlugin();
     private static Logger log = Logger.getLogger("SMPCore");
     private File folder = plugin.getDataFolder();
-    private File settingsFile, guildsFile, helpsFile, guisFile, lobbyFile;
-    private FileConfiguration settings, guilds, helps, guis, lobby;
+    private File settingsFile, guildsFile, helpsFile, guisFile, lobbyFile, zonesFile;
+    private FileConfiguration settings, guilds, helps, guis, lobby, zones;
 
     public Config() {
         settingsFile = new File(folder, "settings.yml");
@@ -32,6 +32,8 @@ public class Config {
         guis = new YamlConfiguration();
         lobbyFile = new File(folder, "lobby.yml");
         lobby = new YamlConfiguration();
+        zonesFile = new File(folder, "zones.yml");
+        zones = new YamlConfiguration();
 
         if (!folder.exists()) {
             folder.mkdir();
@@ -55,6 +57,10 @@ public class Config {
 
         if (!lobbyFile.exists()) {
             create(lobby, lobbyFile);
+        }
+
+        if (!zonesFile.exists()) {
+            create(zones, zonesFile);
         }
     }
 
@@ -95,6 +101,7 @@ public class Config {
         save(helps, helpsFile);
         save(guis, guisFile);
         save(lobby, lobbyFile);
+        save(zones, zonesFile);
     }
 
     public void loadAll() {
@@ -103,6 +110,7 @@ public class Config {
         load(helps, helpsFile);
         load(guis, guisFile);
         load(lobby, lobbyFile);
+        load(zones, zonesFile);
     }
 
     public File getSettingsFile() {
@@ -125,6 +133,10 @@ public class Config {
         return lobbyFile;
     }
 
+    public File getZonesFile() {
+        return zonesFile;
+    }
+
     public FileConfiguration getSettings() {
         return settings;
     }
@@ -143,6 +155,10 @@ public class Config {
 
     public FileConfiguration getLobby() {
         return lobby;
+    }
+
+    public FileConfiguration getZones() {
+        return zones;
     }
 
     public static String getTransl(String type, String key) {
@@ -167,6 +183,12 @@ public class Config {
                 );
             case "lobby":
                 return Colors.text(Main.getConf().getLobby().getString(key)
+                        .replace("%sp", Main.getSuccessPrefix())
+                        .replace("%ip", Main.getInfoPrefix())
+                        .replace("%fp", Main.getFailPrefix())
+                );
+            case "zones":
+                return Colors.text(Main.getConf().getZones().getString(key)
                         .replace("%sp", Main.getSuccessPrefix())
                         .replace("%ip", Main.getInfoPrefix())
                         .replace("%fp", Main.getFailPrefix())

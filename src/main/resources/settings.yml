@@ -21,6 +21,10 @@ settings:
       - '1000000000000.0-b'
       - '1000000000000000.0-B'
     valueFormatSize: 5
+  programs:
+    livesListener: true
+  lives:
+    defaultLivesCount: 5
 messages:
   prefixes:
     success: "&8[&a!&8] &7"

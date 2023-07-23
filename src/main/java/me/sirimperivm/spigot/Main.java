@@ -12,9 +12,7 @@ import me.sirimperivm.spigot.assets.utils.Colors;
 import me.sirimperivm.spigot.modules.commands.admin.core.AdminSmpcCommand;
 import me.sirimperivm.spigot.modules.commands.admin.guilds.AdminGuildsCommand;
 import me.sirimperivm.spigot.modules.commands.users.guilds.GuildsCommand;
-import me.sirimperivm.spigot.modules.listeners.ChatListener;
-import me.sirimperivm.spigot.modules.listeners.ClickListener;
-import me.sirimperivm.spigot.modules.listeners.MoveListener;
+import me.sirimperivm.spigot.modules.listeners.*;
 import me.sirimperivm.spigot.modules.tabCompleters.AdminGuildsTabCompleter;
 import me.sirimperivm.spigot.modules.tabCompleters.AdminSmpcTabCompleter;
 import me.sirimperivm.spigot.modules.tabCompleters.GuildsTabCompleter;
@@ -42,6 +40,8 @@ public final class Main extends JavaPlugin {
     private static String successPrefix;
     private static String infoPrefix;
     private static String failPrefix;
+    private static Boolean livesListener;
+    private static Integer defaultLivesCount;
 
     public void disablePlugin() {
         getPluginManager().disablePlugin(this);
@@ -57,6 +57,8 @@ public final class Main extends JavaPlugin {
         plugin = this;
         conf = new Config();
         conf.loadAll();
+        livesListener = conf.getSettings().getBoolean("settings.programs.livesListener");
+        defaultLivesCount = conf.getSettings().getInt("settings.lives.defaultLivesCount");
         vault = new Vault();
         successPrefix = Colors.text(conf.getSettings().getString("messages.prefixes.success"));
         infoPrefix = Colors.text(conf.getSettings().getString("messages.prefixes.info"));
@@ -90,6 +92,9 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ClickListener(), this);
         getServer().getPluginManager().registerEvents(new MoveListener(), this);
         getServer().getPluginManager().registerEvents(new ChatListener(), this);
+        getServer().getPluginManager().registerEvents(new JoinListener(), this);
+        getServer().getPluginManager().registerEvents(new DamageListener(), this);
+
         getConsoleSender().sendMessage(Colors.text("&a[SMPCore] Plugin attivato correttamente!"));
         getConsoleSender().sendMessage(Colors.text("<RAINBOW1>Plugin ideato e sviluppato da SirImperivm_</RAINBOW>"));
     }
@@ -142,5 +147,13 @@ public final class Main extends JavaPlugin {
 
     public static Flag<String> getSmpcGuildId() {
         return smpcGuildId;
+    }
+
+    public static Boolean getLivesListener() {
+        return livesListener;
+    }
+
+    public static Integer getDefaultLivesCount() {
+        return defaultLivesCount;
     }
 }

@@ -87,7 +87,9 @@ public class Db {
         guilds.createTable();
         guildMembers.createTable();
         tasks.createTable();
-        lives.createTable();
+        if (Main.getLivesListener()) {
+            lives.createTable();
+        }
     }
 
     public static Guilds getGuilds() {
