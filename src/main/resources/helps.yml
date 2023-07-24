@@ -24,6 +24,16 @@ helps:
       - "&a/guildsadmin(ga) setlobby &7- &fImposta lo spawn principale."
       - ""
       - "&8&m                              "
+    lives:
+      - "&8&m                              "
+      - ""
+      - "&a/livesadmin(la) give-life &e<player> <quantità> &7- &fRegali ad un utente delle vite."
+      - "&a/livesadmin(la) info &e<player> &7- &fMostra la quantità di vite di un utente."
+      - "&a/livesadmin(la) life-top &7- &fMostra la top delle vite degli utenti."
+      - "&a/livesadmin(la) setDeathZone &7- &fImposta la deathzone alla tua posizione."
+      - "&a/livesadmin(la) take-life &e<player> <quantità> &7- &fRimuovi da un utente delle vite."
+      - ""
+      - "&8&m                              "
   user-commands:
     guilds:
       - "&8&m                              "
@@ -45,5 +55,12 @@ helps:
       - "&a/guilds(g) top-bank &7- &fMostra le prime 8 gilde per filtro bilanci in ordine decrescente."
       - "&a/guilds(g) top-members &7- &fMostra le prime 8 gilde per filtro membri in ordine decrescente."
       - "&a/guilds(g) upgrades &7- &fApre i potenziamenti della gilda."
+      - ""
+      - "&8&m                              "
+    lives:
+      - "&8&m                              "
+      - ""
+      - "&a/lives(l) get &7- &fMostra quante vite hai."
+      - "&a/lives(l) info &e<player> &7- &fMostra quante vite ha un utente."
       - ""
       - "&8&m                              "

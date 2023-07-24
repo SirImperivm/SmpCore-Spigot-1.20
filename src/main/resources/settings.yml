@@ -59,6 +59,8 @@ messages:
       located: "%spHai impostato correttamente la lobby."
     officer:
       set: "%spHai promosso &a$username &7ad ufficiale nella tua gilda."
+    deathZone:
+      located: "%spDeathzone impostata correttamente."
   info:
     money:
       withdrawn: "%ip &e-&7$value."
@@ -107,6 +109,12 @@ messages:
       chat:
         changed: "%ipChat impostata su &a$chatType&7."
         spy: "%ipChatSpy &e$status&7."
+    lives:
+      members:
+        death:
+          can-respawn: "%ipSei morto, hai perso 1 vita, rimanenti &e$livesCount&7."
+          cant-respawn: "%ipSei morto, hai perso tutte le tue vite, non potrai rigiocare."
+          respawn-in: "%ipRespawnerai tra &e5 &7secondi."
     general:
       time:
         expired: "%ipTempo scaduto."
@@ -181,6 +189,9 @@ messages:
       not-located: "%fpNon hai mai impostato lo spawn principale. &c(/ga setlobby)"
     players:
       not-found: "%fpUtente con questo nome non trovato."
+    lives:
+      deathZone:
+        not-located: "%fpNon è stato impostato lo spawn della deathzone, è richiesta una segnalazione allo staff."
   others:
     guilds:
       chat: "&a[GC] &f $guildRole $playerName &8» &f$message"
@@ -265,6 +276,15 @@ messages:
             header: "&cNome   Membri"
             line: "$guildTitle   &f$membersCount"
           footer: "&2✦»&m               &2¦✦¦&m               &2«✦"
+    lives:
+      top:
+        header: "&7|----------|&e✦&7|----------|"
+        title: "&dTop Vite"
+        spacer: "&r"
+        lines:
+          header: "&5Nome   Vite"
+          line: "$playerName $livesCount"
+        footer: "&7|----------|&e✦&7|----------|"
 placeholders:
   guilds:
     name: guild_name # Il placeholder relativo è %smpc_guild_name%
@@ -300,6 +320,14 @@ permissions:
         take: smpc.admincommands.guilds.money.take
         give: smpc.admincommands.guilds.money.give
         set: smpc.admincommands.guilds.money.set
+    lives:
+      main: smpc.admincommands.lives.main
+      info: smpc.admincommands.lives.info
+      setdeathzone: smpc.admincommands.lives.setdeathzone
+      life:
+        give: smpc.admincommands.lives.live.give
+        take: smpc.admincommands.lives.live.take
+      top: smpc.admincommands.lives.top
   user-commands:
     guilds:
       main: smpc.usercommands.guilds.main

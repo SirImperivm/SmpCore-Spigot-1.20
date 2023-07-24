@@ -12,6 +12,7 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
+import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -39,7 +40,7 @@ public class Modules {
     private static HashMap<String, List<String>> guildsList;
     private static List<String> topBankList;
     private static List<String> topMembersList;
-    private static List<String> guildBankList;
+    private static List<String> topLivesList;
     private static List<String> depositCooldown;
     private static List<String> withdrawCooldown;
     private static List<String> spyChat;
@@ -63,6 +64,9 @@ public class Modules {
         executeTasksLoop();
         refreshBankTop();
         refreshMembersTop();
+        if (Main.getLivesListener()) {
+            refreshLivesTop();
+        }
     }
 
     void refreshSettings() {
@@ -74,6 +78,32 @@ public class Modules {
             guildsData = data.getGuildMembers().guildsData();
         }, 20, 5 * 20);
 
+    }
+
+    void refreshLivesTop() {
+        BukkitScheduler scheduler = Bukkit.getScheduler();
+        scheduler.runTaskTimer(plugin, () -> {
+            String query = "SELECT * FROM " + data.getLives().database;
+            Map<String, Integer> map = new HashMap<>();
+            topLivesList = new ArrayList<String>();
+
+            try {
+                PreparedStatement state = data.conn.prepareStatement(query);
+                ResultSet rs = state.executeQuery();
+                while (rs.next()) {
+                    map.put(rs.getString("playerName"), rs.getInt("livesCount"));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            List<Map.Entry<String, Integer>> sortedList = new ArrayList<>(map.entrySet());
+            sortedList.sort((e1, e2) -> Integer.compare(e2.getValue(), e1.getValue()));
+
+            for (Map.Entry<String, Integer> entry : sortedList) {
+                topLivesList.add(entry.getKey() + "£" + entry.getValue());
+            }
+        }, 20, 20 * 20);
     }
 
     void refreshBankTop() {
@@ -310,6 +340,23 @@ public class Modules {
         }
     }
 
+    public void sendLivesTop(CommandSender s) {
+        s.sendMessage(Config.getTransl("settings", "messages.others.lives.top.header"));
+        s.sendMessage(Config.getTransl("settings", "messages.others.lives.top.title"));
+        s.sendMessage(Config.getTransl("settings", "messages.others.lives.top.spacer"));
+        s.sendMessage(Config.getTransl("settings", "messages.others.lives.top.lines.header"));
+
+        int loop = 0;
+        for (String line : topLivesList) {
+            String[] splitter = line.split("£");
+
+            s.sendMessage(Config.getTransl("settings", "messages.others.lives.top.lines.line")
+                    .replace("$playerName", splitter[0])
+                    .replace("$livesCount", splitter[1]));
+        }
+        s.sendMessage(Config.getTransl("settings", "messages.others.lives.top.footer"));
+    }
+
     public void sendGuildList(Player p, String type) {
         guildsList = data.getGuilds().getBoughtGuildList();
 
@@ -509,6 +556,26 @@ public class Modules {
         conf.getZones().set(settingsPath + ".rotPitch", rotPitch);
         conf.save(conf.getZones(), conf.getZonesFile());
         p.sendMessage(Config.getTransl("settings", "messages.success.lobby.located"));
+    }
+
+    public void setDeathZone(Player p) {
+        String settingsPath = "zones.deathZone";
+
+        String worldName = p.getLocation().getWorld().getName();
+        double posX = p.getLocation().getX();
+        double posY = p.getLocation().getY();
+        double posZ = p.getLocation().getZ();
+        float rotYaw = p.getLocation().getYaw();
+        float rotPitch = p.getLocation().getPitch();
+
+        conf.getZones().set(settingsPath + ".world", worldName);
+        conf.getZones().set(settingsPath + ".posX", posX);
+        conf.getZones().set(settingsPath + ".posY", posY);
+        conf.getZones().set(settingsPath + ".posZ", posZ);
+        conf.getZones().set(settingsPath + ".rotYaw", rotYaw);
+        conf.getZones().set(settingsPath + ".rotPitch", rotPitch);
+        conf.save(conf.getZones(), conf.getZonesFile());
+        p.sendMessage(Config.getTransl("settings", "messages.success.deathZone.located"));
     }
 
     public void inviteMember(Player target, String guildName) {
@@ -832,6 +899,19 @@ public class Modules {
         p.teleport(home);
     }
 
+    public void sendPlayerToDeathZone(Player p) {
+        String path = "zones.deathZone";
+        World world = Bukkit.getWorld(conf.getZones().getString(path + ".world"));
+        double posX = conf.getZones().getDouble(path + ".posX");
+        double posY = conf.getZones().getDouble(path + ".posY");
+        double posZ = conf.getZones().getDouble(path + ".posZ");
+        float rotYaw = conf.getZones().getInt(path + ".rotYaw");
+        float rotPitch = conf.getZones().getInt(path + ".rotPitch");
+        Location loc = new Location(world, posX, posY, posZ, rotYaw, rotPitch);
+
+        p.teleport(loc);
+    }
+
     public void sendGuildersBroadcast(String guildId, String message, String exceptedUsername) {
         for (String key : guildsData.keySet()) {
             List<String> guildsAndRole = guildsData.get(key);
@@ -891,6 +971,10 @@ public class Modules {
 
     public boolean isLobbyLocated() {
         return !conf.getZones().getString("zones.lobby.world").equalsIgnoreCase("null");
+    }
+
+    public boolean isDeathZoneLocated() {
+        return !conf.getZones().getString("zones.deathZone.world").equalsIgnoreCase("null");
     }
 
     public double getUserBalance(Player p) {
@@ -963,6 +1047,10 @@ public class Modules {
 
     public static List<String> getTopMembersList() {
         return topMembersList;
+    }
+
+    public static List<String> getTopLivesList() {
+        return topLivesList;
     }
 
     public static Db getData() {
