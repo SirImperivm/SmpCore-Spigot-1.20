@@ -38,6 +38,7 @@ public class DamageListener implements Listener {
                 int lives = data.getLives().getPlayerLives(p);
                 if (damageValue >= p.getHealth()) {
                     e.setCancelled(true);
+                    p.setHealth(20);
                     p.setGameMode(GameMode.SPECTATOR);
                     data.getLives().updateIsDead(p, 1);
 

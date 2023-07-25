@@ -25,6 +25,13 @@ settings:
     livesListener: true
   lives:
     defaultLivesCount: 5
+    cantRespawnBlockedCommands:
+      - "/warp"
+      - "/spawn"
+      - "/tpa"
+      - "/tpaccept"
+      - "/tpyes"
+      - "/tpno"
 messages:
   prefixes:
     success: "&8[&a!&8] &7"
@@ -112,7 +119,7 @@ messages:
     lives:
       members:
         death:
-          can-respawn: "%ipSei morto, hai perso 1 vita, rimanenti &e$livesCount&7."
+          can-respawn: "%ipSei morto, hai perso &e1 &7vita, rimanenti &e$livesCount&7."
           cant-respawn: "%ipSei morto, hai perso tutte le tue vite, non potrai rigiocare."
           respawn-in: "%ipRespawnerai tra &e5 &7secondi."
       life:
@@ -200,6 +207,7 @@ messages:
       deathZone:
         not-located: "%fpNon è stato impostato lo spawn della deathzone, è richiesta una segnalazione allo staff."
       contains-chars: "%fpIn questa sezione è solo possibile usare numeri."
+      commandBlocked: "%fpSei morto, non puoi eseguire questo comando."
   others:
     guilds:
       chat: "&a[GC] &f $guildRole $playerName &8» &f$message"
@@ -379,3 +387,6 @@ permissions:
         bypass: smpc.user.guilds.bypass
       chat:
         spy: smpc.user.guilds.chat.spy
+    lives:
+      blockedCommands:
+        bypass: smpc.user.lives.block.bypass
