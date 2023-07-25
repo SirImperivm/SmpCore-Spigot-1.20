@@ -44,7 +44,6 @@ public class AdminLivesCommand implements CommandExecutor {
                                 return true;
                             } else {
                                 Player p = (Player) s;
-
                                 mods.setDeathZone(p);
                             }
                         }

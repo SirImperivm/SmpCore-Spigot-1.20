@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("all")
-public class AdminLivesTabCompleter implements TabCompleter {
+public class LivesTabCompleter implements TabCompleter {
 
     private static Main plugin = Main.getPlugin();
     private static Config conf = Main.getConf();
@@ -26,42 +26,23 @@ public class AdminLivesTabCompleter implements TabCompleter {
 
         if (s instanceof Player) {
             Player p = (Player) s;
-            if (p.hasPermission(conf.getSettings().getString("permissions.admin-commands.lives.main"))) {
+            if (p.hasPermission(conf.getSettings().getString("permissions.user-commands.lives.main"))) {
                 if (a.length == 1) {
                     List<String> args1 = new ArrayList<String>();
-                    args1.add("give-life");
-                    args1.add("info");
-                    args1.add("life-top");
-                    args1.add("setDeathZone");
-                    args1.add("take-life");
+                    args1.add("get");
                     return args1;
                 } else if (a.length == 2) {
                     List<String> args2 = new ArrayList<String>();
-                    if (a[0].equalsIgnoreCase("give-life")) {
-                        for (Player players : Bukkit.getOnlinePlayers()) {
-                            args2.add(players.getName());
-                        }
-                    } else if (a[0].equalsIgnoreCase("info")) {
-                        for (Player players : Bukkit.getOnlinePlayers()) {
-                            args2.add(players.getName());
-                        }
-                    } else if (a[0].equalsIgnoreCase("take-life")) {
+                    if (a[0].equalsIgnoreCase("get")) {
                         for (Player players : Bukkit.getOnlinePlayers()) {
                             args2.add(players.getName());
                         }
                     }
                     return args2;
-                } else if (a.length == 3) {
-                    List<String> args3 = new ArrayList<String>();
-                    if (a[0].equalsIgnoreCase("give-life")) {
-                        args3.add("<insertNumber>");
-                    } else if (a[0].equalsIgnoreCase("take-life")) {
-                        args3.add("<insertNumber>");
-                    }
-                    return args3;
                 }
             }
         }
+
         return null;
     }
 }

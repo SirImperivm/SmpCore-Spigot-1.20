@@ -45,10 +45,6 @@ public class GuildsTabCompleter implements TabCompleter {
                     args1.add("top-bank");
                     args1.add("top-members");
                     args1.add("upgrades");
-
-                    if (args1.contains(p.getName())) {
-                        args1.remove(p.getName());
-                    }
                     return args1;
                 } else if (a.length == 2) {
                     List<String> args2 = new ArrayList<String>();
@@ -78,9 +74,6 @@ public class GuildsTabCompleter implements TabCompleter {
                         args2.add("set");
                         args2.add("remove");
                     }
-                    if (args2.contains(p.getName())) {
-                        args2.remove(p.getName());
-                    }
                     return args2;
                 } else if (a.length == 3) {
                     List<String> args3 = new ArrayList<String>();
@@ -96,9 +89,6 @@ public class GuildsTabCompleter implements TabCompleter {
                                 args3.add(allName);
                             }
                         }
-                    }
-                    if (args3.contains(p.getName())) {
-                        args3.remove(p.getName());
                     }
                     return args3;
                 }

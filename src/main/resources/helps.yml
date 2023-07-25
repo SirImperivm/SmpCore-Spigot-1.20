@@ -61,6 +61,6 @@ helps:
       - "&8&m                              "
       - ""
       - "&a/lives(l) get &7- &fMostra quante vite hai."
-      - "&a/lives(l) info &e<player> &7- &fMostra quante vite ha un utente."
+      - "&a/lives(l) get &e<player> &7- &fMostra quante vite ha un utente."
       - ""
       - "&8&m                              "

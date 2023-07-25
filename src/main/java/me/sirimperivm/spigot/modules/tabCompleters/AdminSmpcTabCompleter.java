@@ -29,9 +29,6 @@ public class AdminSmpcTabCompleter implements TabCompleter {
                 if (a.length == 1) {
                     List<String> args1 = new ArrayList<String>();
                     args1.add("reload");
-                    if (args1.contains(p.getName())) {
-                        args1.remove(p.getName());
-                    }
                     return args1;
                 }
             }

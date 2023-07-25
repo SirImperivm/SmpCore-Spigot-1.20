@@ -13,11 +13,9 @@ import me.sirimperivm.spigot.modules.commands.admin.core.AdminSmpcCommand;
 import me.sirimperivm.spigot.modules.commands.admin.guilds.AdminGuildsCommand;
 import me.sirimperivm.spigot.modules.commands.admin.lives.AdminLivesCommand;
 import me.sirimperivm.spigot.modules.commands.users.guilds.GuildsCommand;
+import me.sirimperivm.spigot.modules.commands.users.lives.LivesCommand;
 import me.sirimperivm.spigot.modules.listeners.*;
-import me.sirimperivm.spigot.modules.tabCompleters.AdminGuildsTabCompleter;
-import me.sirimperivm.spigot.modules.tabCompleters.AdminLivesTabCompleter;
-import me.sirimperivm.spigot.modules.tabCompleters.AdminSmpcTabCompleter;
-import me.sirimperivm.spigot.modules.tabCompleters.GuildsTabCompleter;
+import me.sirimperivm.spigot.modules.tabCompleters.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Logger;
@@ -87,11 +85,13 @@ public final class Main extends JavaPlugin {
         getServer().getPluginCommand("smpc").setExecutor(new AdminSmpcCommand());
         getServer().getPluginCommand("la").setExecutor(new AdminLivesCommand());
         getServer().getPluginCommand("g").setExecutor(new GuildsCommand());
+        getServer().getPluginCommand("l").setExecutor(new LivesCommand());
 
         getServer().getPluginCommand("ga").setTabCompleter(new AdminGuildsTabCompleter());
         getServer().getPluginCommand("smpc").setTabCompleter(new AdminSmpcTabCompleter());
         getServer().getPluginCommand("la").setTabCompleter(new AdminLivesTabCompleter());
         getServer().getPluginCommand("g").setTabCompleter(new GuildsTabCompleter());
+        getServer().getPluginCommand("l").setTabCompleter(new LivesTabCompleter());
 
         getServer().getPluginManager().registerEvents(new ClickListener(), this);
         getServer().getPluginManager().registerEvents(new MoveListener(), this);

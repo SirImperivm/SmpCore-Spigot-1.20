@@ -25,3 +25,6 @@ commands:
   la:
     aliases:
       - livesadmin
+  l:
+    aliases:
+      - lives

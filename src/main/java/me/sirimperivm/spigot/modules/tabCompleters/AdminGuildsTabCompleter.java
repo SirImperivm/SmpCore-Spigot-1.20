@@ -40,9 +40,6 @@ public class AdminGuildsTabCompleter implements TabCompleter {
                     args1.add("list");
                     args1.add("money");
                     args1.add("setlobby");
-                    if (args1.contains(p.getName())) {
-                        args1.remove(p.getName());
-                    }
                     return args1;
                 } else if (a.length == 2) {
                     List<String> args2 = new ArrayList<String>();
@@ -82,9 +79,6 @@ public class AdminGuildsTabCompleter implements TabCompleter {
                         args2.add("give");
                         args2.add("set");
                     }
-                    if (args2.contains(p.getName())) {
-                        args2.remove(p.getName());
-                    }
                     return args2;
                 } else if (a.length == 3) {
                     List<String> args3 = new ArrayList<String>();
@@ -108,9 +102,6 @@ public class AdminGuildsTabCompleter implements TabCompleter {
                             args3.add(guildName);
                         }
                     }
-                    if (args3.contains(p.getName())) {
-                        args3.remove(p.getName());
-                    }
                     return args3;
                 } else if (a.length == 4) {
                     List<String> args4 = new ArrayList<String>();
@@ -118,10 +109,6 @@ public class AdminGuildsTabCompleter implements TabCompleter {
                         args4.add("<insertNumber>");
                     } else if (a[0].equalsIgnoreCase("money")) {
                         args4.add("<insertNumber>");
-                    }
-
-                    if (args4.contains(p.getName())) {
-                        args4.remove(p.getName());
                     }
                     return args4;
                 }

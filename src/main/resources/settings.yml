@@ -377,6 +377,11 @@ permissions:
         main: smpc.usercommands.guilds.officers.use
         set: smpc.usercommands.guilds.officers.use
         remove: smpc.usercommands.guilds.officers.use
+    lives:
+      main: smpc.usercommands.lives.main
+      get:
+        user: smpc.usercommands.lives.get
+        others: smpc.usercommands.lives.get.others
   user-actions:
     guilds:
       shop:
