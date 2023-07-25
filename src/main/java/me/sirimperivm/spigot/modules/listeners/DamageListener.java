@@ -85,7 +85,6 @@ public class DamageListener implements Listener {
                                     if (p != null) {
                                         p.setGameMode(GameMode.SURVIVAL);
                                         mods.sendPlayerToDeathZone(p);
-                                        data.getLives().updateIsDead(p, 0);
                                     }
                                 }
                             }.runTaskLater(plugin, 20 * 5);

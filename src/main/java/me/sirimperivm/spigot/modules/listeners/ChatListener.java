@@ -118,7 +118,7 @@ public class ChatListener implements Listener {
                 if (allGuildId.equals(guildId)) {
                     Player targets = Bukkit.getPlayerExact(allName);
                     if (targets != null) {
-                        targets.sendMessage(Config.getTransl("settings", "messages.tabCompleters.guilds.chat")
+                        targets.sendMessage(Config.getTransl("settings", "messages.others.guilds.chat")
                                 .replace("$guildRole", playerGuildRole.equalsIgnoreCase("leader") ? "CapoGilda" : playerGuildRole.substring(0, 1).toUpperCase() + playerGuildRole.substring(1))
                                 .replace("$playerName", playerName)
                                 .replace("$message", message)
@@ -126,16 +126,13 @@ public class ChatListener implements Listener {
                         for (Player staffOnline : Bukkit.getOnlinePlayers()) {
                             String staffName = staffOnline.getName();
                             if (staffOnline.hasPermission(conf.getSettings().getString("permissions.admin-actions.guilds.chat.spy")) && mods.getSpyChat().contains(staffName)) {
-                                String staffGuildID = guildsData.get(staffName).get(0);
-                                if (!staffGuildID.equalsIgnoreCase(allGuildId)) {
-                                    String guildName = data.getGuilds().getGuildName(guildId);
-                                    staffOnline.sendMessage(Config.getTransl("settings", "messages.tabCompleters.guilds.chat-spy")
-                                            .replace("$guildTitle", Config.getTransl("guilds", "guilds." + guildName + ".guildTitle"))
-                                            .replace("$guildRole", playerGuildRole.equalsIgnoreCase("leader") ? "CapoGilda" : playerGuildRole.substring(0, 1).toUpperCase() + playerGuildRole.substring(1))
-                                            .replace("$playerName", playerName)
-                                            .replace("$message", message)
-                                    );
-                                }
+                                String guildName = data.getGuilds().getGuildName(guildId);
+                                staffOnline.sendMessage(Config.getTransl("settings", "messages.others.guilds.chat-spy")
+                                        .replace("$guildTitle", Config.getTransl("guilds", "guilds." + guildName + ".guildTitle"))
+                                        .replace("$guildRole", playerGuildRole.equalsIgnoreCase("leader") ? "CapoGilda" : playerGuildRole.substring(0, 1).toUpperCase() + playerGuildRole.substring(1))
+                                        .replace("$playerName", playerName)
+                                        .replace("$message", message)
+                                );
                             }
                         }
                     }

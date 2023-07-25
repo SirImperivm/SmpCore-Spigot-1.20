@@ -275,6 +275,15 @@ public class PapiExpansions extends PlaceholderExpansion {
             toReturn = getPlayerLives;
         }
 
+        if (param.equalsIgnoreCase(conf.getSettings().getString(path + ".deaths.is_dead"))) {
+            boolean isDead = data.getLives().isDead((Player) p);
+            if (isDead) {
+                toReturn = Config.getTransl("settings", "messages.others.deaths.placeholderFormats.dead");
+            } else {
+                toReturn = Config.getTransl("settings", "messages.others.deaths.placeholderFormats.live");
+            }
+        }
+
         return toReturn;
     }
 }

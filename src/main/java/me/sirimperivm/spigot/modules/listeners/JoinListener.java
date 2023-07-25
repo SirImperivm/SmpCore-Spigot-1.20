@@ -33,6 +33,9 @@ public class JoinListener implements Listener {
             }
 
             if (data.getLives().isDead(p)) {
+                if (p.getGameMode() != GameMode.SPECTATOR) {
+                    p.setGameMode(GameMode.SPECTATOR);
+                }
                 boolean canRespawn = data.getLives().canRespawn(p);
 
                 if (canRespawn) {
@@ -59,22 +62,21 @@ public class JoinListener implements Listener {
                             }
                         }
                     }.runTaskLater(plugin, 20 * 5);
-                }
-            } else {
-                p.sendMessage(Config.getTransl("settings", "messages.info.lives.members.death.cant-respawn"));
-                if (!mods.isDeathZoneLocated()) {
-                    p.sendMessage(Config.getTransl("settings", "messages.errors.lives.deathZone.not-located"));
                 } else {
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            if (p != null) {
-                                p.setGameMode(GameMode.SURVIVAL);
-                                mods.sendPlayerToDeathZone(p);
-                                data.getLives().updateIsDead(p, 0);
+                    p.sendMessage(Config.getTransl("settings", "messages.info.lives.members.death.cant-respawn"));
+                    if (!mods.isDeathZoneLocated()) {
+                        p.sendMessage(Config.getTransl("settings", "messages.errors.lives.deathZone.not-located"));
+                    } else {
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                if (p != null) {
+                                    p.setGameMode(GameMode.SURVIVAL);
+                                    mods.sendPlayerToDeathZone(p);
+                                }
                             }
-                        }
-                    }.runTaskLater(plugin, 20 * 5);
+                        }.runTaskLater(plugin, 20 * 5);
+                    }
                 }
             }
         }

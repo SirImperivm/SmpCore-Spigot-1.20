@@ -211,7 +211,7 @@ messages:
   others:
     guilds:
       chat: "&a[GC] &f $guildRole $playerName &8» &f$message"
-      chat-spy: "&6[SpyChat] $guildTitle&r $guildRole $playerName &8» &f$message"
+      chat-spy: "&6[SPY] $guildTitle&r $guildRole $playerName &8» &f$message"
       list:
         admin:
           header: "&c✦»&m               &c¦✦¦&m               &c«✦"
@@ -305,6 +305,10 @@ messages:
         - "&2✦»&m               &2¦✦¦&m               &2«✦"
         - "&aL'utente &b$playerName &aha &b$livesCount &avite."
         - "&2✦»&m               &2¦✦¦&m               &2«✦"
+    deaths:
+      placeholderFormats:
+        dead: "[Morto]"
+        live: ""
 placeholders:
   guilds:
     name: guild_name # Il placeholder relativo è %smpc_guild_name%
@@ -321,6 +325,8 @@ placeholders:
       limit: guild_members-limit #  Il placeholder rleativo è %smpc_guild_members-limit%
   lives:
     count: lives_count # Il placeholder relativo è %smpc_lives_count%
+  deaths:
+    is_dead: deaths_is_dead # Il placeholder relativo è %smpc_deaths_is_dead%
 permissions:
   admin-commands:
     core:

@@ -66,6 +66,7 @@ public class Modules {
         refreshMembersTop();
         if (Main.getLivesListener()) {
             refreshLivesTop();
+            refershLifeStates();
         }
     }
 
@@ -78,6 +79,30 @@ public class Modules {
             guildsData = data.getGuildMembers().guildsData();
         }, 20, 5 * 20);
 
+    }
+
+    void refershLifeStates() {
+        BukkitScheduler scheduler = Bukkit.getScheduler();
+
+        scheduler.runTaskTimer(plugin, () -> {
+            String query = "SELECT * FROM " + data.getLives().database;
+
+            try {
+                PreparedStatement state = data.conn.prepareStatement(query);
+                ResultSet rs = state.executeQuery();
+                while (rs.next()) {
+                    if (rs.getInt("livesCount") > 0) {
+                        if (rs.getInt("canRespawn") == 0) {
+                            data.getLives().updateCanRespawn((Player) Bukkit.getOfflinePlayer(rs.getString("playerName")), 1);
+                            data.getLives().updateIsDead((Player) Bukkit.getOfflinePlayer(rs.getString("playerName")), 0);
+                        }
+                    }
+                }
+            } catch (SQLException e) {
+                log.severe("Impossibile reimpostare una nascita.");
+                e.printStackTrace();
+            }
+        }, 20, 20);
     }
 
     void refreshLivesTop() {
