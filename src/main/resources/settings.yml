@@ -32,6 +32,11 @@ settings:
       - "/tpaccept"
       - "/tpyes"
       - "/tpno"
+  deathsManager:
+    wins:
+      money: 1500.0
+    lose:
+      money: 1500.0
 messages:
   prefixes:
     success: "&8[&a!&8] &7"
@@ -325,8 +330,12 @@ placeholders:
       limit: guild_members-limit #  Il placeholder rleativo è %smpc_guild_members-limit%
   lives:
     count: lives_count # Il placeholder relativo è %smpc_lives_count%
-  deaths:
-    is_dead: deaths_is_dead # Il placeholder relativo è %smpc_deaths_is_dead%
+    is_dead: lives_deaths_is_dead # Il placeholder relativo è %smpc_deaths_is_dead%
+  deathsManager:
+    deaths_count: deathsmanager_deaths_count # Il placeholder relativo è %smpc_deathsmanager_deaths_count%
+    deaths_count-formatted: deathsmanager_deaths_count-formatted # Il placeholder relativo è %smpc_deathsmanager_deaths_count-formatted%
+    kills_count: deathsmanager_kills_count # Il placeholder relativo è %smpc_deathsmanager_kills_count%
+    kills_count-formatted: deathsmanager_kills_count-formatted # Il placeholder relativo è %smpc_deathsmanager_kills_count-formatted%
 permissions:
   admin-commands:
     core:

@@ -4,12 +4,17 @@ import me.sirimperivm.spigot.Main;
 import me.sirimperivm.spigot.assets.managers.Config;
 import me.sirimperivm.spigot.assets.managers.Db;
 import me.sirimperivm.spigot.assets.managers.Modules;
+import me.sirimperivm.spigot.assets.managers.values.Vault;
+import me.sirimperivm.spigot.assets.other.Strings;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
@@ -26,6 +31,45 @@ public class DamageListener implements Listener {
     private static Boolean livesListener = Main.getLivesListener();
 
     @EventHandler
+    public void onDeath(EntityDamageByEntityEvent e) {
+        Entity en = e.getEntity();
+        Entity damager = e.getDamager();
+
+        if (en instanceof Player) {
+            Player p = (Player) en;
+            int playerDeaths = data.getStats().getPlayerData(p, "deaths");
+            double damage = e.getFinalDamage();
+
+            if (damager instanceof Player) {
+                if (damage >= p.getHealth()) {
+                    for (int i=0; i<p.getInventory().getSize(); i++) {
+                        ItemStack is = p.getInventory().getItem(i);
+                        p.getWorld().dropItem(p.getLocation(), is);
+                        p.getInventory().remove(is);
+                    }
+                    Player killer = (Player) damager;
+                    int playerKills = data.getStats().getPlayerData(killer, "kills");
+                    int addDeath = playerDeaths + 1;
+                    data.getStats().updatePlayerData(p, "deaths", addDeath);
+                    int addKills = playerKills + 1;
+                    data.getStats().updatePlayerData(killer, "kills", addKills);
+
+                    double moneyToAdd = conf.getSettings().getDouble("settings.deathsManager.wins.money");
+                    double moneyToRemove = conf.getSettings().getDouble("settings.deathsManager.lose.money");
+
+                    Vault.getEcon().withdrawPlayer(p, moneyToRemove);
+                    Vault.getEcon().depositPlayer(killer, moneyToAdd);
+
+                    p.sendMessage(Config.getTransl("settings", "messages.info.money.withdrawn")
+                            .replace("$value", Strings.formatNumber(moneyToRemove)));
+                    killer.sendMessage(Config.getTransl("settings", "messages.info.money.deposit")
+                            .replace("$value", Strings.formatNumber(moneyToAdd)));
+                }
+            }
+        }
+    }
+
+    @EventHandler (priority = EventPriority.HIGHEST)
     public void onDamage(EntityDamageEvent e) {
         Entity en = e.getEntity();
 
@@ -38,8 +82,16 @@ public class DamageListener implements Listener {
                 int lives = data.getLives().getPlayerLives(p);
                 if (damageValue >= p.getHealth()) {
                     e.setCancelled(true);
+                    for (int i=0; i<p.getInventory().getSize(); i++) {
+                        ItemStack is = p.getInventory().getItem(i);
+                        p.getWorld().dropItem(p.getLocation(), is);
+                        p.getInventory().remove(is);
+                    }
                     p.setHealth(20);
                     p.setGameMode(GameMode.SPECTATOR);
+                    int playerDeaths = data.getStats().getPlayerData(p, "deaths");
+                    int addDeath = playerDeaths + 1;
+                    data.getStats().updatePlayerData(p, "deaths", addDeath);
                     data.getLives().updateIsDead(p, 1);
 
                     if (lives > 0) {
@@ -50,7 +102,7 @@ public class DamageListener implements Listener {
 
                     boolean canRespawn = data.getLives().canRespawn(p);
                     if (canRespawn) {
-                        data.getLives().updatePlayerLives(p, data.getLives().getPlayerLives(p) -1);
+                        data.getLives().updatePlayerLives(p, data.getLives().getPlayerLives(p) - 1);
                         p.sendMessage(Config.getTransl("settings", "messages.info.lives.members.death.can-respawn")
                                 .replace("$livesCount", String.valueOf(data.getLives().getPlayerLives(p))));
                         p.sendMessage(Config.getTransl("settings", "messages.info.lives.members.death.respawn-in"));
@@ -90,6 +142,12 @@ public class DamageListener implements Listener {
                             }.runTaskLater(plugin, 20 * 5);
                         }
                     }
+                }
+            } else {
+                if (e.getFinalDamage() >= p.getHealth()) {
+                    int playerDeaths = data.getStats().getPlayerData(p, "deaths");
+                    int addDeath = playerDeaths + 1;
+                    data.getStats().updatePlayerData(p, "deaths", addDeath);
                 }
             }
         }

@@ -270,18 +270,118 @@ public class PapiExpansions extends PlaceholderExpansion {
             toReturn = String.valueOf(value);
         }
 
+        if (param.startsWith("top_kills-member_name_")) {
+            String parameter = param;
+            int stringPosition = 0;
+            do {
+                stringPosition++;
+            } while (parameter.charAt(stringPosition) != '#');
+
+            stringPosition++;
+            char charTopPosition = parameter.charAt(stringPosition);
+            int topPosition = Integer.parseInt(String.valueOf(charTopPosition));
+
+            topPosition -= 1;
+            topPosition = topPosition > 9 ? 9 : topPosition;
+
+            List<String> list = mods.getTopKillsList();
+            String[] splitter = list.get(topPosition).split("£");
+
+            toReturn = splitter[0];
+        }
+
+        if (param.startsWith("top_kills-member_count_")) {
+            String parameter = param;
+            int stringPosition = 0;
+            do {
+                stringPosition++;
+            } while (parameter.charAt(stringPosition) != '#');
+
+            stringPosition++;
+            char charTopPosition = parameter.charAt(stringPosition);
+            int topPosition = Integer.parseInt(String.valueOf(charTopPosition));
+
+            topPosition -= 1;
+            topPosition = topPosition > 9 ? 9 : topPosition;
+
+            List<String> list = mods.getTopKillsList();
+            String[] splitter = list.get(topPosition).split("£");
+
+            toReturn = splitter[1];
+        }
+
+        if (param.startsWith("top_deaths-member_name_")) {
+            String parameter = param;
+            int stringPosition = 0;
+            do {
+                stringPosition++;
+            } while (parameter.charAt(stringPosition) != '#');
+
+            stringPosition++;
+            char charTopPosition = parameter.charAt(stringPosition);
+            int topPosition = Integer.parseInt(String.valueOf(charTopPosition));
+
+            topPosition -= 1;
+            topPosition = topPosition > 9 ? 9 : topPosition;
+
+            List<String> list = mods.getTopDeathsList();
+            String[] splitter = list.get(topPosition).split("£");
+
+            toReturn = splitter[0];
+        }
+
+        if (param.startsWith("top_deaths-member_count_")) {
+            String parameter = param;
+            int stringPosition = 0;
+            do {
+                stringPosition++;
+            } while (parameter.charAt(stringPosition) != '#');
+
+            stringPosition++;
+            char charTopPosition = parameter.charAt(stringPosition);
+            int topPosition = Integer.parseInt(String.valueOf(charTopPosition));
+
+            topPosition -= 1;
+            topPosition = topPosition > 9 ? 9 : topPosition;
+
+            List<String> list = mods.getTopDeathsList();
+            String[] splitter = list.get(topPosition).split("£");
+
+            toReturn = splitter[1];
+        }
+
         if (param.equalsIgnoreCase(conf.getSettings().getString(path + "lives.count"))) {
             String getPlayerLives = String.valueOf(data.getLives().getPlayerLives((Player) p));
             toReturn = getPlayerLives;
         }
 
-        if (param.equalsIgnoreCase(conf.getSettings().getString(path + ".deaths.is_dead"))) {
+        if (param.equalsIgnoreCase(conf.getSettings().getString(path + ".lives.is_dead"))) {
             boolean isDead = data.getLives().isDead((Player) p);
             if (isDead) {
                 toReturn = Config.getTransl("settings", "messages.others.deaths.placeholderFormats.dead");
             } else {
                 toReturn = Config.getTransl("settings", "messages.others.deaths.placeholderFormats.live");
             }
+        }
+
+        if (param.equalsIgnoreCase(conf.getSettings().getString(path + ".deathsManager.deaths_count"))) {
+            int deaths = data.getStats().getPlayerData((Player) p, "deaths");
+            toReturn = String.valueOf(deaths);
+        }
+
+        if (param.equalsIgnoreCase(conf.getSettings().getString(path + ".deathsManager.deaths_count-formatted"))) {
+            Double deaths = Double.valueOf(data.getStats().getPlayerData((Player) p, "deaths"));
+            toReturn = Strings.formatNumber(deaths);
+        }
+
+        if (param.equalsIgnoreCase(conf.getSettings().getString(path + ".deathsManager.kills_count"))) {
+            int kills = data.getStats().getPlayerData((Player) p, "kills");
+            toReturn = String.valueOf(kills);
+        }
+
+        if (param.equalsIgnoreCase(conf.getSettings().getString(path + ".deathsManager.kills_count-formatted"))) {
+            Double kills = Double.valueOf(data.getStats().getPlayerData((Player) p, "kills"));
+            toReturn = Strings.formatNumber(kills);
         }
 
         return toReturn;

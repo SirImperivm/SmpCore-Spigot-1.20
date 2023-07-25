@@ -41,6 +41,8 @@ public class Modules {
     private static List<String> topBankList;
     private static List<String> topMembersList;
     private static List<String> topLivesList;
+    private static List<String> topKillsList;
+    private static List<String> topDeathsList;
     private static List<String> depositCooldown;
     private static List<String> withdrawCooldown;
     private static List<String> spyChat;
@@ -68,6 +70,8 @@ public class Modules {
             refreshLivesTop();
             refershLifeStates();
         }
+        refreshTopKills();
+        refreshTopDeaths();
     }
 
     void refreshSettings() {
@@ -103,6 +107,58 @@ public class Modules {
                 e.printStackTrace();
             }
         }, 20, 20);
+    }
+
+    void refreshTopKills() {
+        BukkitScheduler scheduler = Bukkit.getScheduler();
+        scheduler.runTaskTimer(plugin, () -> {
+            String query = "SELECT * FROM " + data.getStats().database;
+            Map<String, Integer> map = new HashMap<>();
+            topKillsList = new ArrayList<String>();
+
+            try {
+                PreparedStatement state = data.conn.prepareStatement(query);
+                ResultSet rs = state.executeQuery();
+                while (rs.next()) {
+                    map.put(rs.getString("playerName"), rs.getInt("kills"));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            List<Map.Entry<String, Integer>> sortedList = new ArrayList<>(map.entrySet());
+            sortedList.sort((e1, e2) -> Integer.compare(e2.getValue(), e1.getValue()));
+
+            for (Map.Entry<String, Integer> entry : sortedList) {
+                topKillsList.add(entry.getKey() + "£" + entry.getValue());
+            }
+        }, 20, 20 * 20);
+    }
+
+    void refreshTopDeaths() {
+        BukkitScheduler scheduler = Bukkit.getScheduler();
+        scheduler.runTaskTimer(plugin, () -> {
+            String query = "SELECT * FROM " + data.getStats().database;
+            Map<String, Integer> map = new HashMap<>();
+            topDeathsList = new ArrayList<String>();
+
+            try {
+                PreparedStatement state = data.conn.prepareStatement(query);
+                ResultSet rs = state.executeQuery();
+                while (rs.next()) {
+                    map.put(rs.getString("playerName"), rs.getInt("deaths"));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            List<Map.Entry<String, Integer>> sortedList = new ArrayList<>(map.entrySet());
+            sortedList.sort((e1, e2) -> Integer.compare(e2.getValue(), e1.getValue()));
+
+            for (Map.Entry<String, Integer> entry : sortedList) {
+                topDeathsList.add(entry.getKey() + "£" + entry.getValue());
+            }
+        }, 20, 20 * 20);
     }
 
     void refreshLivesTop() {
@@ -1087,6 +1143,14 @@ public class Modules {
 
     public static List<String> getTopLivesList() {
         return topLivesList;
+    }
+
+    public static List<String> getTopKillsList() {
+        return topKillsList;
+    }
+
+    public static List<String> getTopDeathsList() {
+        return topDeathsList;
     }
 
     public static Db getData() {

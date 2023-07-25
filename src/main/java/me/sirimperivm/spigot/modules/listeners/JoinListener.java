@@ -27,8 +27,12 @@ public class JoinListener implements Listener {
         Player p = e.getPlayer();
         String playerName = p.getName();
 
+        if (!data.getStats().existMemberData(p)) {
+            data.getStats().insertMemberData(p, 0, 0);
+        }
+
         if (livesListener) {
-            if (!p.hasPlayedBefore() || !data.getLives().existMemberData(p)) {
+            if (!data.getLives().existMemberData(p)) {
                 data.getLives().insertMemberData(p, defaultLivesCount, 0, 1);
             }
 
