@@ -192,7 +192,7 @@ public class Modules {
     public void sendGuildInfo(Player p, String type, String guildName) {
         switch (type) {
             case "admin":
-                for (String line : conf.getSettings().getStringList("messages.tabCompleters.guilds.guild-info.admin")) {
+                for (String line : conf.getSettings().getStringList("messages.others.guilds.guild-info.admin")) {
                     String guildId = data.getGuilds().getGuildId(guildName);
                     if (line.equalsIgnoreCase("$guildCopyId")) {
                         TextComponent component = new TextComponent(Colors.text("&a[Copia ID]"));
@@ -217,7 +217,7 @@ public class Modules {
                 }
                 break;
             default:
-                for (String line : conf.getSettings().getStringList("messages.tabCompleters.guilds.guild-info.user")) {
+                for (String line : conf.getSettings().getStringList("messages.others.guilds.guild-info.user")) {
                     String guildId = data.getGuilds().getGuildId(guildName);
                     if (line.equalsIgnoreCase("$guildCopyId")) {
                         TextComponent component = new TextComponent(Colors.text("&a[Copia ID]"));
@@ -319,10 +319,10 @@ public class Modules {
 
     public void sendGuildTop(Player p, String type) {
         if (type.equals("bank")) {
-            p.sendMessage(Config.getTransl("settings", "messages.tabCompleters.guilds.top.bank.header"));
-            p.sendMessage(Config.getTransl("settings", "messages.tabCompleters.guilds.top.bank.title"));
-            p.sendMessage(Config.getTransl("settings", "messages.tabCompleters.guilds.top.bank.spacer"));
-            p.sendMessage(Config.getTransl("settings", "messages.tabCompleters.guilds.top.bank.lines.header"));
+            p.sendMessage(Config.getTransl("settings", "messages.others.guilds.top.bank.header"));
+            p.sendMessage(Config.getTransl("settings", "messages.others.guilds.top.bank.title"));
+            p.sendMessage(Config.getTransl("settings", "messages.others.guilds.top.bank.spacer"));
+            p.sendMessage(Config.getTransl("settings", "messages.others.guilds.top.bank.lines.header"));
 
             int loop = 0;
             for (String line : topBankList) {
@@ -330,7 +330,7 @@ public class Modules {
                 String guildName = splitter[0];
                 Double value = Double.parseDouble(splitter[1]);
 
-                p.sendMessage(Config.getTransl("settings", "messages.tabCompleters.guilds.top.bank.lines.line")
+                p.sendMessage(Config.getTransl("settings", "messages.others.guilds.top.bank.lines.line")
                         .replace("$guildTitle", Colors.text(getGuildTitle(guildName)))
                         .replace("$guildBalance", Strings.formatNumber(value))
                 );
@@ -340,19 +340,19 @@ public class Modules {
                 loop++;
             }
 
-            p.sendMessage(Config.getTransl("settings", "messages.tabCompleters.guilds.top.bank.footer"));
+            p.sendMessage(Config.getTransl("settings", "messages.others.guilds.top.bank.footer"));
         } else if (type.equals("members")) {
-            p.sendMessage(Config.getTransl("settings", "messages.tabCompleters.guilds.top.members.header"));
-            p.sendMessage(Config.getTransl("settings", "messages.tabCompleters.guilds.top.members.title"));
-            p.sendMessage(Config.getTransl("settings", "messages.tabCompleters.guilds.top.members.spacer"));
-            p.sendMessage(Config.getTransl("settings", "messages.tabCompleters.guilds.top.members.lines.header"));
+            p.sendMessage(Config.getTransl("settings", "messages.others.guilds.top.members.header"));
+            p.sendMessage(Config.getTransl("settings", "messages.others.guilds.top.members.title"));
+            p.sendMessage(Config.getTransl("settings", "messages.others.guilds.top.members.spacer"));
+            p.sendMessage(Config.getTransl("settings", "messages.others.guilds.top.members.lines.header"));
 
             int loop = 0;
             for (String line : topMembersList) {
                 String[] splitter = line.split("£");
                 String guildName = splitter[0];
 
-                p.sendMessage(Config.getTransl("settings", "messages.tabCompleters.guilds.top.members.lines.line")
+                p.sendMessage(Config.getTransl("settings", "messages.others.guilds.top.members.lines.line")
                         .replace("$guildTitle", Colors.text(getGuildTitle(guildName)))
                         .replace("$membersCount", splitter[1])
                 );
@@ -361,7 +361,7 @@ public class Modules {
                 }
                 loop++;
             }
-            p.sendMessage(Config.getTransl("settings", "messages.tabCompleters.guilds.top.members.footer"));
+            p.sendMessage(Config.getTransl("settings", "messages.others.guilds.top.members.footer"));
         }
     }
 
@@ -398,10 +398,10 @@ public class Modules {
 
         switch (type) {
             case "admin":
-                p.sendMessage(Config.getTransl("settings", "messages.tabCompleters.guilds.list.admin.header"));
-                p.sendMessage(Config.getTransl("settings", "messages.tabCompleters.guilds.list.admin.title"));
-                p.sendMessage(Config.getTransl("settings", "messages.tabCompleters.guilds.list.admin.spacer"));
-                p.sendMessage(Config.getTransl("settings", "messages.tabCompleters.guilds.list.admin.lines.header"));
+                p.sendMessage(Config.getTransl("settings", "messages.others.guilds.list.admin.header"));
+                p.sendMessage(Config.getTransl("settings", "messages.others.guilds.list.admin.title"));
+                p.sendMessage(Config.getTransl("settings", "messages.others.guilds.list.admin.spacer"));
+                p.sendMessage(Config.getTransl("settings", "messages.others.guilds.list.admin.lines.header"));
                 for (String key : guildsList.keySet()) {
                     String guildId = guildsList.get(key).get(0);
                     int boughtStatus = Integer.parseInt(guildsList.get(key).get(1));
@@ -409,7 +409,7 @@ public class Modules {
                     TextComponent component = new TextComponent(Colors.text("&a[Copia ID]"));
                     component.setClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, guildId));
                     component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Copia l'ID").create()));
-                    p.sendMessage(Config.getTransl("settings", "messages.tabCompleters.guilds.list.admin.lines.line")
+                    p.sendMessage(Config.getTransl("settings", "messages.others.guilds.list.admin.lines.line")
                             .replace("$guildName", data.getGuilds().getGuildName(guildId))
                             .replace("$guildId", guildId)
                             .replace("$boughtStats", boughtStatus == 1 ? "acquistata" : "non acquistata")
@@ -417,24 +417,24 @@ public class Modules {
                     );
                     p.spigot().sendMessage(component);
                 }
-                p.sendMessage(Config.getTransl("settings", "messages.tabCompleters.guilds.list.admin.footer"));
+                p.sendMessage(Config.getTransl("settings", "messages.others.guilds.list.admin.footer"));
                 break;
             default:
-                p.sendMessage(Config.getTransl("settings", "messages.tabCompleters.guilds.list.user.header"));
-                p.sendMessage(Config.getTransl("settings", "messages.tabCompleters.guilds.list.user.title"));
-                p.sendMessage(Config.getTransl("settings", "messages.tabCompleters.guilds.list.user.spacer"));
-                p.sendMessage(Config.getTransl("settings", "messages.tabCompleters.guilds.list.user.lines.header"));
+                p.sendMessage(Config.getTransl("settings", "messages.others.guilds.list.user.header"));
+                p.sendMessage(Config.getTransl("settings", "messages.others.guilds.list.user.title"));
+                p.sendMessage(Config.getTransl("settings", "messages.others.guilds.list.user.spacer"));
+                p.sendMessage(Config.getTransl("settings", "messages.others.guilds.list.user.lines.header"));
                 for (String key : guildsList.keySet()) {
                     String guildId = guildsList.get(key).get(0);
                     int boughtStatus = Integer.parseInt(guildsList.get(key).get(1));
 
-                    p.sendMessage(Config.getTransl("settings", "messages.tabCompleters.guilds.list.user.lines.line")
+                    p.sendMessage(Config.getTransl("settings", "messages.others.guilds.list.user.lines.line")
                             .replace("$guildName", data.getGuilds().getGuildName(guildId))
                             .replace("$boughtStats", boughtStatus == 1 ? "acquistata" : "non acquistata")
                             .replace("$guildMembers", Strings.formatNumber(getMembersCount(guildId)))
                     );
                 }
-                p.sendMessage(Config.getTransl("settings", "messages.tabCompleters.guilds.list.user.footer"));
+                p.sendMessage(Config.getTransl("settings", "messages.others.guilds.list.user.footer"));
                 break;
         }
     }

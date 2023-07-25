@@ -178,7 +178,7 @@ public class GuildMembers {
     }
 
     public String getOnlineOfficers(String guildId) {
-        StringBuilder sb = new StringBuilder(conf.getSettings().getString("messages.tabCompleters.guilds.guild-info.general.online-officers.format-prefix"));
+        StringBuilder sb = new StringBuilder(conf.getSettings().getString("messages.others.guilds.guild-info.general.online-officers.format-prefix"));
         String query = "SELECT * FROM " + database;
 
         try {
@@ -190,9 +190,9 @@ public class GuildMembers {
                         String username = rs.getString("username");
                         Player p = Bukkit.getPlayerExact(username);
                         if (p != null) {
-                            sb.append(conf.getSettings().getString("messages.tabCompleters.guilds.guild-info.general.online-officers.userformat")
+                            sb.append(conf.getSettings().getString("messages.others.guilds.guild-info.general.online-officers.userformat")
                                     .replace("$username", username))
-                                    .append(conf.getSettings().getString("messages.tabCompleters.guilds.guild-info.general.online-officers.commas"));
+                                    .append(conf.getSettings().getString("messages.others.guilds.guild-info.general.online-officers.commas"));
                         }
                     }
                 }
@@ -205,7 +205,7 @@ public class GuildMembers {
     }
 
     public String getOnlineGuilders(String guildId) {
-        StringBuilder sb = new StringBuilder(conf.getSettings().getString("messages.tabCompleters.guilds.guild-info.general.online-guilders.format-prefix"));
+        StringBuilder sb = new StringBuilder(conf.getSettings().getString("messages.others.guilds.guild-info.general.online-guilders.format-prefix"));
         String query = "SELECT * FROM " + database;
 
         try {
@@ -217,9 +217,9 @@ public class GuildMembers {
                         String username = rs.getString("username");
                         Player p = Bukkit.getPlayerExact(username);
                         if (p != null) {
-                            sb.append(conf.getSettings().getString("messages.tabCompleters.guilds.guild-info.general.online-guilders.userformat")
+                            sb.append(conf.getSettings().getString("messages.others.guilds.guild-info.general.online-guilders.userformat")
                                             .replace("$username", username))
-                                    .append(conf.getSettings().getString("messages.tabCompleters.guilds.guild-info.general.online-guilders.commas"));
+                                    .append(conf.getSettings().getString("messages.others.guilds.guild-info.general.online-guilders.commas"));
                         }
                     }
                 }
