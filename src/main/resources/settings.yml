@@ -115,6 +115,13 @@ messages:
           can-respawn: "%ipSei morto, hai perso 1 vita, rimanenti &e$livesCount&7."
           cant-respawn: "%ipSei morto, hai perso tutte le tue vite, non potrai rigiocare."
           respawn-in: "%ipRespawnerai tra &e5 &7secondi."
+      life:
+        added:
+          user: "%ipHai ricevuto &e$livesCount&7 vite al tuo account, totale &e$totalCount&7."
+          admin: "%ipHai aggiunto &e$livesCount&7 vite all'utente &e$playerName&7."
+        taken:
+          user: "%ipSono state rimosse &e$livesCount&7 vite dal tuo account, totale &e$totalCount&7."
+          admin: "%ipHai rimosso &e$livesCount&7 vite all'utente &e$playerName&7."
     general:
       time:
         expired: "%ipTempo scaduto."
@@ -192,6 +199,7 @@ messages:
     lives:
       deathZone:
         not-located: "%fpNon è stato impostato lo spawn della deathzone, è richiesta una segnalazione allo staff."
+      contains-chars: "%fpIn questa sezione è solo possibile usare numeri."
   others:
     guilds:
       chat: "&a[GC] &f $guildRole $playerName &8» &f$message"
@@ -285,6 +293,10 @@ messages:
           header: "&5Nome   Vite"
           line: "$playerName $livesCount"
         footer: "&7|----------|&e✦&7|----------|"
+      info:
+        - "&2✦»&m               &2¦✦¦&m               &2«✦"
+        - "&aL'utente &b$playerName &aha &b$livesCount &avite."
+        - "&2✦»&m               &2¦✦¦&m               &2«✦"
 placeholders:
   guilds:
     name: guild_name # Il placeholder relativo è %smpc_guild_name%
@@ -299,6 +311,8 @@ placeholders:
     members:
       count: guild_members-count #  Il placeholder rleativo è %smpc_guild_members-count%
       limit: guild_members-limit #  Il placeholder rleativo è %smpc_guild_members-limit%
+  lives:
+    count: lives_count # Il placeholder relativo è %smpc_lives_count%
 permissions:
   admin-commands:
     core:

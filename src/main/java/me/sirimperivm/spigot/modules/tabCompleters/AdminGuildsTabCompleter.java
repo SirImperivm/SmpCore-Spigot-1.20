@@ -115,27 +115,9 @@ public class AdminGuildsTabCompleter implements TabCompleter {
                 } else if (a.length == 4) {
                     List<String> args4 = new ArrayList<String>();
                     if (a[0].equalsIgnoreCase("createguild")) {
-                        args4.add("0");
-                        args4.add("1");
-                        args4.add("2");
-                        args4.add("3");
-                        args4.add("4");
-                        args4.add("5");
-                        args4.add("6");
-                        args4.add("7");
-                        args4.add("8");
-                        args4.add("9");
+                        args4.add("<insertNumber>");
                     } else if (a[0].equalsIgnoreCase("money")) {
-                        args4.add("0");
-                        args4.add("1");
-                        args4.add("2");
-                        args4.add("3");
-                        args4.add("4");
-                        args4.add("5");
-                        args4.add("6");
-                        args4.add("7");
-                        args4.add("8");
-                        args4.add("9");
+                        args4.add("<insertNumber>");
                     }
 
                     if (args4.contains(p.getName())) {

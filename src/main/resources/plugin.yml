@@ -22,3 +22,6 @@ commands:
   smpc:
     aliases:
       - smpcore
+  la:
+    aliases:
+      - livesadmin

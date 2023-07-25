@@ -357,6 +357,17 @@ public class Modules {
         s.sendMessage(Config.getTransl("settings", "messages.others.lives.top.footer"));
     }
 
+    public void sendLivesInfo(CommandSender s, Player t) {
+        int livesCount = data.getLives().getPlayerLives(t);
+
+        for (String line : conf.getSettings().getStringList("messages.others.lives.info")) {
+            s.sendMessage(Colors.text(line
+                    .replace("$playerName", t.getName())
+                    .replace("$livesCount", String.valueOf(livesCount))
+            ));
+        }
+    }
+
     public void sendGuildList(Player p, String type) {
         guildsList = data.getGuilds().getBoughtGuildList();
 

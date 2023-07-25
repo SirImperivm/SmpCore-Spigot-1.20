@@ -6,6 +6,7 @@ import me.sirimperivm.spigot.assets.managers.Db;
 import me.sirimperivm.spigot.assets.managers.Modules;
 import me.sirimperivm.spigot.assets.utils.Colors;
 import me.sirimperivm.spigot.assets.utils.Errors;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -47,14 +48,107 @@ public class AdminLivesCommand implements CommandExecutor {
                                 mods.setDeathZone(p);
                             }
                         }
-                    }
-                    if (a[0].equalsIgnoreCase("life-top")) {
+                    } else if (a[0].equalsIgnoreCase("life-top")) {
                         if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.admin-commands.lives.top"))) {
                             return true;
                         } else {
                             mods.sendLivesTop(s);
                         }
                     } else {
+                        getUsage(s);
+                    }
+                } else if (a.length == 2) {
+                    if (a[0].equalsIgnoreCase("info")) {
+                        if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.admin-commands.lives.info"))) {
+                            return true;
+                        } else {
+                            Player t = Bukkit.getPlayerExact(a[1]);
+                            if (t == null) {
+                                s.sendMessage(Config.getTransl("settings", "messages.errors.players.not-found"));
+                            } else {
+                                mods.sendLivesInfo(s, t);
+                            }
+                        }
+                    } else {
+                        getUsage(s);
+                    }
+                }
+                else if (a.length == 3) {
+                    if (a[0].equalsIgnoreCase("give-life")) {
+                        if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.admin-commands.lives.life.give"))) {
+                            return true;
+                        } else {
+                            Player t = Bukkit.getPlayerExact(a[1]);
+                            if (t == null) {
+                                s.sendMessage(Config.getTransl("settings", "messages.errors.players.not-found"));
+                            } else {
+                                String stringToAdd = a[2];
+                                boolean containsChars = false;
+                                for (char ch : stringToAdd.toCharArray()) {
+                                    if (!(ch >= '0' && ch <= '9')) {
+                                        containsChars = true;
+                                        break;
+                                    }
+                                }
+                                if (!containsChars) {
+                                    int toAdd = Integer.parseInt(stringToAdd);
+                                    int getLives = data.getLives().getPlayerLives(t);
+                                    int total = toAdd + getLives;
+
+                                    data.getLives().updatePlayerLives(t,total);
+                                    s.sendMessage(Config.getTransl("settings", "messages.info.lives.life.added.admin")
+                                            .replace("$livesCount", String.valueOf(toAdd))
+                                            .replace("$playerName", a[1])
+                                    );
+                                    t.sendMessage(Config.getTransl("settings", "messages.info.lives.life.added.user")
+                                            .replace("$livesCount", String.valueOf(toAdd))
+                                            .replace("$totalCount", String.valueOf(total))
+                                    );
+
+                                } else {
+                                    s.sendMessage(Config.getTransl("settings", "messages.errors.lives.contains-chars"));
+                                }
+                            }
+                        }
+                    }
+                    else if (a[0].equalsIgnoreCase("take-life")) {
+                        if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.admin-commands.lives.life.take"))) {
+                            return true;
+                        } else {
+                            Player t = Bukkit.getPlayerExact(a[1]);
+                            if (t == null) {
+                                s.sendMessage(Config.getTransl("settings", "messages.errors.players.not-found"));
+                            } else {
+                                String stringToRemove = a[2];
+                                boolean containsChars = false;
+                                for (char ch : stringToRemove.toCharArray()) {
+                                    if (!(ch >= '0' && ch <= '9')) {
+                                        containsChars = true;
+                                        break;
+                                    }
+                                }
+                                if (!containsChars) {
+                                    int toRemove = Integer.parseInt(stringToRemove);
+                                    int getLives = data.getLives().getPlayerLives(t);
+                                    int total = getLives - toRemove;
+
+                                    data.getLives().updatePlayerLives(t,total);
+                                    s.sendMessage(Config.getTransl("settings", "messages.info.lives.life.taken.admin")
+                                            .replace("$livesCount", String.valueOf(toRemove))
+                                            .replace("$playerName", a[1])
+                                    );
+                                    t.sendMessage(Config.getTransl("settings", "messages.info.lives.life.taken.user")
+                                            .replace("$livesCount", String.valueOf(toRemove))
+                                            .replace("$totalCount", String.valueOf(total))
+                                    );
+
+                                } else {
+                                    s.sendMessage(Config.getTransl("settings", "messages.errors.lives.contains-chars"));
+                                }
+                            }
+                        }
+                    }
+                    else {
                         getUsage(s);
                     }
                 }

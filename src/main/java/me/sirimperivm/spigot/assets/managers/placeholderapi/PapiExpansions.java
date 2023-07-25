@@ -7,6 +7,7 @@ import me.sirimperivm.spigot.assets.managers.Db;
 import me.sirimperivm.spigot.assets.managers.Modules;
 import me.sirimperivm.spigot.assets.other.Strings;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -267,6 +268,11 @@ public class PapiExpansions extends PlaceholderExpansion {
             int value = Integer.parseInt(splitter[1]);
 
             toReturn = String.valueOf(value);
+        }
+
+        if (param.equalsIgnoreCase(conf.getSettings().getString(path + "lives.count"))) {
+            String getPlayerLives = String.valueOf(data.getLives().getPlayerLives((Player) p));
+            toReturn = getPlayerLives;
         }
 
         return toReturn;
