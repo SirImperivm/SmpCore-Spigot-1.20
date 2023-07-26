@@ -134,6 +134,9 @@ messages:
         taken:
           user: "%ipSono state rimosse &e$livesCount&7 vite dal tuo account, totale &e$totalCount&7."
           admin: "%ipHai rimosso &e$livesCount&7 vite all'utente &e$playerName&7."
+    pvpArena:
+      joined: "%ipSei joinato nell'arena pvp."
+      left: "%ipSei uscito dall'arena pvp."
     general:
       time:
         expired: "%ipTempo scaduto."
@@ -213,6 +216,12 @@ messages:
         not-located: "%fpNon è stato impostato lo spawn della deathzone, è richiesta una segnalazione allo staff."
       contains-chars: "%fpIn questa sezione è solo possibile usare numeri."
       commandBlocked: "%fpSei morto, non puoi eseguire questo comando."
+    pvpArena:
+      spawn:
+        not-set: "%fpNon è stato impostato lo spawn dell'arena pvp."
+      players:
+        already-joined: "%fpSei già entrato nell'arena pvp."
+        not-joined: "%fpNon sei entrato nell'arena pvp."
   others:
     guilds:
       chat: "&a[GC] &f $guildRole $playerName &8» &f$message"
@@ -391,8 +400,12 @@ permissions:
       get:
         user: smpc.usercommands.lives.get
         others: smpc.usercommands.lives.get.others
-    pvpGui:
-      main: smpc.usercommands.pvpgui.main
+    arena:
+      main: smpc.usercommands.arena.main
+      join: smpc.usercommands.arena.join
+      leave: smpc.usercommands.arena.leave
+      gui: smpc.usercommands.arena.gui
+      bet: smpc.usercommands.arena.bet
   user-actions:
     guilds:
       shop:
@@ -403,8 +416,6 @@ permissions:
         withdraw: smpc.user.guilds.bank.withdraw
       upgrades:
         use: smpc.user.guilds.upgrades.use
-    pvpGui:
-      use: smpc.user.pvpGui.use
   admin-actions:
     guilds:
       entering:

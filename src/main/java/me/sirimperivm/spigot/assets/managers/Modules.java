@@ -38,6 +38,8 @@ public class Modules {
     private static HashMap<String, List<String>> guildsData;
     private static HashMap<String, String> guildsChat;
     private static HashMap<String, List<String>> guildsList;
+    private static HashMap<String, Location> pvpArenaJoins;
+    private static HashMap<String, String> pvpArenaData;
     private static List<String> topBankList;
     private static List<String> topMembersList;
     private static List<String> topLivesList;
@@ -56,6 +58,8 @@ public class Modules {
         invites = new HashMap<String, String>();
         guildsChat = new HashMap<String, String>();
         guildsList = new HashMap<String, List<String>>();
+        pvpArenaJoins = new HashMap<String, Location>();
+        pvpArenaData = new HashMap<String, String>();
         spyChat = new ArrayList<String>();
         guildMembers = new ArrayList<String>();
         depositCooldown = new ArrayList<String>();
@@ -1004,6 +1008,19 @@ public class Modules {
         p.teleport(loc);
     }
 
+    public void sendPlayerToArenaSpawn(Player p) {
+        String path = "locations.defaultSpawn";
+        World world = Bukkit.getWorld(conf.getArenaPvP().getString(path + ".world"));
+        double posX = conf.getZones().getDouble(path + ".posX");
+        double posY = conf.getZones().getDouble(path + ".posY");
+        double posZ = conf.getZones().getDouble(path + ".posZ");
+        float rotYaw = conf.getZones().getInt(path + ".rotYaw");
+        float rotPitch = conf.getZones().getInt(path + ".rotPitch");
+        Location loc = new Location(world, posX, posY, posZ, rotYaw, rotPitch);
+
+        p.teleport(loc);
+    }
+
     public void sendGuildersBroadcast(String guildId, String message, String exceptedUsername) {
         for (String key : guildsData.keySet()) {
             List<String> guildsAndRole = guildsData.get(key);
@@ -1093,7 +1110,7 @@ public class Modules {
         }
     }
 
-    public boolean isSetPvPLocation(String team, String type) {
+    public boolean isSetAreaLocation(String team, String type) {
         boolean value = true;
         String path = "locations." + team + "." + type;
         if (conf.getArenaPvP().getString(path + ".world").equalsIgnoreCase("null")) {
@@ -1128,6 +1145,14 @@ public class Modules {
 
     public static HashMap<String, String> getGuildsChat() {
         return guildsChat;
+    }
+
+    public static HashMap<String, Location> getPvpArenaJoins() {
+        return pvpArenaJoins;
+    }
+
+    public static HashMap<String, String> getPvpArenaData() {
+        return pvpArenaData;
     }
 
     public static List<String> getDepositCooldown() {

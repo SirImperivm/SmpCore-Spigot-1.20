@@ -64,9 +64,12 @@ helps:
       - "&a/lives(l) get &e<player> &7- &fMostra quante vite ha un utente."
       - ""
       - "&8&m                              "
-    pvpGui:
+    arena:
       - "&8&m                              "
       - ""
-      - "&a/pvpGui &7- &fApre la gui del pvp."
+      - "&a/arena join &7- &fEntri nell'arena."
+      - "&a/arena leave &7- &fEsci dall'arena."
+      - "&a/arena gui &7- &fApri la gui dell'arena."
+      - "&a/arena bet &e<value> <player> &7- &fPunti dei soldi sulla vincita di un player."
       - ""
       - "&8&m                              "

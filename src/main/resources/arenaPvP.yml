@@ -138,3 +138,10 @@ locations:
       posZ: 0.0
       rotYaw: 0.00
       rotPitch: 0.00
+  defaultSpawn:
+    world: "null"
+    posX: 0.0
+    posY: 0.0
+    posZ: 0.0
+    rotYaw: 0.00
+    rotPitch: 0.00

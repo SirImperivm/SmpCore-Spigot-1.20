@@ -14,7 +14,6 @@ import me.sirimperivm.spigot.modules.commands.admin.guilds.AdminGuildsCommand;
 import me.sirimperivm.spigot.modules.commands.admin.lives.AdminLivesCommand;
 import me.sirimperivm.spigot.modules.commands.users.guilds.GuildsCommand;
 import me.sirimperivm.spigot.modules.commands.users.lives.LivesCommand;
-import me.sirimperivm.spigot.modules.commands.users.pvp.PvPGui;
 import me.sirimperivm.spigot.modules.listeners.*;
 import me.sirimperivm.spigot.modules.tabCompleters.*;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -87,7 +86,6 @@ public final class Main extends JavaPlugin {
         getServer().getPluginCommand("la").setExecutor(new AdminLivesCommand());
         getServer().getPluginCommand("g").setExecutor(new GuildsCommand());
         getServer().getPluginCommand("l").setExecutor(new LivesCommand());
-        getServer().getPluginCommand("pvpGui").setExecutor(new PvPGui());
 
         getServer().getPluginCommand("ga").setTabCompleter(new AdminGuildsTabCompleter());
         getServer().getPluginCommand("smpc").setTabCompleter(new AdminSmpcTabCompleter());
