@@ -391,6 +391,8 @@ permissions:
       get:
         user: smpc.usercommands.lives.get
         others: smpc.usercommands.lives.get.others
+    pvpGui:
+      main: smpc.usercommands.pvpgui.main
   user-actions:
     guilds:
       shop:
@@ -401,6 +403,8 @@ permissions:
         withdraw: smpc.user.guilds.bank.withdraw
       upgrades:
         use: smpc.user.guilds.upgrades.use
+    pvpGui:
+      use: smpc.user.pvpGui.use
   admin-actions:
     guilds:
       entering:

@@ -28,3 +28,5 @@ commands:
   l:
     aliases:
       - lives
+  pvpGui:
+    aliases: []

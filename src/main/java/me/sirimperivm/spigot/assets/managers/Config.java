@@ -18,8 +18,8 @@ public class Config {
     private static Main plugin = Main.getPlugin();
     private static Logger log = Logger.getLogger("SMPCore");
     private File folder = plugin.getDataFolder();
-    private File settingsFile, guildsFile, helpsFile, guisFile, zonesFile;
-    private FileConfiguration settings, guilds, helps, guis, zones;
+    private File settingsFile, guildsFile, helpsFile, guisFile, zonesFile, arenaPvPFile;
+    private FileConfiguration settings, guilds, helps, guis, zones, arenaPvP;
 
     public Config() {
         settingsFile = new File(folder, "settings.yml");
@@ -32,6 +32,8 @@ public class Config {
         guis = new YamlConfiguration();
         zonesFile = new File(folder, "zones.yml");
         zones = new YamlConfiguration();
+        arenaPvPFile = new File(folder, "arenaPvP.yml");
+        arenaPvP = new YamlConfiguration();
 
         if (!folder.exists()) {
             folder.mkdir();
@@ -55,6 +57,10 @@ public class Config {
 
         if (!zonesFile.exists()) {
             create(zones, zonesFile);
+        }
+
+        if (!arenaPvPFile.exists()) {
+            create(arenaPvP, arenaPvPFile);
         }
     }
 
@@ -95,6 +101,7 @@ public class Config {
         save(helps, helpsFile);
         save(guis, guisFile);
         save(zones, zonesFile);
+        save(arenaPvP, arenaPvPFile);
     }
 
     public void loadAll() {
@@ -103,6 +110,7 @@ public class Config {
         load(helps, helpsFile);
         load(guis, guisFile);
         load(zones, zonesFile);
+        load(arenaPvP, arenaPvPFile);
     }
 
     public File getSettingsFile() {
@@ -125,6 +133,10 @@ public class Config {
         return zonesFile;
     }
 
+    public File getArenaPvPFile() {
+        return arenaPvPFile;
+    }
+
     public FileConfiguration getSettings() {
         return settings;
     }
@@ -143,6 +155,10 @@ public class Config {
 
     public FileConfiguration getZones() {
         return zones;
+    }
+
+    public FileConfiguration getArenaPvP() {
+        return arenaPvP;
     }
 
     public static String getTransl(String type, String key) {
@@ -167,6 +183,12 @@ public class Config {
                 );
             case "zones":
                 return Colors.text(Main.getConf().getZones().getString(key)
+                        .replace("%sp", Main.getSuccessPrefix())
+                        .replace("%ip", Main.getInfoPrefix())
+                        .replace("%fp", Main.getFailPrefix())
+                );
+            case "arenaPvP":
+                return Colors.text(Main.getConf().getArenaPvP().getString(key)
                         .replace("%sp", Main.getSuccessPrefix())
                         .replace("%ip", Main.getInfoPrefix())
                         .replace("%fp", Main.getFailPrefix())

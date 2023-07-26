@@ -11,7 +11,8 @@ public enum Configs {
     guilds(Main.getConf().getGuilds(), Main.getConf().getGuildsFile()),
     helps(Main.getConf().getHelps(), Main.getConf().getHelpsFile()),
     guis(Main.getConf().getGuis(), Main.getConf().getGuisFile()),
-    zones(Main.getConf().getZones(), Main.getConf().getZonesFile());
+    zones(Main.getConf().getZones(), Main.getConf().getZonesFile()),
+    arenaPvP(Main.getConf().getArenaPvP(), Main.getConf().getArenaPvPFile());
 
     private FileConfiguration c;
     private File f;

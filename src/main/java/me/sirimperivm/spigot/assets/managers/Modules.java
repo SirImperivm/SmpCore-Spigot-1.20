@@ -1093,6 +1093,15 @@ public class Modules {
         }
     }
 
+    public boolean isSetPvPLocation(String team, String type) {
+        boolean value = true;
+        String path = "locations." + team + "." + type;
+        if (conf.getArenaPvP().getString(path + ".world").equalsIgnoreCase("null")) {
+            value = false;
+        }
+        return value;
+    }
+
     public static List<String> getGeneratedGuilds() {
         return generatedGuilds;
     }

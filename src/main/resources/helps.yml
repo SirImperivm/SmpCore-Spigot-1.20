@@ -64,3 +64,9 @@ helps:
       - "&a/lives(l) get &e<player> &7- &fMostra quante vite ha un utente."
       - ""
       - "&8&m                              "
+    pvpGui:
+      - "&8&m                              "
+      - ""
+      - "&a/pvpGui &7- &fApre la gui del pvp."
+      - ""
+      - "&8&m                              "
