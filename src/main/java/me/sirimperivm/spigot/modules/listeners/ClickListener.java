@@ -377,24 +377,5 @@ public class ClickListener implements Listener {
 
             return;
         }
-
-        if (title.equalsIgnoreCase(Config.getTransl("arenaPvP", "gui.title"))) {
-            e.setCancelled(true);
-            e.setResult(Event.Result.DENY);
-
-            if (Errors.noPermAction(p, conf.getSettings().getString("permissions.user-actions.pvpGui.use"))) {
-                return;
-            } else {
-                for (String item : conf.getArenaPvP().getConfigurationSection("gui.items").getKeys(false)) {
-                    String itemsPath = "gui.items." + item;
-                    List<Integer> slots = conf.getArenaPvP().getIntegerList(itemsPath + ".slots");
-                    if (slots.contains(slot)) {
-                        String actionType = conf.getArenaPvP().getString(itemsPath + ".action");
-                    }
-                }
-            }
-
-            return;
-        }
     }
 }

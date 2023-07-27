@@ -44,10 +44,16 @@ public class DamageListener implements Listener {
                 if (damage >= p.getHealth()) {
                     for (int i=0; i<p.getInventory().getSize(); i++) {
                         ItemStack is = p.getInventory().getItem(i);
-                        p.getWorld().dropItem(p.getLocation(), is);
-                        p.getInventory().remove(is);
+                        if (is != null) {
+                            p.getWorld().dropItem(p.getLocation(), is);
+                            p.getInventory().remove(is);
+                        }
                     }
                     Player killer = (Player) damager;
+
+                    String killerName = killer.getName();
+                    String playerName = p.getName();
+
                     int playerKills = data.getStats().getPlayerData(killer, "kills");
                     int addDeath = playerDeaths + 1;
                     data.getStats().updatePlayerData(p, "deaths", addDeath);
@@ -64,6 +70,7 @@ public class DamageListener implements Listener {
                             .replace("$value", Strings.formatNumber(moneyToRemove)));
                     killer.sendMessage(Config.getTransl("settings", "messages.info.money.deposit")
                             .replace("$value", Strings.formatNumber(moneyToAdd)));
+
                 }
             }
         }
@@ -84,8 +91,10 @@ public class DamageListener implements Listener {
                     e.setCancelled(true);
                     for (int i=0; i<p.getInventory().getSize(); i++) {
                         ItemStack is = p.getInventory().getItem(i);
-                        p.getWorld().dropItem(p.getLocation(), is);
-                        p.getInventory().remove(is);
+                        if (is != null) {
+                            p.getWorld().dropItem(p.getLocation(), is);
+                            p.getInventory().remove(is);
+                        }
                     }
                     p.setHealth(20);
                     p.setGameMode(GameMode.SPECTATOR);

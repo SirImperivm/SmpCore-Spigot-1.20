@@ -207,39 +207,4 @@ public class Gui {
         }
         return inv;
     }
-
-    public Inventory pvpGui() {
-        String guiTitle = Config.getTransl("arenaPvP", "gui.title");
-        int guiSize = 9 * conf.getArenaPvP().getInt("gui.rows");
-
-        Inventory inv = Bukkit.createInventory(null, guiSize, guiTitle);
-
-        for (String item : conf.getArenaPvP().getConfigurationSection("gui.items").getKeys(false)) {
-            String itemsPath = "gui.items." + item;
-            List<Integer> slots = conf.getArenaPvP().getIntegerList(itemsPath + ".slots");
-
-            ItemStack material = new ItemStack(Material.getMaterial(conf.getArenaPvP().getString(itemsPath + ".material")));
-            ItemMeta meta = material.getItemMeta();
-            String displayName = conf.getArenaPvP().getString(itemsPath + ".displayName");
-            if (!displayName.equalsIgnoreCase("null")) {
-                meta.setDisplayName(Colors.text(displayName));
-            }
-            meta.setLore(General.lore(conf.getArenaPvP().getStringList(itemsPath + ".lore")));
-            meta.setCustomModelData(conf.getArenaPvP().getInt(itemsPath + ".model"));
-            if (conf.getArenaPvP().getBoolean(itemsPath + ".glowing")) {
-                meta.addEnchant(Enchantment.DURABILITY, 1, true);
-                meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-            }
-            for (String flag : conf.getArenaPvP().getStringList(itemsPath + ".itemFlags")) {
-                meta.addItemFlags(ItemFlag.valueOf(flag));
-            }
-            material.setItemMeta(meta);
-
-            for (Integer i : slots) {
-                inv.setItem(i, material);
-            }
-        }
-
-        return inv;
-    }
 }
