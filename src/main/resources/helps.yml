@@ -34,6 +34,13 @@ helps:
       - "&a/livesadmin(la) take-life &e<player> <quantità> &7- &fRimuovi da un utente delle vite."
       - ""
       - "&8&m                              "
+    bounties:
+      - "&8&m                              "
+      - ""
+      - "&a/bountyadmin(ba) remove &e<player> &7- &fRimuove una taglia da un utente."
+      - "&a/bountyadmin(ba) set &e<player> <taglia> &7- &fImposta una taglia ad un utente."
+      - ""
+      - "&8&m                              "
   user-commands:
     guilds:
       - "&8&m                              "
@@ -64,12 +71,9 @@ helps:
       - "&a/lives(l) get &e<player> &7- &fMostra quante vite ha un utente."
       - ""
       - "&8&m                              "
-    arena:
+    bounties:
       - "&8&m                              "
       - ""
-      - "&a/arena join &7- &fEntri nell'arena."
-      - "&a/arena leave &7- &fEsci dall'arena."
-      - "&a/arena gui &7- &fApri la gui dell'arena."
-      - "&a/arena bet &e<value> <player> &7- &fPunti dei soldi sulla vincita di un player."
+      - "&a/bounty(b) &e<player> <taglia> &7- &fInserisci una taglia ad un utente."
       - ""
       - "&8&m                              "

@@ -20,6 +20,7 @@ public class Db {
     private static Tasks tasks;
     private static Lives lives;
     private static Statistics stats;
+    private static Bounties bounties;
     public static Connection conn;
     public static String dbname = conf.getSettings().getString("settings.database.dbname");
     public static String tablePrefix = conf.getSettings().getString("settings.database.tablePrefix");
@@ -83,6 +84,7 @@ public class Db {
         tasks = new Tasks();
         lives = new Lives();
         stats = new Statistics();
+        bounties = new Bounties();
         guilds.createTable();
         guildMembers.createTable();
         tasks.createTable();
@@ -90,6 +92,7 @@ public class Db {
             lives.createTable();
         }
         stats.createTable();
+        bounties.createTable();
     }
 
     public static Guilds getGuilds() {
@@ -110,5 +113,9 @@ public class Db {
 
     public static Statistics getStats() {
         return stats;
+    }
+
+    public static Bounties getBounties() {
+        return bounties;
     }
 }

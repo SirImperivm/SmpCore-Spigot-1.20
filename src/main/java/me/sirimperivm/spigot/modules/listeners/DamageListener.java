@@ -6,6 +6,8 @@ import me.sirimperivm.spigot.assets.managers.Db;
 import me.sirimperivm.spigot.assets.managers.Modules;
 import me.sirimperivm.spigot.assets.managers.values.Vault;
 import me.sirimperivm.spigot.assets.other.Strings;
+import me.sirimperivm.spigot.assets.utils.Colors;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -70,7 +72,31 @@ public class DamageListener implements Listener {
                             .replace("$value", Strings.formatNumber(moneyToRemove)));
                     killer.sendMessage(Config.getTransl("settings", "messages.info.money.deposit")
                             .replace("$value", Strings.formatNumber(moneyToAdd)));
+                    for (Player players : Bukkit.getOnlinePlayers()) {
+                        players.sendMessage(Config.getTransl("settings", "messages.others.deaths.message.by-player")
+                                .replace("$killer", killerName)
+                                .replace("$victim", playerName));
+                    }
 
+                    if (data.getBounties().hasBounty(p.getName())) {
+                        for (Player players : Bukkit.getOnlinePlayers()) {
+                            for (String line : conf.getSettings().getStringList("messages.info.bounties.obtained.broadcast")) {
+                                players.sendMessage(Colors.text(line
+                                        .replace("$targetName", p.getName())
+                                ));
+                            }
+                        }
+                        double bountyValue = 1;
+                        if (data.getBounties().getBountyExecutor(p.getName()).equalsIgnoreCase(killerName)) {
+                            bountyValue = 2 * data.getBounties().getBounty(playerName);
+                        } else {
+                            bountyValue = data.getBounties().getBounty(playerName);
+                        }
+                        Vault.getEcon().depositPlayer(killer, bountyValue);
+                        p.sendMessage(Config.getTransl("settings", "messages.info.money.deposit")
+                                .replace("$value", Strings.formatNumber(bountyValue)));
+                        data.getBounties().deleteMemberData(p.getName());
+                    }
                 }
             }
         }
@@ -152,11 +178,19 @@ public class DamageListener implements Listener {
                         }
                     }
                 }
+                for (Player players : Bukkit.getOnlinePlayers()) {
+                    players.sendMessage(Config.getTransl("settings", "messages.others.deaths.message.by-null")
+                            .replace("$victim", playerName));
+                }
             } else {
                 if (e.getFinalDamage() >= p.getHealth()) {
                     int playerDeaths = data.getStats().getPlayerData(p, "deaths");
                     int addDeath = playerDeaths + 1;
                     data.getStats().updatePlayerData(p, "deaths", addDeath);
+                    for (Player players : Bukkit.getOnlinePlayers()) {
+                        players.sendMessage(Config.getTransl("settings", "messages.others.deaths.message.by-null")
+                                .replace("$victim", p.getName()));
+                    }
                 }
             }
         }

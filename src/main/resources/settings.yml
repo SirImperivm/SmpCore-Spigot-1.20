@@ -134,6 +134,31 @@ messages:
         taken:
           user: "%ipSono state rimosse &e$livesCount&7 vite dal tuo account, totale &e$totalCount&7."
           admin: "%ipHai rimosso &e$livesCount&7 vite all'utente &e$playerName&7."
+    bounties:
+      set:
+        broadcast:
+          fromPlayer:
+            - "&8»»»» &c&lNuova Taglia &8««««"
+            - "&6Esecutore &8» &6$executorName"
+            - "&6Bersaglio &8» &6$targetName"
+            - "&6Guadagno &8» &6$bountyValue"
+            - "&8»»»» &c&lNuova Taglia &8««««"
+          fromAdmin:
+            - "&8»»»» &c&lNuova Taglia &8««««"
+            - "&6Esecutore &8» &6Sistema"
+            - "&6Bersaglio &8» &6$targetName"
+            - "&6Guadagno &8» &6$bountyValue"
+            - "&8»»»» &c&lNuova Taglia &8««««"
+      removed:
+        broadcast:
+          - "&8»»»» &c&lTaglia Rimossa &8««««"
+          - "&6Ex Bersaglio &8» &6$targetName"
+          - "&8»»»» &c&lTaglia Rimossa &8««««"
+      obtained:
+        broadcast:
+          - "&8»»»» &c&lTaglia Ottenuta &8««««"
+          - "&6Ex Bersaglio &8» &6$targetName"
+          - "&8»»»» &c&lTaglia Ottenuta &8««««"
     general:
       time:
         expired: "%ipTempo scaduto."
@@ -213,6 +238,13 @@ messages:
         not-located: "%fpNon è stato impostato lo spawn della deathzone, è richiesta una segnalazione allo staff."
       contains-chars: "%fpIn questa sezione è solo possibile usare numeri."
       commandBlocked: "%fpSei morto, non puoi eseguire questo comando."
+    bounties:
+      chars-not-allowed: "%fpIn questa sezione è possibile inserire solamente numeri."
+      money:
+        not-enough: "%fpNon hai abbastanza soldi."
+      target:
+        cant-be-yourself: "%fpNon puoi impostarti una taglia da solo."
+        hasnt-bounty: "%fpL'utente non ha una taglia."
   others:
     guilds:
       chat: "&a[GC] &f $guildRole $playerName &8» &f$message"
@@ -314,6 +346,9 @@ messages:
       placeholderFormats:
         dead: "[Morto]"
         live: ""
+      message:
+        by-null: "&c✖ &7L'utente &c$victim&7 è morto. &c✖"
+        by-player: "&c✖ &7L'utente &c$killer&7 ha ucciso &c$victim&7. &c✖"
 placeholders:
   guilds:
     name: guild_name # Il placeholder relativo è %smpc_guild_name%
@@ -336,6 +371,9 @@ placeholders:
     deaths_count-formatted: deathsmanager_deaths_count-formatted # Il placeholder relativo è %smpc_deathsmanager_deaths_count-formatted%
     kills_count: deathsmanager_kills_count # Il placeholder relativo è %smpc_deathsmanager_kills_count%
     kills_count-formatted: deathsmanager_kills_count-formatted # Il placeholder relativo è %smpc_deathsmanager_kills_count-formatted%
+  bounties:
+    value: bounties_value # Il placeholder relativo è %smpc_bounties_value%
+    value-formatted: bounties_value-formatted # Il placeholder relativo è %smpc_bounties_value-formatted%
 permissions:
   admin-commands:
     core:
@@ -365,6 +403,10 @@ permissions:
         give: smpc.admincommands.lives.live.give
         take: smpc.admincommands.lives.live.take
       top: smpc.admincommands.lives.top
+    bounties:
+      main: smpc.admincommands.bounty.main
+      set: smpc.admincommands.bounty.set
+      remove: smpc.admincommands.bounty.remove
   user-commands:
     guilds:
       main: smpc.usercommands.guilds.main
@@ -391,12 +433,9 @@ permissions:
       get:
         user: smpc.usercommands.lives.get
         others: smpc.usercommands.lives.get.others
-    arena:
-      main: smpc.usercommands.arena.main
-      join: smpc.usercommands.arena.join
-      leave: smpc.usercommands.arena.leave
-      gui: smpc.usercommands.arena.gui
-      bet: smpc.usercommands.arena.bet
+    bounties:
+      main: smpc.usercommands.bounties.main
+      set: smpc.usercommands.bounties.set
   user-actions:
     guilds:
       shop:

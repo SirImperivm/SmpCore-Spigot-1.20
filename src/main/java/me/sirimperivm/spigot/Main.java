@@ -9,9 +9,11 @@ import me.sirimperivm.spigot.assets.managers.placeholderapi.PapiExpansions;
 import me.sirimperivm.spigot.assets.managers.values.Vault;
 import me.sirimperivm.spigot.assets.managers.worldguard.Wg;
 import me.sirimperivm.spigot.assets.utils.Colors;
+import me.sirimperivm.spigot.modules.commands.admin.bounties.AdminBountiesCommand;
 import me.sirimperivm.spigot.modules.commands.admin.core.AdminSmpcCommand;
 import me.sirimperivm.spigot.modules.commands.admin.guilds.AdminGuildsCommand;
 import me.sirimperivm.spigot.modules.commands.admin.lives.AdminLivesCommand;
+import me.sirimperivm.spigot.modules.commands.users.bounties.BountiesCommand;
 import me.sirimperivm.spigot.modules.commands.users.guilds.GuildsCommand;
 import me.sirimperivm.spigot.modules.commands.users.lives.LivesCommand;
 import me.sirimperivm.spigot.modules.listeners.*;
@@ -84,14 +86,17 @@ public final class Main extends JavaPlugin {
         getServer().getPluginCommand("ga").setExecutor(new AdminGuildsCommand());
         getServer().getPluginCommand("smpc").setExecutor(new AdminSmpcCommand());
         getServer().getPluginCommand("la").setExecutor(new AdminLivesCommand());
+        getServer().getPluginCommand("ba").setExecutor(new AdminBountiesCommand());
         getServer().getPluginCommand("g").setExecutor(new GuildsCommand());
         getServer().getPluginCommand("l").setExecutor(new LivesCommand());
+        getServer().getPluginCommand("b").setExecutor(new BountiesCommand());
 
         getServer().getPluginCommand("ga").setTabCompleter(new AdminGuildsTabCompleter());
         getServer().getPluginCommand("smpc").setTabCompleter(new AdminSmpcTabCompleter());
         getServer().getPluginCommand("la").setTabCompleter(new AdminLivesTabCompleter());
         getServer().getPluginCommand("g").setTabCompleter(new GuildsTabCompleter());
         getServer().getPluginCommand("l").setTabCompleter(new LivesTabCompleter());
+        getServer().getPluginCommand("b").setTabCompleter(new BountiesTabCompleter());
 
         getServer().getPluginManager().registerEvents(new ClickListener(), this);
         getServer().getPluginManager().registerEvents(new MoveListener(), this);

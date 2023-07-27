@@ -28,3 +28,9 @@ commands:
   l:
     aliases:
       - lives
+  b:
+    aliases:
+      - bounty
+  ba:
+    aliases:
+      - bountyadmin

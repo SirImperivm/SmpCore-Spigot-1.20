@@ -38,7 +38,6 @@ public class Modules {
     private static HashMap<String, List<String>> guildsData;
     private static HashMap<String, String> guildsChat;
     private static HashMap<String, List<String>> guildsList;
-    private static boolean arenaPvPStarted;
     private static List<String> topBankList;
     private static List<String> topMembersList;
     private static List<String> topLivesList;
@@ -57,7 +56,6 @@ public class Modules {
         invites = new HashMap<String, String>();
         guildsChat = new HashMap<String, String>();
         guildsList = new HashMap<String, List<String>>();
-        arenaPvPStarted = false;
         spyChat = new ArrayList<String>();
         guildMembers = new ArrayList<String>();
         depositCooldown = new ArrayList<String>();
@@ -364,23 +362,6 @@ public class Modules {
 
                         if (p != null) {
                             setters(p, guildId, setterType);
-                            deleteTask(taskId);
-                        }
-                    }
-                    if (taskType.equalsIgnoreCase("sendToOldLocation")) {
-                        String[] splitter = taskValue.split("£");
-                        String[] locationSplitter = splitter[1].split(";");
-                        World world = Bukkit.getWorld(locationSplitter[0]);
-                        double posX = Double.parseDouble(locationSplitter[1]);
-                        double posY = Double.parseDouble(locationSplitter[2]);
-                        double posZ = Double.parseDouble(locationSplitter[3]);
-                        float rotYaw = Float.parseFloat(locationSplitter[4]);
-                        float rotPitch = Float.parseFloat(locationSplitter[5]);
-
-                        Location loc = new Location(world, posX, posY, posZ, rotYaw, rotPitch);
-                        Player player = Bukkit.getPlayer(splitter[0]);
-                        if (player != null) {
-                            player.teleport(loc);
                             deleteTask(taskId);
                         }
                     }
@@ -1112,10 +1093,6 @@ public class Modules {
         }
     }
 
-    public void changeArenaPvPStart(boolean value) {
-        arenaPvPStarted = value;
-    }
-
     public static List<String> getGeneratedGuilds() {
         return generatedGuilds;
     }
@@ -1142,10 +1119,6 @@ public class Modules {
 
     public static HashMap<String, String> getGuildsChat() {
         return guildsChat;
-    }
-
-    public static boolean isArenaPvPStarted() {
-        return arenaPvPStarted;
     }
 
     public static List<String> getDepositCooldown() {

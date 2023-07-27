@@ -384,6 +384,24 @@ public class PapiExpansions extends PlaceholderExpansion {
             toReturn = Strings.formatNumber(kills);
         }
 
+        if (param.equalsIgnoreCase(conf.getSettings().getString(path + ".bounties.value"))) {
+            double bountyValue = data.getBounties().getBounty(p.getName());
+            if (bountyValue != 0) {
+                toReturn = String.valueOf(bountyValue);
+            } else {
+                toReturn = "";
+            }
+        }
+
+        if (param.equalsIgnoreCase(conf.getSettings().getString(path + ".bounties.value-formatted"))) {
+            double bountyValue = data.getBounties().getBounty(p.getName());
+            if (bountyValue != 0) {
+                toReturn = Strings.formatNumber(bountyValue);
+            } else {
+                toReturn = "";
+            }
+        }
+
         return toReturn;
     }
 }
