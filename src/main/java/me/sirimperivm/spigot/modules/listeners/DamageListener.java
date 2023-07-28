@@ -32,6 +32,8 @@ public class DamageListener implements Listener {
 
     private static Boolean livesListener = Main.getLivesListener();
 
+    boolean deathFromPlayer = false;
+
     @EventHandler
     public void onDeath(EntityDamageByEntityEvent e) {
         Entity en = e.getEntity();
@@ -62,16 +64,19 @@ public class DamageListener implements Listener {
                     int addKills = playerKills + 1;
                     data.getStats().updatePlayerData(killer, "kills", addKills);
 
-                    double moneyToAdd = conf.getSettings().getDouble("settings.deathsManager.wins.money");
-                    double moneyToRemove = conf.getSettings().getDouble("settings.deathsManager.lose.money");
+                    if (!data.getBounties().hasBounty(playerName)) {
+                        double moneyToAdd = conf.getSettings().getDouble("settings.deathsManager.wins.money");
+                        double moneyToRemove = conf.getSettings().getDouble("settings.deathsManager.lose.money");
 
-                    Vault.getEcon().withdrawPlayer(p, moneyToRemove);
-                    Vault.getEcon().depositPlayer(killer, moneyToAdd);
+                        Vault.getEcon().withdrawPlayer(p, moneyToRemove);
+                        Vault.getEcon().depositPlayer(killer, moneyToAdd);
 
-                    p.sendMessage(Config.getTransl("settings", "messages.info.money.withdrawn")
-                            .replace("$value", Strings.formatNumber(moneyToRemove)));
-                    killer.sendMessage(Config.getTransl("settings", "messages.info.money.deposit")
-                            .replace("$value", Strings.formatNumber(moneyToAdd)));
+                        p.sendMessage(Config.getTransl("settings", "messages.info.money.withdrawn")
+                                .replace("$value", Strings.formatNumber(moneyToRemove)));
+                        killer.sendMessage(Config.getTransl("settings", "messages.info.money.deposit")
+                                .replace("$value", Strings.formatNumber(moneyToAdd)));
+                    }
+                    deathFromPlayer = true;
                     for (Player players : Bukkit.getOnlinePlayers()) {
                         players.sendMessage(Config.getTransl("settings", "messages.others.deaths.message.by-player")
                                 .replace("$killer", killerName)
@@ -177,21 +182,29 @@ public class DamageListener implements Listener {
                             }.runTaskLater(plugin, 20 * 5);
                         }
                     }
-                }
-                for (Player players : Bukkit.getOnlinePlayers()) {
-                    players.sendMessage(Config.getTransl("settings", "messages.others.deaths.message.by-null")
-                            .replace("$victim", playerName));
+                    if (!deathFromPlayer) {
+                        for (Player players : Bukkit.getOnlinePlayers()) {
+                            players.sendMessage(Config.getTransl("settings", "messages.others.deaths.message.by-null")
+                                    .replace("$victim", playerName));
+                        }
+                    }
                 }
             } else {
                 if (e.getFinalDamage() >= p.getHealth()) {
                     int playerDeaths = data.getStats().getPlayerData(p, "deaths");
                     int addDeath = playerDeaths + 1;
                     data.getStats().updatePlayerData(p, "deaths", addDeath);
-                    for (Player players : Bukkit.getOnlinePlayers()) {
-                        players.sendMessage(Config.getTransl("settings", "messages.others.deaths.message.by-null")
-                                .replace("$victim", p.getName()));
+                    if (!deathFromPlayer) {
+                        for (Player players : Bukkit.getOnlinePlayers()) {
+                            players.sendMessage(Config.getTransl("settings", "messages.others.deaths.message.by-null")
+                                    .replace("$victim", p.getName()));
+                        }
                     }
                 }
+            }
+
+            if (deathFromPlayer) {
+                deathFromPlayer = false;
             }
         }
     }

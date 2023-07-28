@@ -386,19 +386,17 @@ public class PapiExpansions extends PlaceholderExpansion {
 
         if (param.equalsIgnoreCase(conf.getSettings().getString(path + ".bounties.value"))) {
             double bountyValue = data.getBounties().getBounty(p.getName());
-            if (bountyValue != 0) {
-                toReturn = String.valueOf(bountyValue);
-            } else {
-                toReturn = "";
+            if (bountyValue > 0) {
+                toReturn = Config.getTransl("settings", "messages.others.bounties.placeholderFormats.bounty")
+                        .replace("$bountyValue", String.valueOf(bountyValue));
             }
         }
 
         if (param.equalsIgnoreCase(conf.getSettings().getString(path + ".bounties.value-formatted"))) {
             double bountyValue = data.getBounties().getBounty(p.getName());
-            if (bountyValue != 0) {
-                toReturn = Strings.formatNumber(bountyValue);
-            } else {
-                toReturn = "";
+            if (bountyValue > 0) {
+                toReturn = Config.getTransl("settings", "messages.others.bounties.placeholderFormats.bounty")
+                        .replace("$bountyValue", Strings.formatNumber(bountyValue));
             }
         }
 

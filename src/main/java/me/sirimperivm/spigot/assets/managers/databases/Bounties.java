@@ -54,20 +54,20 @@ public class Bounties {
         }
     }
 
-    public void insertMemberData(String playerName, String bountyExecutor, String bountyValue) {
-        String query = "INSERT INTO " + database + "(target, bountyExecutor, bountyValue) VALUES (?, ?, ?);";
+    public void insertMemberData(String playerName, String bountyExecutor, String bounty) {
+        String query = "INSERT INTO " + database + "(target, bountyExecutor, bounty) VALUES (?, ?, ?);";
 
         try {
             PreparedStatement state = conn.prepareStatement(query);
             state.setString(1, playerName);
             state.setString(2, bountyExecutor);
-            state.setString(3, bountyValue);
+            state.setString(3, bounty);
             state.executeUpdate();
         } catch (SQLException e) {
             log.severe("Impossibile inserire dei dati nel database delle taglie:" +
                     "\n Utente: " + playerName +
                     "\n Esecutore: " + bountyExecutor +
-                    "\n Valore: " + bountyValue +
+                    "\n Valore: " + bounty +
                     "\n...!");
             e.printStackTrace();
         }
@@ -111,7 +111,7 @@ public class Bounties {
             ResultSet rs = state.executeQuery();
             while (rs.next()) {
                 if (rs.getString("target").equalsIgnoreCase(playerName)) {
-                    bounty = Double.parseDouble(rs.getString("bountyValue"));
+                    bounty = Double.parseDouble(rs.getString("bounty"));
                     break;
                 }
             }

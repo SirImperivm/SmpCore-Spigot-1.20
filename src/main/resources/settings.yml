@@ -141,13 +141,13 @@ messages:
             - "&8»»»» &c&lNuova Taglia &8««««"
             - "&6Esecutore &8» &6$executorName"
             - "&6Bersaglio &8» &6$targetName"
-            - "&6Guadagno &8» &6$bountyValue"
+            - "&6Guadagno &8» &6€$bountyValue"
             - "&8»»»» &c&lNuova Taglia &8««««"
           fromAdmin:
             - "&8»»»» &c&lNuova Taglia &8««««"
             - "&6Esecutore &8» &6Sistema"
             - "&6Bersaglio &8» &6$targetName"
-            - "&6Guadagno &8» &6$bountyValue"
+            - "&6Guadagno &8» &6€$bountyValue"
             - "&8»»»» &c&lNuova Taglia &8««««"
       removed:
         broadcast:
@@ -349,6 +349,9 @@ messages:
       message:
         by-null: "&c✖ &7L'utente &c$victim&7 è morto. &c✖"
         by-player: "&c✖ &7L'utente &c$killer&7 ha ucciso &c$victim&7. &c✖"
+    bounties:
+      placeholderFormats:
+        bounty: "&6B:&7€&f$bountyValue"
 placeholders:
   guilds:
     name: guild_name # Il placeholder relativo è %smpc_guild_name%

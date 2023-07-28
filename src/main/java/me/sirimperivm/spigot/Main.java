@@ -94,6 +94,7 @@ public final class Main extends JavaPlugin {
         getServer().getPluginCommand("ga").setTabCompleter(new AdminGuildsTabCompleter());
         getServer().getPluginCommand("smpc").setTabCompleter(new AdminSmpcTabCompleter());
         getServer().getPluginCommand("la").setTabCompleter(new AdminLivesTabCompleter());
+        getServer().getPluginCommand("ba").setTabCompleter(new AdminBountiesTabCompleter());
         getServer().getPluginCommand("g").setTabCompleter(new GuildsTabCompleter());
         getServer().getPluginCommand("l").setTabCompleter(new LivesTabCompleter());
         getServer().getPluginCommand("b").setTabCompleter(new BountiesTabCompleter());

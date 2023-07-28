@@ -38,63 +38,52 @@ public class BountiesCommand implements CommandExecutor {
                 if (a.length == 0) {
                     getUsage(s);
                 } else if (a.length == 2) {
-                    boolean isActualPlayer = false;
-                    for (Player players : Bukkit.getOnlinePlayers()) {
-                        if (players.getName().equalsIgnoreCase(a[1])) {
-                            isActualPlayer = true;
-                            break;
-                        }
-                    }
-                    if (isActualPlayer) {
-                        if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.user-commands.bounties.set"))) {
+                    if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.user-commands.bounties.set"))) {
+                        return true;
+                    } else {
+                        if (Errors.noConsole(s)) {
                             return true;
                         } else {
-                            if (Errors.noConsole(s)) {
-                                return true;
-                            } else {
-                                Player p = (Player) s;
-                                Player t = Bukkit.getPlayerExact(a[0]);
+                            Player p = (Player) s;
+                            Player t = Bukkit.getPlayerExact(a[0]);
 
-                                if (t == null) {
-                                    p.sendMessage(Config.getTransl("settings", "messages.errors.players.not-found"));
-                                } else if (t == p) {
-                                    p.sendMessage(Config.getTransl("settings", "messages.errors.bounties.target.cant-be-yourself"));
-                                } else {
-                                    boolean containsChars = false;
-                                    for (char ch : a[2].toCharArray()) {
-                                        if (!(ch >= '0' && ch <= '9')) {
-                                            containsChars = true;
-                                            break;
-                                        }
+                            if (t == null) {
+                                p.sendMessage(Config.getTransl("settings", "messages.errors.players.not-found"));
+                            } else if (t == p) {
+                                p.sendMessage(Config.getTransl("settings", "messages.errors.bounties.target.cant-be-yourself"));
+                            } else {
+                                boolean containsChars = false;
+                                for (char ch : a[1].toCharArray()) {
+                                    if (!(ch >= '0' && ch <= '9')) {
+                                        containsChars = true;
+                                        break;
                                     }
-                                    if (!containsChars) {
-                                        double bountyValue = Double.parseDouble(a[1]);
-                                        double userBalance = Vault.getEcon().getBalance(p);
-                                        if (userBalance >= bountyValue) {
-                                            Vault.getEcon().withdrawPlayer(p, bountyValue);
-                                            p.sendMessage(Config.getTransl("settings", "messages.info.money.withdrawn")
-                                                    .replace("$value", Strings.formatNumber(bountyValue)));
-                                            data.getBounties().insertMemberData(a[0], p.getName(), a[1]);
-                                            for (Player players : Bukkit.getOnlinePlayers()) {
-                                                for (String line : conf.getSettings().getStringList("messages.info.bounties.set.broadcast.fromPlayer")) {
-                                                    players.sendMessage(Colors.text(line
-                                                            .replace("$executorName", p.getName())
-                                                            .replace("$targetName", a[0])
-                                                            .replace("$bountyValue", Strings.formatNumber(bountyValue))
-                                                    ));
-                                                }
+                                }
+                                if (!containsChars) {
+                                    double bountyValue = Double.parseDouble(a[1]);
+                                    double userBalance = Vault.getEcon().getBalance(p);
+                                    if (userBalance >= bountyValue) {
+                                        Vault.getEcon().withdrawPlayer(p, bountyValue);
+                                        p.sendMessage(Config.getTransl("settings", "messages.info.money.withdrawn")
+                                                .replace("$value", Strings.formatNumber(bountyValue)));
+                                        data.getBounties().insertMemberData(a[0], p.getName(), a[1]);
+                                        for (Player players : Bukkit.getOnlinePlayers()) {
+                                            for (String line : conf.getSettings().getStringList("messages.info.bounties.set.broadcast.fromPlayer")) {
+                                                players.sendMessage(Colors.text(line
+                                                        .replace("$executorName", p.getName())
+                                                        .replace("$targetName", a[0])
+                                                        .replace("$bountyValue", Strings.formatNumber(bountyValue))
+                                                ));
                                             }
-                                        } else {
-                                            p.sendMessage(Config.getTransl("settings", "messages.errors.bounties.money.not-enough"));
                                         }
                                     } else {
-                                        p.sendMessage(Config.getTransl("settings", "messages.errors.bounties.chars-not-allowed"));
+                                        p.sendMessage(Config.getTransl("settings", "messages.errors.bounties.money.not-enough"));
                                     }
+                                } else {
+                                    p.sendMessage(Config.getTransl("settings", "messages.errors.bounties.chars-not-allowed"));
                                 }
                             }
                         }
-                    } else {
-                        getUsage(s);
                     }
                 } else {
                     getUsage(s);

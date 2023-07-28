@@ -60,7 +60,7 @@ public class AdminBountiesCommand implements CommandExecutor {
                     }
                 } else if (a.length == 3) {
                     if (a[0].equalsIgnoreCase("set")) {
-                        if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.admin-commands.bounty.set"))) {
+                        if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.admin-commands.bounties.set"))) {
                             return true;
                         } else {
                             Player t = Bukkit.getPlayerExact(a[1]);
@@ -81,7 +81,7 @@ public class AdminBountiesCommand implements CommandExecutor {
                                         for (String line : conf.getSettings().getStringList("messages.info.bounties.set.broadcast.fromAdmin")) {
                                             players.sendMessage(Colors.text(line
                                                     .replace("$executorName", (s instanceof Player) ? s.getName() : "Sistema")
-                                                    .replace("$targetName", a[0])
+                                                    .replace("$targetName", a[1])
                                                     .replace("$bountyValue", Strings.formatNumber(bountyValue))
                                             ));
                                         }
