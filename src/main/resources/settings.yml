@@ -1,12 +1,12 @@
 settings:
   dbType: "mysql" # Questo può essere o mysql o mariadb
   database:
-    host: ""
-    port: 
-    username: ""
-    password: ""
-    dbname: ""
-    tablePrefix: ""
+    host: "192.168.1.2"
+    port: 3306
+    username: "u44_D85VVtD94J"
+    password: "Alnn^m8S!ghwst63p=IfrB!R"
+    dbname: "s44_SmpCore"
+    tablePrefix: "smpc_"
   guilds:
     bank:
       startingBalance: 0.0
