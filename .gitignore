@@ -1,2 +1,4 @@
 # Project exclude paths
 /target/
+
+/src/main/java/me/sirimperivm/spigot/Main.java
