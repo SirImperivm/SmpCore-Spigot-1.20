@@ -4,6 +4,7 @@ import me.sirimperivm.spigot.Main;
 import me.sirimperivm.spigot.assets.managers.Config;
 import me.sirimperivm.spigot.assets.managers.Db;
 import me.sirimperivm.spigot.assets.managers.Modules;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,6 +27,13 @@ public class JoinListener implements Listener {
     public void onJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
         String playerName = p.getName();
+
+        if (conf.getSettings().getBoolean("settings.messages.join")) {
+            for (Player players : Bukkit.getOnlinePlayers()) {
+                players.sendMessage(Config.getTransl("settings", "messages.others.join-message")
+                        .replace("$username", p.getName()));
+            }
+        }
 
         if (!data.getStats().existMemberData(p)) {
             data.getStats().insertMemberData(p, 0, 0);

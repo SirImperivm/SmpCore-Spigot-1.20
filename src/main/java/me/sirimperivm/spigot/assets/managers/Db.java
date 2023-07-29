@@ -21,6 +21,7 @@ public class Db {
     private static Lives lives;
     private static Statistics stats;
     private static Bounties bounties;
+    private static Whitelist whitelist;
     public static Connection conn;
     public static String dbname = conf.getSettings().getString("settings.database.dbname");
     public static String tablePrefix = conf.getSettings().getString("settings.database.tablePrefix");
@@ -85,6 +86,7 @@ public class Db {
         lives = new Lives();
         stats = new Statistics();
         bounties = new Bounties();
+        whitelist = new Whitelist();
         guilds.createTable();
         guildMembers.createTable();
         tasks.createTable();
@@ -93,6 +95,7 @@ public class Db {
         }
         stats.createTable();
         bounties.createTable();
+        whitelist.createTable();
     }
 
     public static Guilds getGuilds() {
@@ -117,5 +120,9 @@ public class Db {
 
     public static Bounties getBounties() {
         return bounties;
+    }
+
+    public static Whitelist getWhitelist() {
+        return whitelist;
     }
 }

@@ -4,6 +4,7 @@ import me.sirimperivm.spigot.Main;
 import me.sirimperivm.spigot.assets.managers.Config;
 import me.sirimperivm.spigot.assets.managers.Db;
 import me.sirimperivm.spigot.assets.managers.Modules;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -29,7 +30,31 @@ public class AdminSmpcTabCompleter implements TabCompleter {
                 if (a.length == 1) {
                     List<String> args1 = new ArrayList<String>();
                     args1.add("reload");
+                    args1.add("whitelist");
                     return args1;
+                }
+                if (a.length == 2) {
+                    List<String> args2 = new ArrayList<String>();
+                    if (a[0].equalsIgnoreCase("whitelist")) {
+                        args2.add("add");
+                        args2.add("remove");
+                        args2.add("toggle");
+                    }
+                    return args2;
+                }
+                if (a.length == 3) {
+                    List<String> args3 = new ArrayList<String>();
+                    if (a[0].equalsIgnoreCase("whitelist")) {
+                        if (a[1].equalsIgnoreCase("add")) {
+                            args3.add("<insertName>");
+                        }
+                        if (a[1].equalsIgnoreCase("remove")) {
+                            for (Player players : Bukkit.getOnlinePlayers()) {
+                                args3.add(players.getName());
+                            }
+                        }
+                    }
+                    return args3;
                 }
             }
         }

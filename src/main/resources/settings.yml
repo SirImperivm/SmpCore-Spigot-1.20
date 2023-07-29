@@ -37,6 +37,11 @@ settings:
       money: 1500.0
     lose:
       money: 1500.0
+  messages:
+    join: true
+    leave: true
+  whitelist:
+    enabled: true
 messages:
   prefixes:
     success: "&8[&a!&8] &7"
@@ -73,6 +78,12 @@ messages:
       set: "%spHai promosso &a$username &7ad ufficiale nella tua gilda."
     deathZone:
       located: "%spDeathzone impostata correttamente."
+    whitelist:
+      member:
+        added: "%spUtente aggiunto alla whitelist."
+        removed: "%spUtente rimosso dalla whitelist."
+      status:
+        changed: "%spWhitelist &a$status&7."
   info:
     money:
       withdrawn: "%ip &e-&7$value."
@@ -162,6 +173,10 @@ messages:
     general:
       time:
         expired: "%ipTempo scaduto."
+    whitelist:
+      target:
+        unwhitelisted: "%ipSei stato rimosso dalla whitelist."
+        not-in: "%ipNon sei in whitelist."
   errors:
     no-perm:
       command: "%fpNecessiti del permesso &c$node &7per avere accesso a questo comando."
@@ -245,7 +260,14 @@ messages:
       target:
         cant-be-yourself: "%fpNon puoi impostarti una taglia da solo."
         hasnt-bounty: "%fpL'utente non ha una taglia."
+    whitelist:
+      not-enabled: "%fpIl modulo della whitelist non è stato abilitato."
+      member:
+        already-added: "%fpL'utente è già in whitelist."
+        not-added: "%fpL'utente non è mai stato inserito in whitelist."
   others:
+    join-message: "&8[<SOLID:00FF00>+&8] &e<SOLID:00FF00>$username"
+    quit-message: "&8[<SOLID:FF0000>-&8] &e<SOLID:FF0000>$username"
     guilds:
       chat: "&a[GC] &f $guildRole $playerName &8» &f$message"
       chat-spy: "&6[SPY] $guildTitle&r $guildRole $playerName &8» &f$message"
@@ -382,6 +404,10 @@ permissions:
     core:
       main: smpc.admincommands.core.main
       reload: smpc.admincommands.core.reload
+      whitelist:
+        add: smpc.admincommands.core.whitelist.add
+        remove: smpc.admincommands.core.whitelist.remove
+        toggle: smpc.admincommands.core.whitelist.toggle
     guilds:
       main: smpc.admincommands.guilds.main
       setlobby: smpc.admincommands.guilds.setlobby
