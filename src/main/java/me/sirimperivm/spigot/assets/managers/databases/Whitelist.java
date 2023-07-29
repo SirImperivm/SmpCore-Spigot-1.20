@@ -105,9 +105,14 @@ public class Whitelist {
             ResultSet rs = state.executeQuery();
             while (rs.next()) {
                 String username = rs.getString("playerName");
-                sb.append(conf.getSettings().getString("messages.others.whitelist.list-format.player")
-                        .replace("$username", username))
-                        .append(conf.getSettings().getString("messages.others.whitelist.list-format.commas"));
+                if (!rs.isLast()) {
+                    sb.append(conf.getSettings().getString("messages.others.whitelist.list-format.player")
+                                    .replace("$username", username))
+                            .append(conf.getSettings().getString("messages.others.whitelist.list-format.commas"));
+                } else {
+                    sb.append(conf.getSettings().getString("messages.others.whitelist.list-format.player")
+                                    .replace("$username", username));
+                }
             }
         } catch (SQLException e) {
             log.severe("Impossibile ottenere i player whitelistati.");

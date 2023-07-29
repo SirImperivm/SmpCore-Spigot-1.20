@@ -70,7 +70,7 @@ public class AdminSmpcCommand implements CommandExecutor {
                             if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.admin-commands.core.whitelist.list"))) {
                                 return true;
                             } else {
-                                s.sendMessage(data.getWhitelist().getWhitelistedPlayer());
+                                s.sendMessage(Colors.text(data.getWhitelist().getWhitelistedPlayer()));
                             }
                         } else {
                             getUsage(s);

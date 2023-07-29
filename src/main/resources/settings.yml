@@ -378,7 +378,7 @@ messages:
       list-format:
         prefix: "&7Utenti in whitelist: "
         player: "&f$username"
-        commans: "&7, "
+        commas: "&7, "
 placeholders:
   guilds:
     name: guild_name # Il placeholder relativo è %smpc_guild_name%
