@@ -6,6 +6,8 @@ import me.sirimperivm.spigot.assets.managers.Db;
 import me.sirimperivm.spigot.assets.managers.Modules;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 @SuppressWarnings("all")
@@ -96,6 +98,23 @@ public class Whitelist {
         }
     }
 
+    public List<String> getWhitelistList() {
+        List<String> whitelist = new ArrayList<String>();
+        String query = "SELECT * FROM " + database;
+
+        try {
+            PreparedStatement state = conn.prepareStatement(query);
+            ResultSet rs = state.executeQuery();
+            while (rs.next()) {
+                whitelist.add(rs.getString("playerName"));
+            }
+        } catch (SQLException e) {
+            log.severe("Impossibile ottenere la lista dei whitelistati.");
+            e.printStackTrace();
+        }
+        return whitelist;
+    }
+
     public String getWhitelistedPlayer() {
         StringBuilder sb = new StringBuilder(conf.getSettings().getString("messages.others.whitelist.list-format.prefix"));
         String query = "SELECT * FROM " + database;
@@ -105,13 +124,17 @@ public class Whitelist {
             ResultSet rs = state.executeQuery();
             while (rs.next()) {
                 String username = rs.getString("playerName");
+                String commas = conf.getSettings().getString("messages.others.whitelist.list-format.commas");
                 if (!rs.isLast()) {
+                    String comma = commas.split("£")[0];
                     sb.append(conf.getSettings().getString("messages.others.whitelist.list-format.player")
                                     .replace("$username", username))
-                            .append(conf.getSettings().getString("messages.others.whitelist.list-format.commas"));
+                            .append(comma);
                 } else {
+                    String dot = commas.split("£")[1];
                     sb.append(conf.getSettings().getString("messages.others.whitelist.list-format.player")
-                                    .replace("$username", username));
+                                    .replace("$username", username))
+                            .append(dot);
                 }
             }
         } catch (SQLException e) {

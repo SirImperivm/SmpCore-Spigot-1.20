@@ -190,13 +190,17 @@ public class GuildMembers {
                         String username = rs.getString("username");
                         Player p = Bukkit.getPlayerExact(username);
                         if (p != null) {
+                            String commas = conf.getSettings().getString("messages.others.guild.guild-info.general.online-officers.commas");
                             if (!rs.isLast()) {
+                                String comma = commas.split("£")[0];
                                 sb.append(conf.getSettings().getString("messages.others.guilds.guild-info.general.online-officers.userformat")
                                                 .replace("$username", username))
-                                        .append(conf.getSettings().getString("messages.others.guilds.guild-info.general.online-officers.commas"));
+                                        .append(comma);
                             } else {
+                                String dot = commas.split("£")[1];
                                 sb.append(conf.getSettings().getString("messages.others.guilds.guild-info.general.online-officers.userformat")
-                                                .replace("$username", username));
+                                                .replace("$username", username))
+                                        .append(dot);
                             }
                         }
                     }
@@ -222,13 +226,17 @@ public class GuildMembers {
                         String username = rs.getString("username");
                         Player p = Bukkit.getPlayerExact(username);
                         if (p != null) {
+                            String commas = conf.getSettings().getString("messages.others.guilds.guild-info.general.online-guilders.commas");
                             if (!rs.isLast()) {
+                                String comma = commas.split("£")[0];
                                 sb.append(conf.getSettings().getString("messages.others.guilds.guild-info.general.online-guilders.userformat")
                                                 .replace("$username", username))
-                                        .append(conf.getSettings().getString("messages.others.guilds.guild-info.general.online-guilders.commas"));
+                                        .append(comma);
                             } else {
+                                String dot = commas.split("£")[1];
                                 sb.append(conf.getSettings().getString("messages.others.guilds.guild-info.general.online-guilders.userformat")
-                                                .replace("$username", username));
+                                                .replace("$username", username))
+                                        .append(dot);
                             }
                         }
                     }
