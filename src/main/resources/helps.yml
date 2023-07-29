@@ -5,6 +5,7 @@ helps:
       - ""
       - "&a/smpcore(smpc) reload &7- &fRicarica il plugin."
       - "&a/smpcore(smpc) whitelist add &e<nomeutente> &7- &fAggiunge un utente in whitelist."
+      - "&a/smpcore(smpc) whitelist list &7- &fMostra chi è in whitelist."
       - "&a/smpcore(smpc) whitelist remove &e<nomeutente> &7- &fRimuove un utente dalla whitelist."
       - "&a/smpcore(smpc) whitelist toggle &7- &fAttiva/Disattiva la whitelist."
       - ""

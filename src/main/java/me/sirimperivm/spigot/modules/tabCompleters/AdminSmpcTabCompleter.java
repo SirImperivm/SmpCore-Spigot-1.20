@@ -37,6 +37,7 @@ public class AdminSmpcTabCompleter implements TabCompleter {
                     List<String> args2 = new ArrayList<String>();
                     if (a[0].equalsIgnoreCase("whitelist")) {
                         args2.add("add");
+                        args2.add("list");
                         args2.add("remove");
                         args2.add("toggle");
                     }

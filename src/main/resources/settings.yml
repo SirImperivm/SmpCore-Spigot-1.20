@@ -374,6 +374,11 @@ messages:
     bounties:
       placeholderFormats:
         bounty: "&6B:&7€&f$bountyValue"
+    whitelist:
+      list-format:
+        prefix: "&7Utenti in whitelist: "
+        player: "&f$username"
+        commans: "&7, "
 placeholders:
   guilds:
     name: guild_name # Il placeholder relativo è %smpc_guild_name%
@@ -408,6 +413,7 @@ permissions:
         add: smpc.admincommands.core.whitelist.add
         remove: smpc.admincommands.core.whitelist.remove
         toggle: smpc.admincommands.core.whitelist.toggle
+        list: smpc.admincommands.core.whitelist.list
     guilds:
       main: smpc.admincommands.guilds.main
       setlobby: smpc.admincommands.guilds.setlobby

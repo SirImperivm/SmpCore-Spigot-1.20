@@ -96,6 +96,26 @@ public class Whitelist {
         }
     }
 
+    public String getWhitelistedPlayer() {
+        StringBuilder sb = new StringBuilder(conf.getSettings().getString("messages.others.whitelist.list-format.prefix"));
+        String query = "SELECT * FROM " + database;
+
+        try {
+            PreparedStatement state = conn.prepareStatement(query);
+            ResultSet rs = state.executeQuery();
+            while (rs.next()) {
+                String username = rs.getString("playerName");
+                sb.append(conf.getSettings().getString("messages.others.whitelist.list-format.player")
+                        .replace("$username", username))
+                        .append(conf.getSettings().getString("messages.others.whitelist.list-format.commas"));
+            }
+        } catch (SQLException e) {
+            log.severe("Impossibile ottenere i player whitelistati.");
+            e.printStackTrace();
+        }
+        return sb.toString();
+    }
+
     public String getUuid(String username) {
         String uuid = "null";
         String query = "SELECT * FROM " + database;

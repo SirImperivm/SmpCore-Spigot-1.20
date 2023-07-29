@@ -48,30 +48,32 @@ public class AdminSmpcCommand implements CommandExecutor {
                     }
                 } else if (a.length == 2) {
                     if (a[0].equalsIgnoreCase("whitelist")) {
-                        if (conf.getSettings().getBoolean("settings.whitelist.enabled")) {
-                            if (a[1].equalsIgnoreCase("toggle")) {
-                                if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.admin-commands.core.whitelist.toggle"))) {
-                                    return true;
-                                } else {
-                                    boolean whitelistStatus = conf.getSettings().getBoolean("settings.whitelist.enabled");
-
-                                    if (whitelistStatus) {
-                                        conf.getSettings().set("settings.whitelist.enabled", false);
-                                        conf.save(conf.getSettings(), conf.getSettingsFile());
-                                        s.sendMessage(Config.getTransl("settings", "messages.success.whitelist.status.changed")
-                                                .replace("$status", "Disattivata"));
-                                    } else {
-                                        conf.getSettings().set("settings.whitelist.enabled", true);
-                                        conf.save(conf.getSettings(), conf.getSettingsFile());
-                                        s.sendMessage(Config.getTransl("settings", "messages.success.whitelist.status.changed")
-                                                .replace("$status", "Attivata"));
-                                    }
-                                }
+                        if (a[1].equalsIgnoreCase("toggle")) {
+                            if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.admin-commands.core.whitelist.toggle"))) {
+                                return true;
                             } else {
-                                getUsage(s);
+                                boolean whitelistStatus = conf.getSettings().getBoolean("settings.whitelist.enabled");
+
+                                if (whitelistStatus) {
+                                    conf.getSettings().set("settings.whitelist.enabled", false);
+                                    conf.save(conf.getSettings(), conf.getSettingsFile());
+                                    s.sendMessage(Config.getTransl("settings", "messages.success.whitelist.status.changed")
+                                            .replace("$status", "Disattivata"));
+                                } else {
+                                    conf.getSettings().set("settings.whitelist.enabled", true);
+                                    conf.save(conf.getSettings(), conf.getSettingsFile());
+                                    s.sendMessage(Config.getTransl("settings", "messages.success.whitelist.status.changed")
+                                            .replace("$status", "Attivata"));
+                                }
+                            }
+                        } else if (a[1].equalsIgnoreCase("list")) {
+                            if (Errors.noPermCommand(s, conf.getSettings().getString("permissions.admin-commands.core.whitelist.list"))) {
+                                return true;
+                            } else {
+                                s.sendMessage(data.getWhitelist().getWhitelistedPlayer());
                             }
                         } else {
-                            s.sendMessage(Config.getTransl("settings", "messages.errors.whitelist.not-enabled"));
+                            getUsage(s);
                         }
                     } else {
                         getUsage(s);
